@@ -47,6 +47,12 @@
       box-sizing: border-box;
     }
 
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       margin: 0;
       font-family: Inter, Arial, sans-serif;
@@ -64,13 +70,16 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
     .hidden {
       display: none !important;
     }
 
-    /* =========================
-       LOGIN
-    ========================= */
+    /* LOGIN */
 
     #loginScreen {
       min-height: 100vh;
@@ -137,9 +146,7 @@
       font-weight: bold;
     }
 
-    /* =========================
-       APP
-    ========================= */
+    /* APP */
 
     #app {
       min-height: 100vh;
@@ -206,9 +213,7 @@
       padding: 34px 22px 60px;
     }
 
-    /* =========================
-       DASHBOARD HEADER
-    ========================= */
+    /* DASHBOARD */
 
     .dashboard-welcome {
       display: flex;
@@ -246,9 +251,7 @@
       transform: translateY(-1px);
     }
 
-    /* =========================
-       DASHBOARD STATS
-    ========================= */
+    /* STATS */
 
     .stats-grid {
       display: grid;
@@ -278,9 +281,7 @@
       letter-spacing: -0.4px;
     }
 
-    /* =========================
-       DASHBOARD CLASSES
-    ========================= */
+    /* CLASSES */
 
     .section-header {
       display: flex;
@@ -308,6 +309,8 @@
     }
 
     .class-card {
+      min-width: 0;
+      position: relative;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 15px;
@@ -317,6 +320,7 @@
         transform 0.15s,
         border-color 0.15s,
         box-shadow 0.15s;
+      overflow: hidden;
     }
 
     .class-card:hover {
@@ -326,16 +330,22 @@
     }
 
     .class-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
       gap: 12px;
+    }
+
+    .class-card-top > div:first-child {
+      min-width: 0;
     }
 
     .class-card h4 {
       margin: 0 0 6px;
       font-size: 19px;
       line-height: 1.25;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .class-info {
@@ -343,14 +353,19 @@
       font-size: 13px;
       line-height: 1.45;
       min-height: 19px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .class-delete {
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
       border: 0;
       background: transparent;
       color: var(--muted);
       font-size: 17px;
-      padding: 3px;
+      padding: 3px 5px;
       border-radius: 6px;
     }
 
@@ -367,6 +382,7 @@
     }
 
     .class-stat {
+      min-width: 0;
       background: var(--surface-2);
       border-radius: 9px;
       padding: 11px 12px;
@@ -381,6 +397,7 @@
     .class-stat-value {
       font-size: 16px;
       font-weight: 800;
+      overflow-wrap: anywhere;
     }
 
     .open-class {
@@ -441,9 +458,7 @@
       font-weight: 600;
     }
 
-    /* =========================
-       CLASS VIEW
-    ========================= */
+    /* CLASS VIEW */
 
     .back-btn {
       border: 1px solid var(--border);
@@ -469,11 +484,14 @@
     .class-title h2 {
       margin: 0 0 5px;
       font-size: 28px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .class-title p {
       margin: 0;
       color: var(--muted);
+      overflow-wrap: anywhere;
     }
 
     .class-actions {
@@ -507,27 +525,31 @@
       border-radius: 13px;
       padding: 16px 18px;
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 20px;
       box-shadow: var(--shadow);
-      overflow: visible;
+      overflow: hidden;
     }
 
     .student-name {
       font-weight: 700;
       font-size: 17px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .student-controls {
       display: flex;
       align-items: center;
       gap: 7px;
+      min-width: 0;
     }
 
     .point-btn {
       width: 38px;
       height: 38px;
+      flex-shrink: 0;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface-2);
@@ -543,6 +565,7 @@
     .amount-input {
       width: 75px;
       height: 38px;
+      flex-shrink: 0;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--surface);
@@ -555,14 +578,23 @@
       border-color: var(--primary);
     }
 
+    .amount-input::-webkit-inner-spin-button,
+    .amount-input::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+
     .points-display {
       min-width: 85px;
+      max-width: 280px;
       text-align: right;
       font-size: 21px;
       font-weight: 800;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .remove-student {
+      flex-shrink: 0;
       border: 0;
       background: transparent;
       color: var(--muted);
@@ -574,9 +606,7 @@
       color: var(--danger);
     }
 
-    /* =========================
-       FLOATING POINT ANIMATION
-    ========================= */
+    /* FLOATING POINT */
 
     .point-float {
       position: absolute;
@@ -609,9 +639,7 @@
       }
     }
 
-    /* =========================
-       MODALS
-    ========================= */
+    /* MODALS */
 
     .modal-overlay {
       position: fixed;
@@ -672,9 +700,7 @@
       margin-top: 20px;
     }
 
-    /* =========================
-       HISTORY
-    ========================= */
+    /* HISTORY */
 
     .history-modal {
       max-width: 650px;
@@ -698,6 +724,7 @@
       margin: 0;
       color: var(--muted);
       font-size: 13px;
+      overflow-wrap: anywhere;
     }
 
     .history-container {
@@ -717,6 +744,7 @@
 
     .history-student {
       font-weight: 600;
+      overflow-wrap: anywhere;
     }
 
     .history-time {
@@ -744,12 +772,9 @@
       padding: 30px 10px;
     }
 
-    /* =========================
-       MOBILE
-    ========================= */
+    /* MOBILE */
 
     @media (max-width: 700px) {
-
       header {
         padding: 0 15px;
       }
@@ -793,6 +818,7 @@
 
       .student-controls {
         width: 100%;
+        flex-wrap: wrap;
       }
 
       .points-display {
@@ -822,22 +848,39 @@
         max-height: 90vh;
       }
     }
+
+    @media (max-width: 430px) {
+      .student-controls {
+        display: grid;
+        grid-template-columns: 38px 1fr 38px auto 32px;
+        width: 100%;
+      }
+
+      .amount-input {
+        width: 100%;
+      }
+
+      .points-display {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .point-float {
+        right: 90px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- =========================
-       LOGIN
-  ========================= -->
+  <!-- LOGIN -->
 
   <section id="loginScreen">
 
     <div class="login-card">
 
-      <div class="logo">
-        PT
-      </div>
+      <div class="logo">PT</div>
 
       <h1>PointTrack</h1>
 
@@ -846,10 +889,7 @@
         built for teachers.
       </p>
 
-      <button
-        id="googleLoginBtn"
-        class="google-btn"
-      >
+      <button id="googleLoginBtn" class="google-btn">
         <span class="google-icon">G</span>
         Continue with Google
       </button>
@@ -859,9 +899,7 @@
   </section>
 
 
-  <!-- =========================
-       APP
-  ========================= -->
+  <!-- APP -->
 
   <div id="app" class="hidden">
 
@@ -869,9 +907,7 @@
 
       <div class="brand">
 
-        <div class="brand-logo">
-          PT
-        </div>
+        <div class="brand-logo">PT</div>
 
         PointTrack
 
@@ -887,10 +923,7 @@
           ◐
         </button>
 
-        <button
-          id="logoutBtn"
-          class="logout-btn"
-        >
+        <button id="logoutBtn" class="logout-btn">
           Log out
         </button>
 
@@ -901,9 +934,7 @@
 
     <main>
 
-      <!-- =========================
-           DASHBOARD
-      ========================= -->
+      <!-- DASHBOARD -->
 
       <section id="dashboardView">
 
@@ -911,9 +942,7 @@
 
           <div class="welcome">
 
-            <h2>
-              Welcome back 👋
-            </h2>
+            <h2>Welcome back 👋</h2>
 
             <p id="teacherEmail"></p>
 
@@ -929,22 +958,13 @@
         </div>
 
 
-        <!-- =========================
-             DASHBOARD STATS
-        ========================= -->
-
         <div class="stats-grid">
 
           <div class="stat-card">
 
-            <div class="stat-label">
-              Classes
-            </div>
+            <div class="stat-label">Classes</div>
 
-            <div
-              id="totalClasses"
-              class="stat-value"
-            >
+            <div id="totalClasses" class="stat-value">
               0
             </div>
 
@@ -953,14 +973,9 @@
 
           <div class="stat-card">
 
-            <div class="stat-label">
-              Students
-            </div>
+            <div class="stat-label">Students</div>
 
-            <div
-              id="totalStudents"
-              class="stat-value"
-            >
+            <div id="totalStudents" class="stat-value">
               0
             </div>
 
@@ -969,14 +984,9 @@
 
           <div class="stat-card">
 
-            <div class="stat-label">
-              Total Points
-            </div>
+            <div class="stat-label">Total Points</div>
 
-            <div
-              id="totalPoints"
-              class="stat-value"
-            >
+            <div id="totalPoints" class="stat-value">
               0
             </div>
 
@@ -985,17 +995,11 @@
         </div>
 
 
-        <!-- =========================
-             CLASSES
-        ========================= -->
-
         <div class="section-header">
 
           <div>
 
-            <h3>
-              Your Classes
-            </h3>
+            <h3>Your Classes</h3>
 
             <div class="section-subtitle">
               Open a class to manage students and points.
@@ -1006,27 +1010,16 @@
         </div>
 
 
-        <div
-          id="classesContainer"
-          class="classes-grid"
-        ></div>
+        <div id="classesContainer" class="classes-grid"></div>
 
       </section>
 
 
-      <!-- =========================
-           CLASS VIEW
-      ========================= -->
+      <!-- CLASS VIEW -->
 
-      <section
-        id="classView"
-        class="hidden"
-      >
+      <section id="classView" class="hidden">
 
-        <button
-          id="backBtn"
-          class="back-btn"
-        >
+        <button id="backBtn" class="back-btn">
           ← Back to Classes
         </button>
 
@@ -1063,10 +1056,7 @@
         </div>
 
 
-        <div
-          id="studentsContainer"
-          class="student-list"
-        ></div>
+        <div id="studentsContainer" class="student-list"></div>
 
       </section>
 
@@ -1075,27 +1065,17 @@
   </div>
 
 
-  <!-- =========================
-       CREATE CLASS MODAL
-  ========================= -->
+  <!-- CREATE CLASS MODAL -->
 
-  <div
-    id="classModal"
-    class="modal-overlay hidden"
-  >
+  <div id="classModal" class="modal-overlay hidden">
 
     <div class="modal">
 
-      <h3>
-        Create Class
-      </h3>
-
+      <h3>Create Class</h3>
 
       <div class="field">
 
-        <label>
-          Class Name
-        </label>
+        <label>Class Name</label>
 
         <input
           id="classNameInput"
@@ -1108,9 +1088,7 @@
 
       <div class="field">
 
-        <label>
-          School Year
-        </label>
+        <label>School Year</label>
 
         <input
           id="schoolYearInput"
@@ -1123,9 +1101,7 @@
 
       <div class="field">
 
-        <label>
-          Term
-        </label>
+        <label>Term</label>
 
         <input
           id="termInput"
@@ -1159,27 +1135,17 @@
   </div>
 
 
-  <!-- =========================
-       ADD STUDENT MODAL
-  ========================= -->
+  <!-- ADD STUDENT MODAL -->
 
-  <div
-    id="studentModal"
-    class="modal-overlay hidden"
-  >
+  <div id="studentModal" class="modal-overlay hidden">
 
     <div class="modal">
 
-      <h3>
-        Add Student
-      </h3>
-
+      <h3>Add Student</h3>
 
       <div class="field">
 
-        <label>
-          Student Name
-        </label>
+        <label>Student Name</label>
 
         <input
           id="studentNameInput"
@@ -1213,14 +1179,9 @@
   </div>
 
 
-  <!-- =========================
-       POINT HISTORY MODAL
-  ========================= -->
+  <!-- HISTORY MODAL -->
 
-  <div
-    id="historyModal"
-    class="modal-overlay hidden"
-  >
+  <div id="historyModal" class="modal-overlay hidden">
 
     <div class="modal history-modal">
 
@@ -1228,14 +1189,11 @@
 
         <div>
 
-          <h3>
-            Point History
-          </h3>
+          <h3>Point History</h3>
 
           <p id="historySubtitle"></p>
 
         </div>
-
 
         <button
           id="closeHistoryBtn"
@@ -1269,9 +1227,7 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_jBsWWgn62dAwCZWgNtB-kg_Pbpt7Ova";
 
-
     const { createClient } = supabase;
-
 
     const db = createClient(
       SUPABASE_URL,
@@ -1284,8 +1240,8 @@
     ===================================================== */
 
     let currentUser = null;
-
     let currentClass = null;
+    let restoringClass = false;
 
 
     /* =====================================================
@@ -1342,6 +1298,173 @@
         "dashboardCreateClassBtn"
       );
 
+    const classModal =
+      document.getElementById("classModal");
+
+    const cancelClassBtn =
+      document.getElementById("cancelClassBtn");
+
+    const saveClassBtn =
+      document.getElementById("saveClassBtn");
+
+    const classNameInput =
+      document.getElementById("classNameInput");
+
+    const schoolYearInput =
+      document.getElementById("schoolYearInput");
+
+    const termInput =
+      document.getElementById("termInput");
+
+    const studentModal =
+      document.getElementById("studentModal");
+
+    const addStudentBtn =
+      document.getElementById("addStudentBtn");
+
+    const cancelStudentBtn =
+      document.getElementById("cancelStudentBtn");
+
+    const saveStudentBtn =
+      document.getElementById("saveStudentBtn");
+
+    const studentNameInput =
+      document.getElementById("studentNameInput");
+
+    const historyBtn =
+      document.getElementById("historyBtn");
+
+    const historyModal =
+      document.getElementById("historyModal");
+
+    const closeHistoryBtn =
+      document.getElementById("closeHistoryBtn");
+
+    const historyContainer =
+      document.getElementById("historyContainer");
+
+    const historySubtitle =
+      document.getElementById("historySubtitle");
+
+
+    /* =====================================================
+       CURRENT CLASS STORAGE
+    ===================================================== */
+
+    function getLastClassKey() {
+
+      if (!currentUser)
+        return null;
+
+      return (
+        "pointtrack-last-class-" +
+        currentUser.id
+      );
+
+    }
+
+
+    function saveLastClass(classId) {
+
+      const key =
+        getLastClassKey();
+
+      if (!key)
+        return;
+
+      localStorage.setItem(
+        key,
+        classId
+      );
+
+    }
+
+
+    function getLastClassId() {
+
+      const key =
+        getLastClassKey();
+
+      if (!key)
+        return null;
+
+      return localStorage.getItem(key);
+
+    }
+
+
+    function clearLastClass() {
+
+      const key =
+        getLastClassKey();
+
+      if (!key)
+        return;
+
+      localStorage.removeItem(key);
+
+    }
+
+
+    /* =====================================================
+       MODAL CLEANUP
+    ===================================================== */
+
+    function resetStudentModal() {
+
+      studentModal
+        .classList
+        .add("hidden");
+
+      studentNameInput.value = "";
+
+      saveStudentBtn.disabled = false;
+
+      saveStudentBtn.textContent =
+        "Add Student";
+
+    }
+
+
+    function resetClassModal() {
+
+      classModal
+        .classList
+        .add("hidden");
+
+      classNameInput.value = "";
+
+      schoolYearInput.value = "";
+
+      termInput.value = "";
+
+      saveClassBtn.disabled = false;
+
+      saveClassBtn.textContent =
+        "Create Class";
+
+    }
+
+
+    function closeHistory() {
+
+      historyModal
+        .classList
+        .add("hidden");
+
+    }
+
+
+    function closeTransientUI() {
+
+      resetStudentModal();
+
+      resetClassModal();
+
+      closeHistory();
+
+    }
+
 
     /* =====================================================
        LOGIN
@@ -1353,7 +1476,7 @@
 
         googleLoginBtn.disabled = true;
 
-        googleLoginBtn.textContent =
+        googleLoginBtn.innerHTML =
           "Connecting...";
 
 
@@ -1365,7 +1488,14 @@
             options: {
 
               redirectTo:
-                "https://moldybreadeater.github.io/PointTrack/"
+                "https://moldybreadeater.github.io/PointTrack/",
+
+              queryParams: {
+
+                prompt:
+                  "select_account"
+
+              }
 
             }
 
@@ -1380,7 +1510,6 @@
             "Login failed:\n" +
             error.message
           );
-
 
           googleLoginBtn.disabled = false;
 
@@ -1410,7 +1539,7 @@
         currentUser =
           session.user;
 
-        showApp();
+        await showApp();
 
       }
 
@@ -1431,7 +1560,7 @@
           currentUser =
             session.user;
 
-          showApp();
+          await showApp();
 
         }
 
@@ -1454,40 +1583,7 @@
 
     function showLogin() {
 
-      loginScreen
-        .classList
-        .remove("hidden");
-
-      app
-        .classList
-        .add("hidden");
-
-    }
-
-
-    async function showApp() {
-
-      loginScreen
-        .classList
-        .add("hidden");
-
-      app
-        .classList
-        .remove("hidden");
-
-
-      teacherEmail.textContent =
-        currentUser.email || "";
-
-
-      showDashboard();
-
-      await loadClasses();
-
-    }
-
-
-    function showDashboard() {
+      closeTransientUI();
 
       dashboardView
         .classList
@@ -1497,8 +1593,63 @@
         .classList
         .add("hidden");
 
-      currentClass =
-        null;
+      app
+        .classList
+        .add("hidden");
+
+      loginScreen
+        .classList
+        .remove("hidden");
+
+      currentClass = null;
+
+    }
+
+
+    async function showApp() {
+
+      if (!currentUser)
+        return;
+
+      loginScreen
+        .classList
+        .add("hidden");
+
+      app
+        .classList
+        .remove("hidden");
+
+      teacherEmail.textContent =
+        currentUser.email || "";
+
+      showDashboard(false);
+
+      await loadClasses();
+
+    }
+
+
+    function showDashboard(
+      clearSavedClass = true
+    ) {
+
+      closeTransientUI();
+
+      dashboardView
+        .classList
+        .remove("hidden");
+
+      classView
+        .classList
+        .add("hidden");
+
+      currentClass = null;
+
+      if (clearSavedClass) {
+
+        clearLastClass();
+
+      }
 
     }
 
@@ -1510,6 +1661,10 @@
     logoutBtn.addEventListener(
       "click",
       async () => {
+
+        closeTransientUI();
+
+        currentClass = null;
 
         await db.auth.signOut();
 
@@ -1529,10 +1684,8 @@
           .classList
           .toggle("dark");
 
-
         localStorage.setItem(
           "pointtrack-theme",
-
           document.body
             .classList
             .contains("dark")
@@ -1561,38 +1714,9 @@
        CREATE CLASS
     ===================================================== */
 
-    const classModal =
-      document.getElementById(
-        "classModal"
-      );
-
-    const cancelClassBtn =
-      document.getElementById(
-        "cancelClassBtn"
-      );
-
-    const saveClassBtn =
-      document.getElementById(
-        "saveClassBtn"
-      );
-
-    const classNameInput =
-      document.getElementById(
-        "classNameInput"
-      );
-
-    const schoolYearInput =
-      document.getElementById(
-        "schoolYearInput"
-      );
-
-    const termInput =
-      document.getElementById(
-        "termInput"
-      );
-
-
     function openCreateClassModal() {
+
+      closeHistory();
 
       classModal
         .classList
@@ -1611,13 +1735,7 @@
 
     cancelClassBtn.addEventListener(
       "click",
-      () => {
-
-        classModal
-          .classList
-          .add("hidden");
-
-      }
+      resetClassModal
     );
 
 
@@ -1689,17 +1807,7 @@
 
       else {
 
-        classNameInput.value = "";
-
-        schoolYearInput.value = "";
-
-        termInput.value = "";
-
-
-        classModal
-          .classList
-          .add("hidden");
-
+        resetClassModal();
 
         await loadClasses();
 
@@ -1763,6 +1871,8 @@
 
       if (!data.length) {
 
+        clearLastClass();
+
         totalStudents.textContent =
           "0";
 
@@ -1814,12 +1924,6 @@
       }
 
 
-      /*
-        Load all students belonging
-        to the teacher's classes in
-        one query.
-      */
-
       const classIds =
         data.map(
           classItem =>
@@ -1869,7 +1973,7 @@
 
             students: 0,
 
-            points: 0
+            points: 0n
 
           };
 
@@ -1895,9 +1999,9 @@
               classStats[
                 student.class_id
               ].points +=
-                Number(
+                toBigInt(
                   student.points
-                ) || 0;
+                );
 
             }
 
@@ -1921,14 +2025,12 @@
                 student
               ) =>
                 total +
-                (
-                  Number(
-                    student.points
-                  ) || 0
+                toBigInt(
+                  student.points
                 ),
-              0
+              0n
             )
-          : 0;
+          : 0n;
 
 
       totalStudents.textContent =
@@ -1936,150 +2038,193 @@
 
 
       totalPoints.textContent =
-        pointsTotal.toLocaleString();
+        formatBigInt(
+          pointsTotal
+        );
 
 
       classesContainer.innerHTML =
         "";
 
 
-      for (
-        const classItem
-        of data
-      ) {
+      data.forEach(
+        classItem => {
 
-        const card =
-          document.createElement(
-            "div"
-          );
+          const card =
+            document.createElement(
+              "div"
+            );
 
-
-        card.className =
-          "class-card";
+          card.className =
+            "class-card";
 
 
-        const info = [
+          const info = [
 
-          classItem.school_year,
+            classItem.school_year,
 
-          classItem.term
+            classItem.term
 
-        ]
-        .filter(Boolean)
-        .join(" • ");
-
-
-        const stats =
-          classStats[
-            classItem.id
-          ] || {
-
-            students: 0,
-
-            points: 0
-
-          };
+          ]
+          .filter(Boolean)
+          .join(" • ");
 
 
-        card.innerHTML = `
+          const stats =
+            classStats[
+              classItem.id
+            ] || {
 
-          <div class="class-card-top">
+              students: 0,
 
-            <div>
+              points: 0n
 
-              <h4>
-                ${escapeHtml(
-                  classItem.name
-                )}
-              </h4>
+            };
 
-              <div class="class-info">
-                ${escapeHtml(
-                  info ||
-                  "No additional information"
-                )}
+
+          card.innerHTML = `
+
+            <div class="class-card-top">
+
+              <div>
+
+                <h4>
+                  ${escapeHtml(
+                    classItem.name
+                  )}
+                </h4>
+
+                <div class="class-info">
+                  ${escapeHtml(
+                    info ||
+                    "No additional information"
+                  )}
+                </div>
+
+              </div>
+
+              <button
+                class="class-delete"
+                title="Delete class"
+              >
+                ×
+              </button>
+
+            </div>
+
+
+            <div class="class-stats">
+
+              <div class="class-stat">
+
+                <div class="class-stat-label">
+                  Students
+                </div>
+
+                <div class="class-stat-value">
+                  ${stats.students.toLocaleString()}
+                </div>
+
+              </div>
+
+
+              <div class="class-stat">
+
+                <div class="class-stat-label">
+                  Total Points
+                </div>
+
+                <div class="class-stat-value">
+                  ${formatBigInt(
+                    stats.points
+                  )}
+                </div>
+
               </div>
 
             </div>
 
 
-            <button
-              class="class-delete"
-              title="Delete class"
-            >
-              ×
+            <button class="open-class">
+              Open Class
             </button>
 
-          </div>
+          `;
 
 
-          <div class="class-stats">
-
-            <div class="class-stat">
-
-              <div class="class-stat-label">
-                Students
-              </div>
-
-              <div class="class-stat-value">
-                ${stats.students.toLocaleString()}
-              </div>
-
-            </div>
+          card
+            .querySelector(
+              ".open-class"
+            )
+            .addEventListener(
+              "click",
+              () =>
+                openClass(
+                  classItem
+                )
+            );
 
 
-            <div class="class-stat">
-
-              <div class="class-stat-label">
-                Total Points
-              </div>
-
-              <div class="class-stat-value">
-                ${stats.points.toLocaleString()}
-              </div>
-
-            </div>
-
-          </div>
+          card
+            .querySelector(
+              ".class-delete"
+            )
+            .addEventListener(
+              "click",
+              () =>
+                deleteClass(
+                  classItem
+                )
+            );
 
 
-          <button
-            class="open-class"
-          >
-            Open Class
-          </button>
+          classesContainer
+            .appendChild(card);
 
-        `;
+        }
+      );
 
 
-        card
-          .querySelector(
-            ".open-class"
-          )
-          .addEventListener(
-            "click",
-            () =>
-              openClass(
-                classItem
-              )
+      /*
+        Restore the class the teacher was
+        previously using for this account.
+      */
+
+      const savedClassId =
+        getLastClassId();
+
+
+      if (
+        savedClassId &&
+        !restoringClass
+      ) {
+
+        const savedClass =
+          data.find(
+            classItem =>
+              classItem.id ===
+              savedClassId
           );
 
 
-        card
-          .querySelector(
-            ".class-delete"
-          )
-          .addEventListener(
-            "click",
-            () =>
-              deleteClass(
-                classItem
-              )
+        if (savedClass) {
+
+          restoringClass = true;
+
+          await openClass(
+            savedClass,
+            false
           );
 
+          restoringClass = false;
 
-        classesContainer
-          .appendChild(card);
+        }
+
+        else {
+
+          clearLastClass();
+
+        }
 
       }
 
@@ -2171,6 +2316,27 @@
       }
 
 
+      if (
+        getLastClassId() ===
+        classItem.id
+      ) {
+
+        clearLastClass();
+
+      }
+
+
+      if (
+        currentClass &&
+        currentClass.id ===
+        classItem.id
+      ) {
+
+        showDashboard();
+
+      }
+
+
       await loadClasses();
 
     }
@@ -2181,11 +2347,23 @@
     ===================================================== */
 
     async function openClass(
-      classItem
+      classItem,
+      remember = true
     ) {
+
+      closeTransientUI();
 
       currentClass =
         classItem;
+
+
+      if (remember) {
+
+        saveLastClass(
+          classItem.id
+        );
+
+      }
 
 
       dashboardView
@@ -2229,7 +2407,8 @@
       .getElementById("backBtn")
       .addEventListener(
         "click",
-        showDashboard
+        () =>
+          showDashboard(true)
       );
 
 
@@ -2237,35 +2416,22 @@
        ADD STUDENT
     ===================================================== */
 
-    const studentModal =
-      document.getElementById(
-        "studentModal"
-      );
-
-    const addStudentBtn =
-      document.getElementById(
-        "addStudentBtn"
-      );
-
-    const cancelStudentBtn =
-      document.getElementById(
-        "cancelStudentBtn"
-      );
-
-    const saveStudentBtn =
-      document.getElementById(
-        "saveStudentBtn"
-      );
-
-    const studentNameInput =
-      document.getElementById(
-        "studentNameInput"
-      );
-
-
     addStudentBtn.addEventListener(
       "click",
       () => {
+
+        if (!currentClass)
+          return;
+
+        closeHistory();
+
+        studentNameInput.value = "";
+
+        saveStudentBtn.disabled =
+          false;
+
+        saveStudentBtn.textContent =
+          "Add Student";
 
         studentModal
           .classList
@@ -2279,13 +2445,7 @@
 
     cancelStudentBtn.addEventListener(
       "click",
-      () => {
-
-        studentModal
-          .classList
-          .add("hidden");
-
-      }
+      resetStudentModal
     );
 
 
@@ -2296,6 +2456,15 @@
 
 
     async function addStudent() {
+
+      if (!currentClass) {
+
+        resetStudentModal();
+
+        return;
+
+      }
+
 
       const name =
         studentNameInput.value.trim();
@@ -2312,6 +2481,17 @@
       }
 
 
+      /*
+        Capture the class ID now.
+        This prevents a navigation/state
+        change from accidentally changing
+        where the request goes.
+      */
+
+      const classId =
+        currentClass.id;
+
+
       saveStudentBtn.disabled =
         true;
 
@@ -2325,7 +2505,7 @@
           .insert({
 
             class_id:
-              currentClass.id,
+              classId,
 
             name:
               name,
@@ -2345,28 +2525,43 @@
           error.message
         );
 
+        /*
+          Always recover the button,
+          even if the database request fails.
+        */
+
+        saveStudentBtn.disabled =
+          false;
+
+        saveStudentBtn.textContent =
+          "Add Student";
+
+        return;
+
       }
 
-      else {
 
-        studentNameInput.value =
-          "";
+      /*
+        If the teacher somehow navigated
+        away while the request was running,
+        do not leave stale modal state behind.
+      */
 
-        studentModal
-          .classList
-          .add("hidden");
+      if (
+        !currentClass ||
+        currentClass.id !== classId
+      ) {
 
+        resetStudentModal();
 
-        await loadStudents();
+        return;
 
       }
 
 
-      saveStudentBtn.disabled =
-        false;
+      resetStudentModal();
 
-      saveStudentBtn.textContent =
-        "Add Student";
+      await loadStudents();
 
     }
 
@@ -2376,6 +2571,14 @@
     ===================================================== */
 
     async function loadStudents() {
+
+      if (!currentClass)
+        return;
+
+
+      const classId =
+        currentClass.id;
+
 
       studentsContainer.innerHTML =
         '<div class="empty-state">Loading students...</div>';
@@ -2387,7 +2590,7 @@
           .select("*")
           .eq(
             "class_id",
-            currentClass.id
+            classId
           )
           .order(
             "name",
@@ -2403,6 +2606,16 @@
 
         studentsContainer.innerHTML =
           '<div class="empty-state">Could not load students.</div>';
+
+        return;
+
+      }
+
+
+      if (
+        !currentClass ||
+        currentClass.id !== classId
+      ) {
 
         return;
 
@@ -2494,6 +2707,7 @@
             class="amount-input"
             type="number"
             min="1"
+            step="1"
             value="1"
             aria-label="Point amount"
           >
@@ -2509,7 +2723,11 @@
 
           <div class="points-display">
 
-            ${student.points}
+            ${formatBigInt(
+              toBigInt(
+                student.points
+              )
+            )}
 
           </div>
 
@@ -2584,6 +2802,90 @@
 
 
     /* =====================================================
+       POINT INPUT VALIDATION
+    ===================================================== */
+
+    function getPointAmount(
+      input
+    ) {
+
+      const raw =
+        input.value.trim();
+
+
+      if (!raw) {
+
+        alert(
+          "Please enter a point amount."
+        );
+
+        input.focus();
+
+        return null;
+
+      }
+
+
+      /*
+        Only whole positive numbers are
+        accepted. Decimal values such as
+        2.9 are NOT silently converted to 2.
+      */
+
+      if (!/^[0-9]+$/.test(raw)) {
+
+        alert(
+          "Please enter a whole number greater than 0."
+        );
+
+        input.focus();
+
+        return null;
+
+      }
+
+
+      let amount;
+
+      try {
+
+        amount =
+          BigInt(raw);
+
+      }
+
+      catch {
+
+        alert(
+          "Please enter a valid point amount."
+        );
+
+        input.focus();
+
+        return null;
+
+      }
+
+
+      if (amount < 1n) {
+
+        alert(
+          "Please enter a whole number greater than 0."
+        );
+
+        input.focus();
+
+        return null;
+
+      }
+
+
+      return amount;
+
+    }
+
+
+    /* =====================================================
        CHANGE POINTS
     ===================================================== */
 
@@ -2594,41 +2896,37 @@
       card
     ) {
 
-      let amount =
-        parseInt(
-          amountInput.value,
-          10
+      const amount =
+        getPointAmount(
+          amountInput
         );
 
 
-      if (
-        Number.isNaN(amount) ||
-        amount < 1
-      ) {
+      if (amount === null)
+        return;
 
-        amount = 1;
 
-      }
+      const oldPoints =
+        toBigInt(
+          student.points
+        );
 
 
       const change =
-        amount * direction;
+        direction === 1
+          ? amount
+          : -amount;
 
 
       const newPoints =
-        student.points +
+        oldPoints +
         change;
 
 
-      if (newPoints < 0) {
-
-        alert(
-          "A student's points cannot go below 0."
-        );
-
-        return;
-
-      }
+      /*
+        Negative points are intentionally
+        allowed now.
+      */
 
 
       const { error } =
@@ -2637,7 +2935,7 @@
           .update({
 
             points:
-              newPoints
+              newPoints.toString()
 
           })
           .eq(
@@ -2671,7 +2969,7 @@
               student.id,
 
             amount:
-              change
+              change.toString()
 
           });
 
@@ -2697,7 +2995,9 @@
 
 
       pointsDisplay.textContent =
-        newPoints;
+        formatBigInt(
+          newPoints
+        );
 
 
       showPointAnimation(
@@ -2726,16 +3026,16 @@
       animation.className =
         "point-float " +
         (
-          amount > 0
+          amount > 0n
             ? "positive"
             : "negative"
         );
 
 
       animation.textContent =
-        amount > 0
-          ? `+${amount}`
-          : `−${Math.abs(amount)}`;
+        amount > 0n
+          ? `+${formatBigInt(amount)}`
+          : `−${formatBigInt(-amount)}`;
 
 
       card.appendChild(
@@ -2809,32 +3109,6 @@
        POINT HISTORY
     ===================================================== */
 
-    const historyBtn =
-      document.getElementById(
-        "historyBtn"
-      );
-
-    const historyModal =
-      document.getElementById(
-        "historyModal"
-      );
-
-    const closeHistoryBtn =
-      document.getElementById(
-        "closeHistoryBtn"
-      );
-
-    const historyContainer =
-      document.getElementById(
-        "historyContainer"
-      );
-
-    const historySubtitle =
-      document.getElementById(
-        "historySubtitle"
-      );
-
-
     historyBtn.addEventListener(
       "click",
       loadHistory
@@ -2843,17 +3117,15 @@
 
     closeHistoryBtn.addEventListener(
       "click",
-      () => {
-
-        historyModal
-          .classList
-          .add("hidden");
-
-      }
+      closeHistory
     );
 
 
     async function loadHistory() {
+
+      if (!currentClass)
+        return;
+
 
       historyModal
         .classList
@@ -2868,6 +3140,10 @@
         currentClass.name;
 
 
+      const classId =
+        currentClass.id;
+
+
       const {
         data: students,
         error: studentsError
@@ -2879,7 +3155,7 @@
           )
           .eq(
             "class_id",
-            currentClass.id
+            classId
           );
 
 
@@ -2995,11 +3271,13 @@
 
 
           const amount =
-            entry.amount;
+            toBigInt(
+              entry.amount
+            );
 
 
           const positive =
-            amount > 0;
+            amount > 0n;
 
 
           const date =
@@ -3066,7 +3344,11 @@
                 positive
                   ? "+"
                   : "−"
-              }${Math.abs(amount)}
+              }${formatBigInt(
+                positive
+                  ? amount
+                  : -amount
+              )}
 
             </div>
 
@@ -3078,6 +3360,53 @@
 
         }
       );
+
+    }
+
+
+    /* =====================================================
+       BIGINT HELPERS
+    ===================================================== */
+
+    function toBigInt(
+      value
+    ) {
+
+      if (
+        typeof value ===
+        "bigint"
+      ) {
+
+        return value;
+
+      }
+
+
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+
+        return 0n;
+
+      }
+
+
+      return BigInt(
+        String(value)
+      );
+
+    }
+
+
+    function formatBigInt(
+      value
+    ) {
+
+      return toBigInt(
+        value
+      ).toLocaleString();
 
     }
 
