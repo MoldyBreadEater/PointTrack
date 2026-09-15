@@ -1,1 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>PointTrack — Classroom Points Tracker</title>
+  <meta name="description" content="PointTrack is a simple classroom points tracker for teachers.">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --surface-2: #f0f3f8;
+      --text: #172033;
+      --muted: #6b7280;
+      --border: #dfe4ec;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    body.dark {
+      --bg: #101318;
+      --surface: #181c23;
+      --surface-2: #222731;
+      --text: #f1f5f9;
+      --muted: #9ca3af;
+      --border: #303744;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 42px 36px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 15px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 25px;
+    }
+
+    .login-card h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.5px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      margin: 10px 0 28px;
+      line-height: 1.5;
+    }
+
+    .google-btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .google-btn:hover {
+      background: var(--surface-2);
+    }
+
+    .google-icon {
+      margin-right: 8px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    #app {
+      min-height: 100vh;
+    }
+
+    header {
+      height: 70px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn,
+    .logout-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 9px 12px;
+    }
+
+    .icon-btn:hover,
+    .logout-btn:hover {
+      background: var(--surface-2);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 34px 22px 60px;
+    }
+
+    .welcome {
+      margin-bottom: 28px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 6px;
+      font-size: 27px;
+    }
+
+    .welcome p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 16px;
+    }
+
+    .section-header h3 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .primary-btn {
+      border: 0;
+      background: var(--primary);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 9px;
+      font-weight: 600;
+    }
+
+    .primary-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .class-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .class-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .class-card h4 {
+      margin: 0 0 7px;
+      font-size: 18px;
+    }
+
+    .class-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .class-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .open-class {
+      flex: 1;
+      border: 0;
+      background: var(--primary);
+      color: white;
+      padding: 9px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .delete-class {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--danger);
+      padding: 9px 11px;
+      border-radius: 8px;
+    }
+
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 45px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* =========================
+       CLASS VIEW
+    ========================= */
+
+    .back-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 9px 13px;
+      border-radius: 8px;
+      margin-bottom: 22px;
+    }
+
+    .class-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .class-title h2 {
+      margin: 0 0 5px;
+      font-size: 28px;
+    }
+
+    .class-title p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .student-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .student-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+      box-shadow: var(--shadow);
+      overflow: visible;
+    }
+
+    .student-name {
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .student-controls {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .point-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .point-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .amount-input {
+      width: 65px;
+      height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      text-align: center;
+      outline: none;
+    }
+
+    .amount-input:focus {
+      border-color: var(--primary);
+    }
+
+    .points-display {
+      min-width: 72px;
+      text-align: right;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .remove-student {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 16px;
+      margin-left: 5px;
+    }
+
+    .remove-student:hover {
+      color: var(--danger);
+    }
+
+    /* Floating point animation */
+
+    .point-float {
+      position: absolute;
+      right: 125px;
+      top: 50%;
+      pointer-events: none;
+      font-weight: 800;
+      font-size: 17px;
+      animation: floatPoint 0.8s ease-out forwards;
+      z-index: 20;
+    }
+
+    .point-float.positive {
+      color: var(--success);
+    }
+
+    .point-float.negative {
+      color: var(--danger);
+    }
+
+    @keyframes floatPoint {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-42px) scale(1.08);
+      }
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 430px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    .modal h3 {
+      margin: 0 0 20px;
+      font-size: 21px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .field input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 15px;
+      }
+
+      main {
+        padding: 25px 14px 50px;
+      }
+
+      .logout-btn {
+        font-size: 13px;
+      }
+
+      .student-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .student-controls {
+        width: 100%;
+      }
+
+      .points-display {
+        margin-left: auto;
+      }
+
+      .point-float {
+        right: 100px;
+      }
+
+      .class-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       LOGIN SCREEN
+  ========================== -->
+
+  <section id="loginScreen">
+    <div class="login-card">
+
+      <div class="logo">PT</div>
+
+      <h1>PointTrack</h1>
+
+      <p>
+        A simple digital classroom points tracker
+        built for teachers.
+      </p>
+
+      <button id="googleLoginBtn" class="google-btn">
+        <span class="google-icon">G</span>
+        Continue with Google
+      </button>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       MAIN APP
+  ========================== -->
+
+  <div id="app" class="hidden">
+
+    <header>
+
+      <div class="brand">
+        <div class="brand-logo">PT</div>
+        PointTrack
+      </div>
+
+      <div class="header-actions">
+        <button id="themeBtn" class="icon-btn" title="Toggle dark mode">
+          ◐
+        </button>
+
+        <button id="logoutBtn" class="logout-btn">
+          Log out
+        </button>
+      </div>
+
+    </header>
+
+
+    <main>
+
+      <!-- DASHBOARD -->
+
+      <section id="dashboardView">
+
+        <div class="welcome">
+          <h2>Welcome back</h2>
+          <p id="teacherEmail"></p>
+        </div>
+
+        <div class="section-header">
+          <h3>Your Classes</h3>
+
+          <button id="createClassBtn" class="primary-btn">
+            + Create Class
+          </button>
+        </div>
+
+        <div id="classesContainer" class="classes-grid"></div>
+
+      </section>
+
+
+      <!-- CLASS VIEW -->
+
+      <section id="classView" class="hidden">
+
+        <button id="backBtn" class="back-btn">
+          ← Back to Classes
+        </button>
+
+        <div class="class-title">
+
+          <div>
+            <h2 id="currentClassName"></h2>
+            <p id="currentClassInfo"></p>
+          </div>
+
+          <button id="addStudentBtn" class="primary-btn">
+            + Add Student
+          </button>
+
+        </div>
+
+        <div id="studentsContainer" class="student-list"></div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       CREATE CLASS MODAL
+  ========================== -->
+
+  <div id="classModal" class="modal-overlay hidden">
+
+    <div class="modal">
+
+      <h3>Create Class</h3>
+
+      <div class="field">
+        <label>Class Name</label>
+        <input
+          id="classNameInput"
+          type="text"
+          placeholder="e.g. 10-Apple"
+        >
+      </div>
+
+      <div class="field">
+        <label>School Year</label>
+        <input
+          id="schoolYearInput"
+          type="text"
+          placeholder="e.g. 2026–2027"
+        >
+      </div>
+
+      <div class="field">
+        <label>Term</label>
+        <input
+          id="termInput"
+          type="text"
+          placeholder="e.g. Term 1"
+        >
+      </div>
+
+      <div class="modal-actions">
+
+        <button id="cancelClassBtn" class="secondary-btn">
+          Cancel
+        </button>
+
+        <button id="saveClassBtn" class="primary-btn">
+          Create Class
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       ADD STUDENT MODAL
+  ========================== -->
+
+  <div id="studentModal" class="modal-overlay hidden">
+
+    <div class="modal">
+
+      <h3>Add Student</h3>
+
+      <div class="field">
+        <label>Student Name</label>
+
+        <input
+          id="studentNameInput"
+          type="text"
+          placeholder="e.g. Juan Dela Cruz"
+        >
+      </div>
+
+      <div class="modal-actions">
+
+        <button id="cancelStudentBtn" class="secondary-btn">
+          Cancel
+        </button>
+
+        <button id="saveStudentBtn" class="primary-btn">
+          Add Student
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /* =====================================================
+       SUPABASE CONFIGURATION
+    ===================================================== */
+
+    const SUPABASE_URL =
+      "https://hczhnfrjcqnhodecmwuw.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_jBsWWgn62dAwCZWgNtB-kg_Pbpt7Ova";
+
+    const { createClient } = supabase;
+
+    const db = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let currentUser = null;
+    let currentClass = null;
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const app =
+      document.getElementById("app");
+
+    const googleLoginBtn =
+      document.getElementById("googleLoginBtn");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const themeBtn =
+      document.getElementById("themeBtn");
+
+    const dashboardView =
+      document.getElementById("dashboardView");
+
+    const classView =
+      document.getElementById("classView");
+
+    const classesContainer =
+      document.getElementById("classesContainer");
+
+    const studentsContainer =
+      document.getElementById("studentsContainer");
+
+    const teacherEmail =
+      document.getElementById("teacherEmail");
+
+    const currentClassName =
+      document.getElementById("currentClassName");
+
+    const currentClassInfo =
+      document.getElementById("currentClassInfo");
+
+
+    /* =====================================================
+       GOOGLE LOGIN
+    ===================================================== */
+
+    googleLoginBtn.addEventListener("click", async () => {
+
+      googleLoginBtn.disabled = true;
+      googleLoginBtn.textContent = "Connecting...";
+
+      const { error } =
+        await db.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin
+          }
+        });
+
+      if (error) {
+
+        alert("Login failed: " + error.message);
+
+        googleLoginBtn.disabled = false;
+        googleLoginBtn.innerHTML =
+          '<span class="google-icon">G</span> Continue with Google';
+      }
+
+    });
+
+
+    /* =====================================================
+       AUTH STATE
+    ===================================================== */
+
+    async function checkUser() {
+
+      const {
+        data: { session }
+      } = await db.auth.getSession();
+
+      if (session) {
+
+        currentUser = session.user;
+
+        showApp();
+
+      } else {
+
+        showLogin();
+
+      }
+    }
+
+
+    db.auth.onAuthStateChange(
+      async (event, session) => {
+
+        if (session) {
+
+          currentUser = session.user;
+
+          showApp();
+
+        } else {
+
+          currentUser = null;
+
+          showLogin();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       SHOW / HIDE SCREENS
+    ===================================================== */
+
+    function showLogin() {
+
+      loginScreen.classList.remove("hidden");
+      app.classList.add("hidden");
+
+    }
+
+
+    async function showApp() {
+
+      loginScreen.classList.add("hidden");
+      app.classList.remove("hidden");
+
+      teacherEmail.textContent =
+        currentUser.email || "";
+
+      showDashboard();
+
+      await loadClasses();
+
+    }
+
+
+    function showDashboard() {
+
+      dashboardView.classList.remove("hidden");
+      classView.classList.add("hidden");
+
+      currentClass = null;
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    logoutBtn.addEventListener("click", async () => {
+
+      await db.auth.signOut();
+
+    });
+
+
+    /* =====================================================
+       DARK MODE
+    ===================================================== */
+
+    themeBtn.addEventListener("click", () => {
+
+      document.body.classList.toggle("dark");
+
+      localStorage.setItem(
+        "pointtrack-theme",
+        document.body.classList.contains("dark")
+          ? "dark"
+          : "light"
+      );
+
+    });
+
+
+    if (
+      localStorage.getItem("pointtrack-theme")
+      === "dark"
+    ) {
+
+      document.body.classList.add("dark");
+
+    }
+
+
+    /* =====================================================
+       CREATE CLASS
+    ===================================================== */
+
+    const classModal =
+      document.getElementById("classModal");
+
+    const createClassBtn =
+      document.getElementById("createClassBtn");
+
+    const cancelClassBtn =
+      document.getElementById("cancelClassBtn");
+
+    const saveClassBtn =
+      document.getElementById("saveClassBtn");
+
+    const classNameInput =
+      document.getElementById("classNameInput");
+
+    const schoolYearInput =
+      document.getElementById("schoolYearInput");
+
+    const termInput =
+      document.getElementById("termInput");
+
+
+    createClassBtn.addEventListener(
+      "click",
+      () => {
+
+        classModal.classList.remove("hidden");
+
+        classNameInput.focus();
+
+      }
+    );
+
+
+    cancelClassBtn.addEventListener(
+      "click",
+      () => {
+
+        classModal.classList.add("hidden");
+
+      }
+    );
+
+
+    saveClassBtn.addEventListener(
+      "click",
+      createClass
+    );
+
+
+    async function createClass() {
+
+      const name =
+        classNameInput.value.trim();
+
+      const schoolYear =
+        schoolYearInput.value.trim();
+
+      const term =
+        termInput.value.trim();
+
+
+      if (!name) {
+
+        alert("Please enter a class name.");
+
+        return;
+
+      }
+
+
+      saveClassBtn.disabled = true;
+      saveClassBtn.textContent = "Creating...";
+
+
+      const { error } =
+        await db
+          .from("classes")
+          .insert({
+            teacher_id: currentUser.id,
+            name: name,
+            school_year: schoolYear,
+            term: term
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "Could not create class:\n" +
+          error.message
+        );
+
+      } else {
+
+        classNameInput.value = "";
+        schoolYearInput.value = "";
+        termInput.value = "";
+
+        classModal.classList.add("hidden");
+
+        await loadClasses();
+
+      }
+
+
+      saveClassBtn.disabled = false;
+      saveClassBtn.textContent = "Create Class";
+
+    }
+
+
+    /* =====================================================
+       LOAD CLASSES
+    ===================================================== */
+
+    async function loadClasses() {
+
+      classesContainer.innerHTML =
+        '<div class="empty-state">Loading classes...</div>';
+
+
+      const { data, error } =
+        await db
+          .from("classes")
+          .select("*")
+          .eq("teacher_id", currentUser.id)
+          .order("created_at", {
+            ascending: false
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        classesContainer.innerHTML =
+          '<div class="empty-state">Could not load classes.</div>';
+
+        return;
+
+      }
+
+
+      if (!data.length) {
+
+        classesContainer.innerHTML = `
+          <div class="empty-state">
+            <strong>No classes yet.</strong><br>
+            Create your first class to get started.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      classesContainer.innerHTML = "";
+
+
+      for (const classItem of data) {
+
+        const card =
+          document.createElement("div");
+
+        card.className = "class-card";
+
+
+        const info =
+          [
+            classItem.school_year,
+            classItem.term
+          ]
+          .filter(Boolean)
+          .join(" • ");
+
+
+        card.innerHTML = `
+
+          <h4>${escapeHtml(classItem.name)}</h4>
+
+          <p>
+            ${escapeHtml(info || "No additional information")}
+          </p>
+
+          <div class="class-buttons">
+
+            <button class="open-class">
+              Open Class
+            </button>
+
+            <button class="delete-class">
+              Delete
+            </button>
+
+          </div>
+        `;
+
+
+        card
+          .querySelector(".open-class")
+          .addEventListener(
+            "click",
+            () => openClass(classItem)
+          );
+
+
+        card
+          .querySelector(".delete-class")
+          .addEventListener(
+            "click",
+            () => deleteClass(classItem)
+          );
+
+
+        classesContainer.appendChild(card);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       DELETE CLASS
+    ===================================================== */
+
+    async function deleteClass(classItem) {
+
+      const confirmed =
+        confirm(
+          `Delete "${classItem.name}"?\n\n` +
+          "This will also remove its students and point history."
+        );
+
+
+      if (!confirmed) return;
+
+
+      const { data: students } =
+        await db
+          .from("students")
+          .select("id")
+          .eq("class_id", classItem.id);
+
+
+      if (students && students.length) {
+
+        const studentIds =
+          students.map(student => student.id);
+
+
+        await db
+          .from("point_history")
+          .delete()
+          .in("student_id", studentIds);
+
+
+        await db
+          .from("students")
+          .delete()
+          .eq("class_id", classItem.id);
+
+      }
+
+
+      const { error } =
+        await db
+          .from("classes")
+          .delete()
+          .eq("id", classItem.id);
+
+
+      if (error) {
+
+        alert(
+          "Could not delete class:\n" +
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      await loadClasses();
+
+    }
+
+
+    /* =====================================================
+       OPEN CLASS
+    ===================================================== */
+
+    async function openClass(classItem) {
+
+      currentClass = classItem;
+
+      dashboardView.classList.add("hidden");
+      classView.classList.remove("hidden");
+
+      currentClassName.textContent =
+        classItem.name;
+
+
+      const info =
+        [
+          classItem.school_year,
+          classItem.term
+        ]
+        .filter(Boolean)
+        .join(" • ");
+
+
+      currentClassInfo.textContent =
+        info || "Class";
+
+
+      await loadStudents();
+
+    }
+
+
+    /* =====================================================
+       BACK TO DASHBOARD
+    ===================================================== */
+
+    document
+      .getElementById("backBtn")
+      .addEventListener(
+        "click",
+        showDashboard
+      );
+
+
+    /* =====================================================
+       ADD STUDENT
+    ===================================================== */
+
+    const studentModal =
+      document.getElementById("studentModal");
+
+    const addStudentBtn =
+      document.getElementById("addStudentBtn");
+
+    const cancelStudentBtn =
+      document.getElementById("cancelStudentBtn");
+
+    const saveStudentBtn =
+      document.getElementById("saveStudentBtn");
+
+    const studentNameInput =
+      document.getElementById("studentNameInput");
+
+
+    addStudentBtn.addEventListener(
+      "click",
+      () => {
+
+        studentModal.classList.remove("hidden");
+
+        studentNameInput.focus();
+
+      }
+    );
+
+
+    cancelStudentBtn.addEventListener(
+      "click",
+      () => {
+
+        studentModal.classList.add("hidden");
+
+      }
+    );
+
+
+    saveStudentBtn.addEventListener(
+      "click",
+      addStudent
+    );
+
+
+    async function addStudent() {
+
+      const name =
+        studentNameInput.value.trim();
+
+
+      if (!name) {
+
+        alert("Please enter a student name.");
+
+        return;
+
+      }
+
+
+      saveStudentBtn.disabled = true;
+      saveStudentBtn.textContent = "Adding...";
+
+
+      const { error } =
+        await db
+          .from("students")
+          .insert({
+            class_id: currentClass.id,
+            name: name,
+            points: 0
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "Could not add student:\n" +
+          error.message
+        );
+
+      } else {
+
+        studentNameInput.value = "";
+
+        studentModal.classList.add("hidden");
+
+        await loadStudents();
+
+      }
+
+
+      saveStudentBtn.disabled = false;
+      saveStudentBtn.textContent = "Add Student";
+
+    }
+
+
+    /* =====================================================
+       LOAD STUDENTS
+    ===================================================== */
+
+    async function loadStudents() {
+
+      studentsContainer.innerHTML =
+        '<div class="empty-state">Loading students...</div>';
+
+
+      const { data, error } =
+        await db
+          .from("students")
+          .select("*")
+          .eq("class_id", currentClass.id)
+          .order("name", {
+            ascending: true
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        studentsContainer.innerHTML =
+          '<div class="empty-state">Could not load students.</div>';
+
+        return;
+
+      }
+
+
+      if (!data.length) {
+
+        studentsContainer.innerHTML = `
+          <div class="empty-state">
+            <strong>No students yet.</strong><br>
+            Add students to begin tracking points.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      studentsContainer.innerHTML = "";
+
+
+      data.forEach(student => {
+
+        renderStudent(student);
+
+      });
+
+    }
+
+
+    /* =====================================================
+       RENDER STUDENT
+    ===================================================== */
+
+    function renderStudent(student) {
+
+      const card =
+        document.createElement("div");
+
+      card.className = "student-card";
+
+
+      card.innerHTML = `
+
+        <div>
+
+          <div class="student-name">
+            ${escapeHtml(student.name)}
+          </div>
+
+        </div>
+
+        <div class="student-controls">
+
+          <button
+            class="point-btn minus-btn"
+            title="Subtract points"
+          >
+            −
+          </button>
+
+          <input
+            class="amount-input"
+            type="number"
+            min="1"
+            value="1"
+            aria-label="Point amount"
+          >
+
+          <button
+            class="point-btn plus-btn"
+            title="Add points"
+          >
+            +
+          </button>
+
+          <div class="points-display">
+            ${student.points}
+          </div>
+
+          <button
+            class="remove-student"
+            title="Remove student"
+          >
+            ×
+          </button>
+
+        </div>
+      `;
+
+
+      const amountInput =
+        card.querySelector(".amount-input");
+
+
+      card
+        .querySelector(".plus-btn")
+        .addEventListener(
+          "click",
+          () => changePoints(
+            student,
+            amountInput,
+            1,
+            card
+          )
+        );
+
+
+      card
+        .querySelector(".minus-btn")
+        .addEventListener(
+          "click",
+          () => changePoints(
+            student,
+            amountInput,
+            -1,
+            card
+          )
+        );
+
+
+      card
+        .querySelector(".remove-student")
+        .addEventListener(
+          "click",
+          () => deleteStudent(student)
+        );
+
+
+      studentsContainer.appendChild(card);
+
+    }
+
+
+    /* =====================================================
+       CHANGE POINTS
+    ===================================================== */
+
+    async function changePoints(
+      student,
+      amountInput,
+      direction,
+      card
+    ) {
+
+      let amount =
+        parseInt(amountInput.value, 10);
+
+
+      if (
+        Number.isNaN(amount) ||
+        amount < 1
+      ) {
+
+        amount = 1;
+
+      }
+
+
+      const change =
+        amount * direction;
+
+
+      const newPoints =
+        student.points + change;
+
+
+      if (newPoints < 0) {
+
+        alert(
+          "A student's points cannot go below 0."
+        );
+
+        return;
+
+      }
+
+
+      const { error } =
+        await db
+          .from("students")
+          .update({
+            points: newPoints
+          })
+          .eq("id", student.id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "Could not update points:\n" +
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      /* Record history */
+
+      const { error: historyError } =
+        await db
+          .from("point_history")
+          .insert({
+            student_id: student.id,
+            amount: change
+          });
+
+
+      if (historyError) {
+
+        console.error(
+          "History error:",
+          historyError
+        );
+
+      }
+
+
+      student.points = newPoints;
+
+
+      const pointsDisplay =
+        card.querySelector(
+          ".points-display"
+        );
+
+
+      pointsDisplay.textContent =
+        newPoints;
+
+
+      /* Floating animation */
+
+      showPointAnimation(
+        card,
+        change
+      );
+
+    }
+
+
+    /* =====================================================
+       FLOATING +5 / -5
+    ===================================================== */
+
+    function showPointAnimation(
+      card,
+      amount
+    ) {
+
+      const animation =
+        document.createElement("div");
+
+
+      animation.className =
+        "point-float " +
+        (
+          amount > 0
+            ? "positive"
+            : "negative"
+        );
+
+
+      animation.textContent =
+        amount > 0
+          ? `+${amount}`
+          : `−${Math.abs(amount)}`;
+
+
+      card.appendChild(animation);
+
+
+      setTimeout(() => {
+
+        animation.remove();
+
+      }, 850);
+
+    }
+
+
+    /* =====================================================
+       DELETE STUDENT
+    ===================================================== */
+
+    async function deleteStudent(student) {
+
+      const confirmed =
+        confirm(
+          `Remove ${student.name} from this class?`
+        );
+
+
+      if (!confirmed) return;
+
+
+      await db
+        .from("point_history")
+        .delete()
+        .eq("student_id", student.id);
+
+
+      const { error } =
+        await db
+          .from("students")
+          .delete()
+          .eq("id", student.id);
+
+
+      if (error) {
+
+        alert(
+          "Could not remove student:\n" +
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      await loadStudents();
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+       Prevents student/class names from becoming HTML
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    checkUser();
+
+  </script>
+
+</body>
+</html>
