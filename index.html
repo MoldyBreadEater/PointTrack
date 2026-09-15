@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>PointTrack — Classroom Points Tracker</title>
-  <meta name="description" content="PointTrack is a simple classroom points tracker for teachers.">
+  <meta
+    name="description"
+    content="PointTrack is a simple classroom points tracker for teachers."
+  >
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -181,7 +183,8 @@
     }
 
     .icon-btn,
-    .logout-btn {
+    .logout-btn,
+    .secondary-btn {
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
@@ -190,7 +193,8 @@
     }
 
     .icon-btn:hover,
-    .logout-btn:hover {
+    .logout-btn:hover,
+    .secondary-btn:hover {
       background: var(--surface-2);
     }
 
@@ -338,6 +342,12 @@
       color: var(--muted);
     }
 
+    .class-actions {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+    }
+
     .student-list {
       display: grid;
       gap: 12px;
@@ -384,7 +394,7 @@
     }
 
     .amount-input {
-      width: 65px;
+      width: 75px;
       height: 38px;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -399,7 +409,7 @@
     }
 
     .points-display {
-      min-width: 72px;
+      min-width: 85px;
       text-align: right;
       font-size: 21px;
       font-weight: 800;
@@ -417,7 +427,9 @@
       color: var(--danger);
     }
 
-    /* Floating point animation */
+    /* =========================
+       FLOATING POINT ANIMATION
+    ========================= */
 
     .point-float {
       position: absolute;
@@ -451,7 +463,7 @@
     }
 
     /* =========================
-       MODAL
+       MODALS
     ========================= */
 
     .modal-overlay {
@@ -513,12 +525,76 @@
       margin-top: 20px;
     }
 
-    .secondary-btn {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 8px;
+    /* =========================
+       HISTORY
+    ========================= */
+
+    .history-modal {
+      max-width: 650px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .history-header h3 {
+      margin: 0 0 5px;
+    }
+
+    .history-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .history-container {
+      display: grid;
+      gap: 8px;
+    }
+
+    .history-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 14px;
+      background: var(--surface-2);
+      border-radius: 9px;
+    }
+
+    .history-student {
+      font-weight: 600;
+    }
+
+    .history-time {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .history-amount {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .history-amount.positive {
+      color: var(--success);
+    }
+
+    .history-amount.negative {
+      color: var(--danger);
+    }
+
+    .history-empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 10px;
     }
 
     /* =========================
@@ -526,6 +602,7 @@
     ========================= */
 
     @media (max-width: 650px) {
+
       header {
         padding: 0 15px;
       }
@@ -559,6 +636,20 @@
         align-items: flex-start;
         flex-direction: column;
       }
+
+      .class-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .class-actions button {
+        width: 100%;
+      }
+
+      .history-modal {
+        max-height: 90vh;
+      }
     }
   </style>
 </head>
@@ -566,13 +657,16 @@
 <body>
 
   <!-- =========================
-       LOGIN SCREEN
-  ========================== -->
+       LOGIN
+  ========================= -->
 
   <section id="loginScreen">
+
     <div class="login-card">
 
-      <div class="logo">PT</div>
+      <div class="logo">
+        PT
+      </div>
 
       <h1>PointTrack</h1>
 
@@ -581,36 +675,54 @@
         built for teachers.
       </p>
 
-      <button id="googleLoginBtn" class="google-btn">
+      <button
+        id="googleLoginBtn"
+        class="google-btn"
+      >
         <span class="google-icon">G</span>
         Continue with Google
       </button>
 
     </div>
+
   </section>
 
 
   <!-- =========================
-       MAIN APP
-  ========================== -->
+       APP
+  ========================= -->
 
   <div id="app" class="hidden">
 
     <header>
 
       <div class="brand">
-        <div class="brand-logo">PT</div>
+
+        <div class="brand-logo">
+          PT
+        </div>
+
         PointTrack
+
       </div>
 
       <div class="header-actions">
-        <button id="themeBtn" class="icon-btn" title="Toggle dark mode">
+
+        <button
+          id="themeBtn"
+          class="icon-btn"
+          title="Toggle dark mode"
+        >
           ◐
         </button>
 
-        <button id="logoutBtn" class="logout-btn">
+        <button
+          id="logoutBtn"
+          class="logout-btn"
+        >
           Log out
         </button>
+
       </div>
 
     </header>
@@ -618,50 +730,100 @@
 
     <main>
 
-      <!-- DASHBOARD -->
+      <!-- =========================
+           DASHBOARD
+      ========================= -->
 
       <section id="dashboardView">
 
         <div class="welcome">
-          <h2>Welcome back</h2>
+
+          <h2>
+            Welcome back
+          </h2>
+
           <p id="teacherEmail"></p>
+
         </div>
+
 
         <div class="section-header">
-          <h3>Your Classes</h3>
 
-          <button id="createClassBtn" class="primary-btn">
+          <h3>
+            Your Classes
+          </h3>
+
+          <button
+            id="createClassBtn"
+            class="primary-btn"
+          >
             + Create Class
           </button>
+
         </div>
 
-        <div id="classesContainer" class="classes-grid"></div>
+
+        <div
+          id="classesContainer"
+          class="classes-grid"
+        ></div>
 
       </section>
 
 
-      <!-- CLASS VIEW -->
+      <!-- =========================
+           CLASS VIEW
+      ========================= -->
 
-      <section id="classView" class="hidden">
+      <section
+        id="classView"
+        class="hidden"
+      >
 
-        <button id="backBtn" class="back-btn">
+        <button
+          id="backBtn"
+          class="back-btn"
+        >
           ← Back to Classes
         </button>
+
 
         <div class="class-title">
 
           <div>
+
             <h2 id="currentClassName"></h2>
+
             <p id="currentClassInfo"></p>
+
           </div>
 
-          <button id="addStudentBtn" class="primary-btn">
-            + Add Student
-          </button>
+
+          <div class="class-actions">
+
+            <button
+              id="historyBtn"
+              class="secondary-btn"
+            >
+              View History
+            </button>
+
+            <button
+              id="addStudentBtn"
+              class="primary-btn"
+            >
+              + Add Student
+            </button>
+
+          </div>
 
         </div>
 
-        <div id="studentsContainer" class="student-list"></div>
+
+        <div
+          id="studentsContainer"
+          class="student-list"
+        ></div>
 
       </section>
 
@@ -672,48 +834,78 @@
 
   <!-- =========================
        CREATE CLASS MODAL
-  ========================== -->
+  ========================= -->
 
-  <div id="classModal" class="modal-overlay hidden">
+  <div
+    id="classModal"
+    class="modal-overlay hidden"
+  >
 
     <div class="modal">
 
-      <h3>Create Class</h3>
+      <h3>
+        Create Class
+      </h3>
+
 
       <div class="field">
-        <label>Class Name</label>
+
+        <label>
+          Class Name
+        </label>
+
         <input
           id="classNameInput"
           type="text"
           placeholder="e.g. 10-Apple"
         >
+
       </div>
 
+
       <div class="field">
-        <label>School Year</label>
+
+        <label>
+          School Year
+        </label>
+
         <input
           id="schoolYearInput"
           type="text"
           placeholder="e.g. 2026–2027"
         >
+
       </div>
 
+
       <div class="field">
-        <label>Term</label>
+
+        <label>
+          Term
+        </label>
+
         <input
           id="termInput"
           type="text"
           placeholder="e.g. Term 1"
         >
+
       </div>
+
 
       <div class="modal-actions">
 
-        <button id="cancelClassBtn" class="secondary-btn">
+        <button
+          id="cancelClassBtn"
+          class="secondary-btn"
+        >
           Cancel
         </button>
 
-        <button id="saveClassBtn" class="primary-btn">
+        <button
+          id="saveClassBtn"
+          class="primary-btn"
+        >
           Create Class
         </button>
 
@@ -726,31 +918,48 @@
 
   <!-- =========================
        ADD STUDENT MODAL
-  ========================== -->
+  ========================= -->
 
-  <div id="studentModal" class="modal-overlay hidden">
+  <div
+    id="studentModal"
+    class="modal-overlay hidden"
+  >
 
     <div class="modal">
 
-      <h3>Add Student</h3>
+      <h3>
+        Add Student
+      </h3>
+
 
       <div class="field">
-        <label>Student Name</label>
+
+        <label>
+          Student Name
+        </label>
 
         <input
           id="studentNameInput"
           type="text"
           placeholder="e.g. Juan Dela Cruz"
         >
+
       </div>
+
 
       <div class="modal-actions">
 
-        <button id="cancelStudentBtn" class="secondary-btn">
+        <button
+          id="cancelStudentBtn"
+          class="secondary-btn"
+        >
           Cancel
         </button>
 
-        <button id="saveStudentBtn" class="primary-btn">
+        <button
+          id="saveStudentBtn"
+          class="primary-btn"
+        >
           Add Student
         </button>
 
@@ -761,10 +970,54 @@
   </div>
 
 
+  <!-- =========================
+       POINT HISTORY MODAL
+  ========================= -->
+
+  <div
+    id="historyModal"
+    class="modal-overlay hidden"
+  >
+
+    <div class="modal history-modal">
+
+      <div class="history-header">
+
+        <div>
+
+          <h3>
+            Point History
+          </h3>
+
+          <p id="historySubtitle"></p>
+
+        </div>
+
+
+        <button
+          id="closeHistoryBtn"
+          class="secondary-btn"
+        >
+          Close
+        </button>
+
+      </div>
+
+
+      <div
+        id="historyContainer"
+        class="history-container"
+      ></div>
+
+    </div>
+
+  </div>
+
+
   <script>
 
     /* =====================================================
-       SUPABASE CONFIGURATION
+       SUPABASE
     ===================================================== */
 
     const SUPABASE_URL =
@@ -773,7 +1026,9 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_jBsWWgn62dAwCZWgNtB-kg_Pbpt7Ova";
 
+
     const { createClient } = supabase;
+
 
     const db = createClient(
       SUPABASE_URL,
@@ -786,6 +1041,7 @@
     ===================================================== */
 
     let currentUser = null;
+
     let currentClass = null;
 
 
@@ -831,55 +1087,82 @@
 
 
     /* =====================================================
-       GOOGLE LOGIN
+       LOGIN
     ===================================================== */
 
-    googleLoginBtn.addEventListener("click", async () => {
+    googleLoginBtn.addEventListener(
+      "click",
+      async () => {
 
-      googleLoginBtn.disabled = true;
-      googleLoginBtn.textContent = "Connecting...";
+        googleLoginBtn.disabled = true;
 
-      const { error } =
-        await db.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: "https://moldybreadeater.github.io/PointTrack/"
-          }
-        });
+        googleLoginBtn.textContent =
+          "Connecting...";
 
-      if (error) {
 
-        alert("Login failed: " + error.message);
+        const { error } =
+          await db.auth.signInWithOAuth({
 
-        googleLoginBtn.disabled = false;
-        googleLoginBtn.innerHTML =
-          '<span class="google-icon">G</span> Continue with Google';
+            provider: "google",
+
+            options: {
+
+              redirectTo:
+                "https://moldybreadeater.github.io/PointTrack/"
+
+            }
+
+          });
+
+
+        if (error) {
+
+          console.error(error);
+
+          alert(
+            "Login failed:\n" +
+            error.message
+          );
+
+
+          googleLoginBtn.disabled = false;
+
+          googleLoginBtn.innerHTML =
+            '<span class="google-icon">G</span> Continue with Google';
+
+        }
+
       }
-
-    });
+    );
 
 
     /* =====================================================
-       AUTH STATE
+       AUTH
     ===================================================== */
 
     async function checkUser() {
 
       const {
         data: { session }
-      } = await db.auth.getSession();
+      } =
+        await db.auth.getSession();
+
 
       if (session) {
 
-        currentUser = session.user;
+        currentUser =
+          session.user;
 
         showApp();
 
-      } else {
+      }
+
+      else {
 
         showLogin();
 
       }
+
     }
 
 
@@ -888,13 +1171,17 @@
 
         if (session) {
 
-          currentUser = session.user;
+          currentUser =
+            session.user;
 
           showApp();
 
-        } else {
+        }
 
-          currentUser = null;
+        else {
+
+          currentUser =
+            null;
 
           showLogin();
 
@@ -905,24 +1192,36 @@
 
 
     /* =====================================================
-       SHOW / HIDE SCREENS
+       SCREEN CONTROL
     ===================================================== */
 
     function showLogin() {
 
-      loginScreen.classList.remove("hidden");
-      app.classList.add("hidden");
+      loginScreen
+        .classList
+        .remove("hidden");
+
+      app
+        .classList
+        .add("hidden");
 
     }
 
 
     async function showApp() {
 
-      loginScreen.classList.add("hidden");
-      app.classList.remove("hidden");
+      loginScreen
+        .classList
+        .add("hidden");
+
+      app
+        .classList
+        .remove("hidden");
+
 
       teacherEmail.textContent =
         currentUser.email || "";
+
 
       showDashboard();
 
@@ -933,10 +1232,16 @@
 
     function showDashboard() {
 
-      dashboardView.classList.remove("hidden");
-      classView.classList.add("hidden");
+      dashboardView
+        .classList
+        .remove("hidden");
 
-      currentClass = null;
+      classView
+        .classList
+        .add("hidden");
+
+      currentClass =
+        null;
 
     }
 
@@ -945,37 +1250,52 @@
        LOGOUT
     ===================================================== */
 
-    logoutBtn.addEventListener("click", async () => {
+    logoutBtn.addEventListener(
+      "click",
+      async () => {
 
-      await db.auth.signOut();
+        await db.auth.signOut();
 
-    });
+      }
+    );
 
 
     /* =====================================================
        DARK MODE
     ===================================================== */
 
-    themeBtn.addEventListener("click", () => {
+    themeBtn.addEventListener(
+      "click",
+      () => {
 
-      document.body.classList.toggle("dark");
+        document.body
+          .classList
+          .toggle("dark");
 
-      localStorage.setItem(
-        "pointtrack-theme",
-        document.body.classList.contains("dark")
-          ? "dark"
-          : "light"
-      );
 
-    });
+        localStorage.setItem(
+          "pointtrack-theme",
+
+          document.body
+            .classList
+            .contains("dark")
+              ? "dark"
+              : "light"
+        );
+
+      }
+    );
 
 
     if (
-      localStorage.getItem("pointtrack-theme")
-      === "dark"
+      localStorage.getItem(
+        "pointtrack-theme"
+      ) === "dark"
     ) {
 
-      document.body.classList.add("dark");
+      document.body
+        .classList
+        .add("dark");
 
     }
 
@@ -985,32 +1305,48 @@
     ===================================================== */
 
     const classModal =
-      document.getElementById("classModal");
+      document.getElementById(
+        "classModal"
+      );
 
     const createClassBtn =
-      document.getElementById("createClassBtn");
+      document.getElementById(
+        "createClassBtn"
+      );
 
     const cancelClassBtn =
-      document.getElementById("cancelClassBtn");
+      document.getElementById(
+        "cancelClassBtn"
+      );
 
     const saveClassBtn =
-      document.getElementById("saveClassBtn");
+      document.getElementById(
+        "saveClassBtn"
+      );
 
     const classNameInput =
-      document.getElementById("classNameInput");
+      document.getElementById(
+        "classNameInput"
+      );
 
     const schoolYearInput =
-      document.getElementById("schoolYearInput");
+      document.getElementById(
+        "schoolYearInput"
+      );
 
     const termInput =
-      document.getElementById("termInput");
+      document.getElementById(
+        "termInput"
+      );
 
 
     createClassBtn.addEventListener(
       "click",
       () => {
 
-        classModal.classList.remove("hidden");
+        classModal
+          .classList
+          .remove("hidden");
 
         classNameInput.focus();
 
@@ -1022,7 +1358,9 @@
       "click",
       () => {
 
-        classModal.classList.add("hidden");
+        classModal
+          .classList
+          .add("hidden");
 
       }
     );
@@ -1048,7 +1386,9 @@
 
       if (!name) {
 
-        alert("Please enter a class name.");
+        alert(
+          "Please enter a class name."
+        );
 
         return;
 
@@ -1056,17 +1396,28 @@
 
 
       saveClassBtn.disabled = true;
-      saveClassBtn.textContent = "Creating...";
+
+      saveClassBtn.textContent =
+        "Creating...";
 
 
       const { error } =
         await db
           .from("classes")
           .insert({
-            teacher_id: currentUser.id,
-            name: name,
-            school_year: schoolYear,
-            term: term
+
+            teacher_id:
+              currentUser.id,
+
+            name:
+              name,
+
+            school_year:
+              schoolYear,
+
+            term:
+              term
+
           });
 
 
@@ -1079,21 +1430,32 @@
           error.message
         );
 
-      } else {
+      }
+
+      else {
 
         classNameInput.value = "";
+
         schoolYearInput.value = "";
+
         termInput.value = "";
 
-        classModal.classList.add("hidden");
+
+        classModal
+          .classList
+          .add("hidden");
+
 
         await loadClasses();
 
       }
 
 
-      saveClassBtn.disabled = false;
-      saveClassBtn.textContent = "Create Class";
+      saveClassBtn.disabled =
+        false;
+
+      saveClassBtn.textContent =
+        "Create Class";
 
     }
 
@@ -1112,10 +1474,16 @@
         await db
           .from("classes")
           .select("*")
-          .eq("teacher_id", currentUser.id)
-          .order("created_at", {
-            ascending: false
-          });
+          .eq(
+            "teacher_id",
+            currentUser.id
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
 
 
       if (error) {
@@ -1133,10 +1501,20 @@
       if (!data.length) {
 
         classesContainer.innerHTML = `
+
           <div class="empty-state">
-            <strong>No classes yet.</strong><br>
-            Create your first class to get started.
+
+            <strong>
+              No classes yet.
+            </strong>
+
+            <br>
+
+            Create your first class
+            to get started.
+
           </div>
+
         `;
 
         return;
@@ -1144,65 +1522,98 @@
       }
 
 
-      classesContainer.innerHTML = "";
+      classesContainer.innerHTML =
+        "";
 
 
-      for (const classItem of data) {
+      for (
+        const classItem
+        of data
+      ) {
 
         const card =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
 
-        card.className = "class-card";
+
+        card.className =
+          "class-card";
 
 
-        const info =
-          [
-            classItem.school_year,
-            classItem.term
-          ]
-          .filter(Boolean)
-          .join(" • ");
+        const info = [
+
+          classItem.school_year,
+
+          classItem.term
+
+        ]
+        .filter(Boolean)
+        .join(" • ");
 
 
         card.innerHTML = `
 
-          <h4>${escapeHtml(classItem.name)}</h4>
+          <h4>
+            ${escapeHtml(
+              classItem.name
+            )}
+          </h4>
 
           <p>
-            ${escapeHtml(info || "No additional information")}
+            ${escapeHtml(
+              info ||
+              "No additional information"
+            )}
           </p>
 
           <div class="class-buttons">
 
-            <button class="open-class">
+            <button
+              class="open-class"
+            >
               Open Class
             </button>
 
-            <button class="delete-class">
+            <button
+              class="delete-class"
+            >
               Delete
             </button>
 
           </div>
+
         `;
 
 
         card
-          .querySelector(".open-class")
+          .querySelector(
+            ".open-class"
+          )
           .addEventListener(
             "click",
-            () => openClass(classItem)
+            () =>
+              openClass(
+                classItem
+              )
           );
 
 
         card
-          .querySelector(".delete-class")
+          .querySelector(
+            ".delete-class"
+          )
           .addEventListener(
             "click",
-            () => deleteClass(classItem)
+            () =>
+              deleteClass(
+                classItem
+              )
           );
 
 
-        classesContainer.appendChild(card);
+        classesContainer
+          .appendChild(card);
 
       }
 
@@ -1213,7 +1624,9 @@
        DELETE CLASS
     ===================================================== */
 
-    async function deleteClass(classItem) {
+    async function deleteClass(
+      classItem
+    ) {
 
       const confirmed =
         confirm(
@@ -1222,32 +1635,50 @@
         );
 
 
-      if (!confirmed) return;
+      if (!confirmed)
+        return;
 
 
-      const { data: students } =
+      const {
+        data: students
+      } =
         await db
           .from("students")
           .select("id")
-          .eq("class_id", classItem.id);
+          .eq(
+            "class_id",
+            classItem.id
+          );
 
 
-      if (students && students.length) {
+      if (
+        students &&
+        students.length
+      ) {
 
         const studentIds =
-          students.map(student => student.id);
+          students.map(
+            student =>
+              student.id
+          );
 
 
         await db
           .from("point_history")
           .delete()
-          .in("student_id", studentIds);
+          .in(
+            "student_id",
+            studentIds
+          );
 
 
         await db
           .from("students")
           .delete()
-          .eq("class_id", classItem.id);
+          .eq(
+            "class_id",
+            classItem.id
+          );
 
       }
 
@@ -1256,7 +1687,10 @@
         await db
           .from("classes")
           .delete()
-          .eq("id", classItem.id);
+          .eq(
+            "id",
+            classItem.id
+          );
 
 
       if (error) {
@@ -1280,24 +1714,36 @@
        OPEN CLASS
     ===================================================== */
 
-    async function openClass(classItem) {
+    async function openClass(
+      classItem
+    ) {
 
-      currentClass = classItem;
+      currentClass =
+        classItem;
 
-      dashboardView.classList.add("hidden");
-      classView.classList.remove("hidden");
+
+      dashboardView
+        .classList
+        .add("hidden");
+
+      classView
+        .classList
+        .remove("hidden");
+
 
       currentClassName.textContent =
         classItem.name;
 
 
-      const info =
-        [
-          classItem.school_year,
-          classItem.term
-        ]
-        .filter(Boolean)
-        .join(" • ");
+      const info = [
+
+        classItem.school_year,
+
+        classItem.term
+
+      ]
+      .filter(Boolean)
+      .join(" • ");
 
 
       currentClassInfo.textContent =
@@ -1310,7 +1756,7 @@
 
 
     /* =====================================================
-       BACK TO DASHBOARD
+       BACK
     ===================================================== */
 
     document
@@ -1326,26 +1772,38 @@
     ===================================================== */
 
     const studentModal =
-      document.getElementById("studentModal");
+      document.getElementById(
+        "studentModal"
+      );
 
     const addStudentBtn =
-      document.getElementById("addStudentBtn");
+      document.getElementById(
+        "addStudentBtn"
+      );
 
     const cancelStudentBtn =
-      document.getElementById("cancelStudentBtn");
+      document.getElementById(
+        "cancelStudentBtn"
+      );
 
     const saveStudentBtn =
-      document.getElementById("saveStudentBtn");
+      document.getElementById(
+        "saveStudentBtn"
+      );
 
     const studentNameInput =
-      document.getElementById("studentNameInput");
+      document.getElementById(
+        "studentNameInput"
+      );
 
 
     addStudentBtn.addEventListener(
       "click",
       () => {
 
-        studentModal.classList.remove("hidden");
+        studentModal
+          .classList
+          .remove("hidden");
 
         studentNameInput.focus();
 
@@ -1357,7 +1815,9 @@
       "click",
       () => {
 
-        studentModal.classList.add("hidden");
+        studentModal
+          .classList
+          .add("hidden");
 
       }
     );
@@ -1377,24 +1837,36 @@
 
       if (!name) {
 
-        alert("Please enter a student name.");
+        alert(
+          "Please enter a student name."
+        );
 
         return;
 
       }
 
 
-      saveStudentBtn.disabled = true;
-      saveStudentBtn.textContent = "Adding...";
+      saveStudentBtn.disabled =
+        true;
+
+      saveStudentBtn.textContent =
+        "Adding...";
 
 
       const { error } =
         await db
           .from("students")
           .insert({
-            class_id: currentClass.id,
-            name: name,
-            points: 0
+
+            class_id:
+              currentClass.id,
+
+            name:
+              name,
+
+            points:
+              0
+
           });
 
 
@@ -1407,19 +1879,28 @@
           error.message
         );
 
-      } else {
+      }
 
-        studentNameInput.value = "";
+      else {
 
-        studentModal.classList.add("hidden");
+        studentNameInput.value =
+          "";
+
+        studentModal
+          .classList
+          .add("hidden");
+
 
         await loadStudents();
 
       }
 
 
-      saveStudentBtn.disabled = false;
-      saveStudentBtn.textContent = "Add Student";
+      saveStudentBtn.disabled =
+        false;
+
+      saveStudentBtn.textContent =
+        "Add Student";
 
     }
 
@@ -1438,10 +1919,16 @@
         await db
           .from("students")
           .select("*")
-          .eq("class_id", currentClass.id)
-          .order("name", {
-            ascending: true
-          });
+          .eq(
+            "class_id",
+            currentClass.id
+          )
+          .order(
+            "name",
+            {
+              ascending: true
+            }
+          );
 
 
       if (error) {
@@ -1459,10 +1946,20 @@
       if (!data.length) {
 
         studentsContainer.innerHTML = `
+
           <div class="empty-state">
-            <strong>No students yet.</strong><br>
-            Add students to begin tracking points.
+
+            <strong>
+              No students yet.
+            </strong>
+
+            <br>
+
+            Add students to begin
+            tracking points.
+
           </div>
+
         `;
 
         return;
@@ -1470,14 +1967,16 @@
       }
 
 
-      studentsContainer.innerHTML = "";
+      studentsContainer.innerHTML =
+        "";
 
 
-      data.forEach(student => {
-
-        renderStudent(student);
-
-      });
+      data.forEach(
+        student =>
+          renderStudent(
+            student
+          )
+      );
 
     }
 
@@ -1486,12 +1985,18 @@
        RENDER STUDENT
     ===================================================== */
 
-    function renderStudent(student) {
+    function renderStudent(
+      student
+    ) {
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
-      card.className = "student-card";
+
+      card.className =
+        "student-card";
 
 
       card.innerHTML = `
@@ -1499,10 +2004,15 @@
         <div>
 
           <div class="student-name">
-            ${escapeHtml(student.name)}
+
+            ${escapeHtml(
+              student.name
+            )}
+
           </div>
 
         </div>
+
 
         <div class="student-controls">
 
@@ -1513,6 +2023,7 @@
             −
           </button>
 
+
           <input
             class="amount-input"
             type="number"
@@ -1521,6 +2032,7 @@
             aria-label="Point amount"
           >
 
+
           <button
             class="point-btn plus-btn"
             title="Add points"
@@ -1528,9 +2040,13 @@
             +
           </button>
 
+
           <div class="points-display">
+
             ${student.points}
+
           </div>
+
 
           <button
             class="remove-student"
@@ -1540,48 +2056,63 @@
           </button>
 
         </div>
+
       `;
 
 
       const amountInput =
-        card.querySelector(".amount-input");
-
-
-      card
-        .querySelector(".plus-btn")
-        .addEventListener(
-          "click",
-          () => changePoints(
-            student,
-            amountInput,
-            1,
-            card
-          )
+        card.querySelector(
+          ".amount-input"
         );
 
 
       card
-        .querySelector(".minus-btn")
+        .querySelector(
+          ".plus-btn"
+        )
         .addEventListener(
           "click",
-          () => changePoints(
-            student,
-            amountInput,
-            -1,
-            card
-          )
+          () =>
+            changePoints(
+              student,
+              amountInput,
+              1,
+              card
+            )
         );
 
 
       card
-        .querySelector(".remove-student")
+        .querySelector(
+          ".minus-btn"
+        )
         .addEventListener(
           "click",
-          () => deleteStudent(student)
+          () =>
+            changePoints(
+              student,
+              amountInput,
+              -1,
+              card
+            )
         );
 
 
-      studentsContainer.appendChild(card);
+      card
+        .querySelector(
+          ".remove-student"
+        )
+        .addEventListener(
+          "click",
+          () =>
+            deleteStudent(
+              student
+            )
+        );
+
+
+      studentsContainer
+        .appendChild(card);
 
     }
 
@@ -1598,7 +2129,10 @@
     ) {
 
       let amount =
-        parseInt(amountInput.value, 10);
+        parseInt(
+          amountInput.value,
+          10
+        );
 
 
       if (
@@ -1616,7 +2150,8 @@
 
 
       const newPoints =
-        student.points + change;
+        student.points +
+        change;
 
 
       if (newPoints < 0) {
@@ -1634,9 +2169,15 @@
         await db
           .from("students")
           .update({
-            points: newPoints
+
+            points:
+              newPoints
+
           })
-          .eq("id", student.id);
+          .eq(
+            "id",
+            student.id
+          );
 
 
       if (error) {
@@ -1653,14 +2194,19 @@
       }
 
 
-      /* Record history */
-
-      const { error: historyError } =
+      const {
+        error: historyError
+      } =
         await db
           .from("point_history")
           .insert({
-            student_id: student.id,
-            amount: change
+
+            student_id:
+              student.id,
+
+            amount:
+              change
+
           });
 
 
@@ -1674,7 +2220,8 @@
       }
 
 
-      student.points = newPoints;
+      student.points =
+        newPoints;
 
 
       const pointsDisplay =
@@ -1687,8 +2234,6 @@
         newPoints;
 
 
-      /* Floating animation */
-
       showPointAnimation(
         card,
         change
@@ -1698,7 +2243,7 @@
 
 
     /* =====================================================
-       FLOATING +5 / -5
+       FLOATING POINT ANIMATION
     ===================================================== */
 
     function showPointAnimation(
@@ -1707,7 +2252,9 @@
     ) {
 
       const animation =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
 
       animation.className =
@@ -1725,14 +2272,15 @@
           : `−${Math.abs(amount)}`;
 
 
-      card.appendChild(animation);
+      card.appendChild(
+        animation
+      );
 
 
-      setTimeout(() => {
-
-        animation.remove();
-
-      }, 850);
+      setTimeout(
+        () => animation.remove(),
+        850
+      );
 
     }
 
@@ -1741,7 +2289,9 @@
        DELETE STUDENT
     ===================================================== */
 
-    async function deleteStudent(student) {
+    async function deleteStudent(
+      student
+    ) {
 
       const confirmed =
         confirm(
@@ -1749,20 +2299,27 @@
         );
 
 
-      if (!confirmed) return;
+      if (!confirmed)
+        return;
 
 
       await db
         .from("point_history")
         .delete()
-        .eq("student_id", student.id);
+        .eq(
+          "student_id",
+          student.id
+        );
 
 
       const { error } =
         await db
           .from("students")
           .delete()
-          .eq("id", student.id);
+          .eq(
+            "id",
+            student.id
+          );
 
 
       if (error) {
@@ -1783,18 +2340,329 @@
 
 
     /* =====================================================
-       ESCAPE HTML
-       Prevents student/class names from becoming HTML
+       POINT HISTORY
     ===================================================== */
 
-    function escapeHtml(value) {
+    const historyBtn =
+      document.getElementById(
+        "historyBtn"
+      );
+
+    const historyModal =
+      document.getElementById(
+        "historyModal"
+      );
+
+    const closeHistoryBtn =
+      document.getElementById(
+        "closeHistoryBtn"
+      );
+
+    const historyContainer =
+      document.getElementById(
+        "historyContainer"
+      );
+
+    const historySubtitle =
+      document.getElementById(
+        "historySubtitle"
+      );
+
+
+    historyBtn.addEventListener(
+      "click",
+      loadHistory
+    );
+
+
+    closeHistoryBtn.addEventListener(
+      "click",
+      () => {
+
+        historyModal
+          .classList
+          .add("hidden");
+
+      }
+    );
+
+
+    async function loadHistory() {
+
+      historyModal
+        .classList
+        .remove("hidden");
+
+
+      historyContainer.innerHTML =
+        '<div class="history-empty">Loading history...</div>';
+
+
+      historySubtitle.textContent =
+        currentClass.name;
+
+
+      /*
+        Get students in this class.
+      */
+
+      const {
+        data: students,
+        error: studentsError
+      } =
+        await db
+          .from("students")
+          .select(
+            "id, name"
+          )
+          .eq(
+            "class_id",
+            currentClass.id
+          );
+
+
+      if (studentsError) {
+
+        console.error(
+          studentsError
+        );
+
+        historyContainer.innerHTML =
+          '<div class="history-empty">Could not load history.</div>';
+
+        return;
+
+      }
+
+
+      if (!students.length) {
+
+        historyContainer.innerHTML =
+          '<div class="history-empty">No students yet.</div>';
+
+        return;
+
+      }
+
+
+      const studentIds =
+        students.map(
+          student =>
+            student.id
+        );
+
+
+      /*
+        Get history belonging
+        to those students.
+      */
+
+      const {
+        data: history,
+        error: historyError
+      } =
+        await db
+          .from("point_history")
+          .select("*")
+          .in(
+            "student_id",
+            studentIds
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (historyError) {
+
+        console.error(
+          historyError
+        );
+
+        historyContainer.innerHTML =
+          '<div class="history-empty">Could not load history.</div>';
+
+        return;
+
+      }
+
+
+      if (!history.length) {
+
+        historyContainer.innerHTML = `
+
+          <div class="history-empty">
+
+            No point changes have
+            been recorded yet.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      /*
+        Match IDs to names.
+      */
+
+      const studentMap = {};
+
+
+      students.forEach(
+        student => {
+
+          studentMap[
+            student.id
+          ] =
+            student.name;
+
+        }
+      );
+
+
+      historyContainer.innerHTML =
+        "";
+
+
+      history.forEach(
+        entry => {
+
+          const studentName =
+            studentMap[
+              entry.student_id
+            ] ||
+            "Unknown Student";
+
+
+          const amount =
+            entry.amount;
+
+
+          const positive =
+            amount > 0;
+
+
+          const date =
+            new Date(
+              entry.created_at
+            );
+
+
+          const formattedDate =
+            date.toLocaleString(
+              undefined,
+              {
+                dateStyle:
+                  "medium",
+
+                timeStyle:
+                  "short"
+              }
+            );
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "history-entry";
+
+
+          row.innerHTML = `
+
+            <div>
+
+              <div class="history-student">
+
+                ${escapeHtml(
+                  studentName
+                )}
+
+              </div>
+
+              <div class="history-time">
+
+                ${escapeHtml(
+                  formattedDate
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="history-amount ${
+                positive
+                  ? "positive"
+                  : "negative"
+              }"
+            >
+
+              ${
+                positive
+                  ? "+"
+                  : "−"
+              }${Math.abs(amount)}
+
+            </div>
+
+          `;
+
+
+          historyContainer
+            .appendChild(row);
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHtml(
+      value
+    ) {
 
       return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
 
     }
 
