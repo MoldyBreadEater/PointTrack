@@ -83,99 +83,595 @@ button:disabled{
 }
 
 
+
 /* =========================================================
-   LOGIN
+   INTERACTIVE LOGIN / LANDING ENVIRONMENT
 ========================================================= */
 
 #loginScreen{
+  --cursor-x:50vw;
+  --cursor-y:50vh;
+  position:relative;
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
+  padding:34px;
+  isolation:isolate;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(37,99,235,.11),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(99,102,241,.09),transparent 25%),
+    radial-gradient(circle at 85% 80%,rgba(14,165,233,.08),transparent 28%),
+    var(--bg);
+}
+
+#loginScreen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-5;
+  opacity:.48;
+  background-image:
+    linear-gradient(rgba(37,99,235,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(37,99,235,.055) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(circle at center,black 20%,transparent 78%);
+  -webkit-mask-image:radial-gradient(circle at center,black 20%,transparent 78%);
+}
+
+#loginScreen::after{
+  content:"";
+  position:absolute;
+  inset:-25%;
+  z-index:-6;
+  background:
+    radial-gradient(circle at var(--cursor-x) var(--cursor-y),rgba(59,130,246,.12),transparent 18%),
+    radial-gradient(circle at 50% 50%,transparent 0%,rgba(15,23,42,.04) 72%,rgba(15,23,42,.14) 100%);
+  pointer-events:none;
+  transition:background .12s linear;
+}
+
+body.dark #loginScreen{
+  background:
+    radial-gradient(circle at 50% 42%,rgba(59,130,246,.16),transparent 31%),
+    radial-gradient(circle at 15% 20%,rgba(99,102,241,.11),transparent 25%),
+    radial-gradient(circle at 85% 80%,rgba(14,165,233,.09),transparent 28%),
+    var(--bg);
+}
+
+.login-environment{
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.environment-glow{
+  position:absolute;
+  width:380px;
+  height:380px;
+  border-radius:50%;
+  left:calc(var(--cursor-x) - 190px);
+  top:calc(var(--cursor-y) - 190px);
+  background:radial-gradient(circle,rgba(59,130,246,.13),transparent 68%);
+  filter:blur(12px);
+  opacity:.8;
+  transition:left .12s ease-out,top .12s ease-out;
+}
+
+.environment-particles{
+  position:absolute;
+  inset:0;
+}
+
+.environment-particle{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(37,99,235,.32);
+  box-shadow:0 0 14px rgba(37,99,235,.24);
+  transition:transform .18s ease-out,width .18s,height .18s,opacity .18s;
+}
+
+.picture-rail{
+  position:absolute;
+  left:-10%;
+  width:120%;
+  top:9%;
+  height:220px;
+  display:flex;
+  gap:22px;
+  animation:railDrift 34s linear infinite;
+  opacity:.74;
+  filter:saturate(.82);
+}
+
+.picture-rail.second{
+  top:auto;
+  bottom:7%;
+  animation-direction:reverse;
+  animation-duration:42s;
+  opacity:.55;
+}
+
+.ambient-float{
+  position:relative;
+  flex:0 0 230px;
+  height:170px;
+}
+
+.ambient-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 22px 55px rgba(15,23,42,.13);
+  opacity:.68;
+  transform:scale(var(--proximity-scale,1)) translate3d(
+    var(--proximity-x,0px),
+    var(--proximity-y,0px),
+    0
+  );
+  transition:transform .2s ease-out,filter .2s,opacity .2s;
+}
+
+.ambient-float:hover .ambient-image{
+  opacity:.9;
+  filter:saturate(1.12) contrast(1.04);
+}
+
+.ambient-image::after{
+  content:"";
+}
+
+.ambient-tint{
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background:
+    linear-gradient(135deg,rgba(37,99,235,.2),transparent 45%),
+    linear-gradient(315deg,rgba(99,102,241,.16),transparent 55%);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+
+.ambient-label{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  padding:6px 9px;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(15,23,42,.58);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.04em;
+  opacity:0;
+  transform:translateY(5px);
+  transition:.2s;
+}
+
+.ambient-float:hover .ambient-label{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@keyframes railDrift{
+  from{transform:translateX(-3%)}
+  to{transform:translateX(-28%)}
+}
+
+.login-orbit{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.orbit-ring{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(78vw,900px);
+  aspect-ratio:1;
+  border:1px solid rgba(37,99,235,.09);
+  border-radius:50%;
+  transform:translate(-50%,-50%) rotate(-8deg);
+}
+
+.orbit-ring:nth-child(2){
+  width:min(60vw,700px);
+  border-color:rgba(99,102,241,.08);
+  transform:translate(-50%,-50%) rotate(22deg);
 }
 
 .login-card{
-  width:100%;
-  max-width:450px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:42px 36px 34px;
-  box-shadow:var(--shadow);
+  width:min(100%,480px);
+  position:relative;
+  z-index:5;
+  background:color-mix(in srgb,var(--surface) 91%,transparent);
+  border:1px solid color-mix(in srgb,var(--border) 78%,white);
+  border-radius:28px;
+  padding:34px 34px 28px;
+  box-shadow:
+    0 35px 90px rgba(15,23,42,.16),
+    0 8px 25px rgba(15,23,42,.07),
+    inset 0 1px 0 rgba(255,255,255,.7);
   text-align:center;
+  backdrop-filter:blur(20px) saturate(1.15);
+  -webkit-backdrop-filter:blur(20px) saturate(1.15);
+  animation:loginCardIn .7s cubic-bezier(.2,.8,.2,1) both;
+}
+
+body.dark .login-card{
+  background:rgba(24,28,35,.86);
+  box-shadow:
+    0 35px 90px rgba(0,0,0,.38),
+    0 8px 25px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+@keyframes loginCardIn{
+  from{opacity:0;transform:translateY(22px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
 }
 
 .logo{
-  width:60px;
-  height:60px;
-  margin:0 auto 18px;
-  border-radius:16px;
-  background:var(--primary);
+  width:64px;
+  height:64px;
+  margin:0 auto 16px;
+  border-radius:18px;
+  background:linear-gradient(145deg,var(--primary),#4f46e5);
   color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-weight:800;
+  font-weight:900;
   font-size:25px;
-  box-shadow:0 8px 20px rgba(37,99,235,.2);
+  box-shadow:0 12px 28px rgba(37,99,235,.27);
+  animation:logoFloat 3.8s ease-in-out infinite;
+}
+
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-4px) rotate(1deg)}
 }
 
 .login-card h1{
   margin:0;
-  font-size:30px;
-  letter-spacing:-.6px;
+  font-size:34px;
+  letter-spacing:-1px;
 }
 
 .login-card>p{
   color:var(--muted);
-  margin:10px 0 27px;
+  margin:9px auto 22px;
   line-height:1.55;
+  max-width:390px;
+}
+
+.login-preview{
+  position:relative;
+  overflow:hidden;
+  margin:0 0 17px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:
+    linear-gradient(135deg,rgba(37,99,235,.08),transparent 52%),
+    var(--surface-2);
+  text-align:left;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+
+.login-preview:hover{
+  transform:translateY(-2px);
+  border-color:rgba(37,99,235,.35);
+  box-shadow:0 15px 30px rgba(37,99,235,.09);
+}
+
+.preview-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:11px;
+}
+
+.preview-student{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.preview-status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:var(--success);
+  font-size:10px;
+  font-weight:800;
+}
+
+.preview-status::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 0 4px rgba(22,163,74,.1);
+}
+
+.preview-points-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.demo-counter{
+  position:relative;
+  height:49px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  overflow:hidden;
+}
+
+.demo-number{
+  display:inline-block;
+  min-width:65px;
+  font-size:32px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-1.2px;
+  color:var(--text);
+  transition:transform .35s cubic-bezier(.2,.9,.2,1),opacity .35s;
+}
+
+.demo-number.rise{
+  animation:counterRise .45s cubic-bezier(.2,.8,.2,1);
+}
+
+.demo-number.fall{
+  animation:counterFall .45s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes counterRise{
+  0%{opacity:.35;transform:translateY(22px) scale(.94)}
+  55%{opacity:1;transform:translateY(-5px) scale(1.05)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+@keyframes counterFall{
+  0%{opacity:.35;transform:translateY(-22px) scale(.94)}
+  55%{opacity:1;transform:translateY(5px) scale(1.05)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+.preview-unit{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+
+.preview-controls{
+  display:flex;
+  gap:6px;
+}
+
+.demo-point-btn{
+  width:35px;
+  height:35px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface);
+  color:var(--text);
+  font-weight:900;
+  font-size:18px;
+  transition:transform .16s,background .16s,border-color .16s;
+}
+
+.demo-point-btn:hover{
+  transform:translateY(-3px) scale(1.04);
+  background:var(--surface-3);
+  border-color:var(--primary);
+}
+
+.demo-point-float{
+  position:absolute;
+  left:20px;
+  top:50%;
+  pointer-events:none;
+  font-weight:900;
+  font-size:13px;
+  animation:demoPointFloat .65s ease-out forwards;
+}
+
+.demo-point-float.positive{color:var(--success)}
+.demo-point-float.negative{color:var(--danger)}
+
+@keyframes demoPointFloat{
+  from{opacity:1;transform:translateY(0) scale(1)}
+  to{opacity:0;transform:translateY(-35px) scale(1.1)}
 }
 
 .login-features{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin:0 0 24px;
+  gap:9px;
+  margin:0 0 18px;
   text-align:left;
 }
 
 .login-feature{
+  position:relative;
   min-width:0;
-  padding:11px 9px;
+  min-height:112px;
+  padding:13px 11px;
   border:1px solid var(--border);
-  background:var(--surface-2);
-  border-radius:10px;
+  background:rgba(255,255,255,.38);
+  color:var(--text);
+  border-radius:15px;
+  text-align:left;
+  cursor:pointer;
+  overflow:hidden;
+  transition:
+    transform .2s cubic-bezier(.2,.8,.2,1),
+    border-color .2s,
+    box-shadow .2s,
+    background .2s;
+}
+
+body.dark .login-feature{
+  background:rgba(255,255,255,.025);
+}
+
+.login-feature:hover{
+  transform:translateY(-6px) scale(1.025);
+  border-color:rgba(37,99,235,.45);
+  background:var(--surface);
+  box-shadow:0 15px 28px rgba(37,99,235,.1);
+}
+
+.login-feature:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
 }
 
 .login-feature-icon{
-  font-size:16px;
-  margin-bottom:6px;
+  width:39px;
+  height:39px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:11px;
+  margin-bottom:10px;
+  background:var(--surface-2);
+  color:var(--primary);
+  font-size:22px;
+  font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(37,99,235,.06);
+}
+
+.feature-add .login-feature-icon{
+  animation:plusWaiting 2.8s ease-in-out infinite;
+}
+
+@keyframes plusWaiting{
+  0%,72%,100%{transform:translateY(0)}
+  78%{transform:translateY(-7px) rotate(-4deg)}
+  84%{transform:translateY(0) rotate(3deg)}
+  89%{transform:translateY(-3px) rotate(0)}
+}
+
+.feature-spin .login-feature-icon{
+  animation:featureSpin 4.5s linear infinite;
+}
+
+@keyframes featureSpin{
+  to{transform:rotate(360deg)}
+}
+
+.feature-check-svg{
+  width:24px;
+  height:24px;
+  overflow:visible;
+}
+
+.feature-check-path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:40;
+  stroke-dashoffset:40;
+  animation:drawCheck 2.8s ease-in-out infinite;
+}
+
+@keyframes drawCheck{
+  0%,18%{stroke-dashoffset:40}
+  38%,76%{stroke-dashoffset:0}
+  94%,100%{stroke-dashoffset:40}
+}
+
+.login-feature-title{
+  font-size:12px;
+  font-weight:850;
+  margin-bottom:4px;
 }
 
 .login-feature-text{
-  font-size:11px;
-  line-height:1.35;
+  font-size:10px;
+  line-height:1.4;
   color:var(--muted);
   font-weight:600;
 }
 
+.feature-pulse{
+  position:absolute;
+  right:-22px;
+  bottom:-22px;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:rgba(37,99,235,.08);
+  transition:transform .3s;
+}
+
+.login-feature:hover .feature-pulse{
+  transform:scale(2);
+}
+
+.feature-spin .feature-pulse{
+  background:rgba(99,102,241,.08);
+}
+
+.feature-check .feature-pulse{
+  background:rgba(22,163,74,.08);
+}
+
 .google-btn{
+  position:relative;
   width:100%;
   border:1px solid var(--border);
   background:var(--surface);
   color:var(--text);
   padding:13px 16px;
-  border-radius:10px;
-  font-weight:700;
+  border-radius:12px;
+  font-weight:800;
+  overflow:hidden;
   transition:.2s;
+  box-shadow:0 5px 15px rgba(15,23,42,.05);
+}
+
+.google-btn::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:-35%;
+  width:25%;
+  transform:skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+  transition:left .5s;
+}
+
+.google-btn:hover::before{
+  left:120%;
 }
 
 .google-btn:hover{
   background:var(--surface-2);
   border-color:#c8d0dc;
-  transform:translateY(-1px);
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(37,99,235,.1);
 }
 
 .google-btn:focus-visible{
@@ -185,14 +681,151 @@ button:disabled{
 
 .google-icon{
   margin-right:8px;
-  font-weight:800;
+  font-weight:900;
 }
 
 .login-note{
-  margin-top:17px;
+  margin-top:13px;
   color:var(--muted);
-  font-size:11px;
+  font-size:10px;
   line-height:1.4;
+}
+
+.login-credit{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:9px;
+  opacity:.72;
+}
+
+.login-credit a{
+  color:inherit;
+}
+
+@media(max-width:900px){
+  .picture-rail{
+    opacity:.4;
+  }
+
+  .ambient-float{
+    flex-basis:190px;
+    height:140px;
+  }
+
+  .orbit-ring{
+    width:100vw;
+  }
+}
+
+@media(max-width:650px){
+  #loginScreen{
+    padding:20px 13px;
+  }
+
+  .picture-rail{
+    top:3%;
+    height:150px;
+    gap:12px;
+    opacity:.24;
+  }
+
+  .picture-rail.second{
+    bottom:2%;
+  }
+
+  .ambient-float{
+    flex-basis:155px;
+    height:112px;
+  }
+
+  .login-card{
+    padding:28px 18px 23px;
+    border-radius:23px;
+  }
+
+  .login-card h1{
+    font-size:30px;
+  }
+
+  .login-features{
+    gap:7px;
+  }
+
+  .login-feature{
+    min-height:105px;
+    padding:11px 9px;
+  }
+
+  .login-feature-text{
+    font-size:9px;
+  }
+
+  .login-feature-title{
+    font-size:11px;
+  }
+
+  .login-feature-icon{
+    width:36px;
+    height:36px;
+  }
+}
+
+@media(max-width:500px){
+  .login-features{
+    grid-template-columns:1fr;
+  }
+
+  .login-feature{
+    min-height:0;
+    display:grid;
+    grid-template-columns:42px 1fr;
+    align-items:center;
+    column-gap:10px;
+  }
+
+  .login-feature-icon{
+    grid-row:1/3;
+    margin:0;
+  }
+
+  .login-feature-title{
+    margin:0;
+  }
+
+  .feature-pulse{
+    display:none;
+  }
+
+  .picture-rail{
+    display:none;
+  }
+
+  .orbit-ring{
+    opacity:.45;
+  }
+
+  .login-preview{
+    padding:13px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #loginScreen *,
+  #loginScreen::before,
+  #loginScreen::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
+  }
+
+  .picture-rail{
+    animation:none;
+  }
+
+  .environment-glow{
+    display:none;
+  }
 }
 
 
@@ -812,6 +1445,7 @@ main{
 
 .point-float.negative{
   color:var(--danger);
+  animation-name:floatPointDown;
 }
 
 @keyframes floatPoint{
@@ -824,6 +1458,38 @@ main{
     opacity:0;
     transform:translateY(-42px) scale(1.08);
   }
+}
+
+@keyframes floatPointDown{
+  0%{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateY(42px) scale(1.08);
+  }
+}
+
+.points-display.point-rise{
+  animation:realPointRise .42s cubic-bezier(.2,.8,.2,1);
+}
+
+.points-display.point-fall{
+  animation:realPointFall .42s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes realPointRise{
+  0%{opacity:.35;transform:translateY(13px) scale(.96)}
+  55%{opacity:1;transform:translateY(-4px) scale(1.06)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+@keyframes realPointFall{
+  0%{opacity:.35;transform:translateY(-13px) scale(.96)}
+  55%{opacity:1;transform:translateY(4px) scale(1.06)}
+  100%{transform:translateY(0) scale(1)}
 }
 
 
@@ -1253,7 +1919,135 @@ main{
      LOGIN
 ======================================================= -->
 
-<section id="loginScreen">
+<section id="loginScreen" aria-label="PointTrack interactive welcome">
+
+  <div class="login-environment" aria-hidden="true">
+
+    <div class="environment-glow"></div>
+
+    <div class="environment-particles">
+      <span class="environment-particle" style="left:8%;top:20%"></span>
+      <span class="environment-particle" style="left:14%;top:72%"></span>
+      <span class="environment-particle" style="left:22%;top:35%"></span>
+      <span class="environment-particle" style="left:30%;top:82%"></span>
+      <span class="environment-particle" style="left:67%;top:17%"></span>
+      <span class="environment-particle" style="left:75%;top:74%"></span>
+      <span class="environment-particle" style="left:84%;top:31%"></span>
+      <span class="environment-particle" style="left:92%;top:64%"></span>
+      <span class="environment-particle" style="left:58%;top:88%"></span>
+      <span class="environment-particle" style="left:43%;top:10%"></span>
+    </div>
+
+    <div class="login-orbit">
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring"></div>
+    </div>
+
+    <div class="picture-rail" data-rail="one">
+      <div class="ambient-float proximity-item" data-depth="1.2">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">CLASSROOM</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth=".8">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1786374352577-d786b5a271da?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">STUDY MODE</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth="1">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1762831063004-bbd3ea38ba3a?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">ORGANIZE</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth="1.15">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">LEARN</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth=".9">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1786374352577-d786b5a271da?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">TRACK</div>
+      </div>
+    </div>
+
+    <div class="picture-rail second" data-rail="two">
+      <div class="ambient-float proximity-item" data-depth=".9">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1762831063004-bbd3ea38ba3a?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">POINTS</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth="1.1">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">CLASS</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth=".8">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1786374352577-d786b5a271da?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">HISTORY</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth="1">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1762831063004-bbd3ea38ba3a?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">FOCUS</div>
+      </div>
+
+      <div class="ambient-float proximity-item" data-depth="1.2">
+        <img
+          class="ambient-image"
+          src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80"
+          alt=""
+        >
+        <div class="ambient-tint"></div>
+        <div class="ambient-label">READY</div>
+      </div>
+    </div>
+
+  </div>
 
   <div class="login-card">
 
@@ -1269,34 +2063,102 @@ main{
       A simple digital classroom points tracker built for teachers.
     </p>
 
+    <div class="login-preview" id="demoPreview">
+      <div class="preview-top">
+        <div class="preview-student">Demo Student</div>
+        <div class="preview-status">LIVE DEMO</div>
+      </div>
+
+      <div class="preview-points-row">
+        <div class="demo-counter" aria-live="polite">
+          <span id="demoPoints" class="demo-number">42</span>
+          <span class="preview-unit">points</span>
+        </div>
+
+        <div class="preview-controls">
+          <button
+            id="demoMinusBtn"
+            class="demo-point-btn"
+            type="button"
+            aria-label="Subtract one demo point"
+          >
+            −
+          </button>
+
+          <button
+            id="demoPlusBtn"
+            class="demo-point-btn"
+            type="button"
+            aria-label="Add one demo point"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="login-features">
 
-      <div class="login-feature">
+      <button
+        id="featureAdd"
+        class="login-feature feature-add"
+        type="button"
+        aria-label="Try the point update demo"
+      >
         <div class="login-feature-icon">+</div>
+        <div class="login-feature-title">Fast point updates</div>
         <div class="login-feature-text">
-          Fast point updates
+          Click me. I am waiting.
         </div>
-      </div>
+        <div class="feature-pulse"></div>
+      </button>
 
-      <div class="login-feature">
+      <button
+        id="featureHistory"
+        class="login-feature feature-spin"
+        type="button"
+        aria-label="Try the history animation"
+      >
         <div class="login-feature-icon">↺</div>
+        <div class="login-feature-title">Automatic history</div>
         <div class="login-feature-text">
-          Automatic history
+          Click me for a history spin.
         </div>
-      </div>
+        <div class="feature-pulse"></div>
+      </button>
 
-      <div class="login-feature">
-        <div class="login-feature-icon">✓</div>
-        <div class="login-feature-text">
-          Simple tracking
+      <button
+        id="featureCheck"
+        class="login-feature feature-check"
+        type="button"
+        aria-label="Try the completion animation"
+      >
+        <div class="login-feature-icon">
+          <svg
+            class="feature-check-svg"
+            viewBox="0 0 28 28"
+            aria-hidden="true"
+          >
+            <path
+              id="featureCheckPath"
+              class="feature-check-path"
+              d="M4 15 L11 22 L24 6"
+            ></path>
+          </svg>
         </div>
-      </div>
+        <div class="login-feature-title">Simple tracking</div>
+        <div class="login-feature-text">
+          Click me to complete it.
+        </div>
+        <div class="feature-pulse"></div>
+      </button>
 
     </div>
 
     <button
       id="googleLoginBtn"
       class="google-btn"
+      type="button"
     >
       <span class="google-icon">G</span>
       Continue with Google
@@ -1306,9 +2168,14 @@ main{
       Built for simple, everyday classroom point tracking.
     </div>
 
+    <div class="login-credit">
+      Interactive preview · No account needed to explore
+    </div>
+
   </div>
 
 </section>
+
 
 
 <!-- =======================================================
@@ -2018,6 +2885,491 @@ const confirmActionBtn =
   document.getElementById(
     "confirmActionBtn"
   );
+
+
+
+/* =========================================================
+   INTERACTIVE LOGIN ENVIRONMENT
+========================================================= */
+
+const loginScreenElement =
+  document.getElementById("loginScreen");
+
+const demoPoints =
+  document.getElementById("demoPoints");
+
+const demoPlusBtn =
+  document.getElementById("demoPlusBtn");
+
+const demoMinusBtn =
+  document.getElementById("demoMinusBtn");
+
+const demoPreview =
+  document.getElementById("demoPreview");
+
+const featureAdd =
+  document.getElementById("featureAdd");
+
+const featureHistory =
+  document.getElementById("featureHistory");
+
+const featureCheck =
+  document.getElementById("featureCheck");
+
+const featureCheckPath =
+  document.getElementById("featureCheckPath");
+
+let demoPointValue = 42;
+
+function animateDemoCounter(direction){
+  demoPoints.classList.remove(
+    "rise",
+    "fall"
+  );
+
+  void demoPoints.offsetWidth;
+
+  demoPoints.classList.add(
+    direction === 1
+      ? "rise"
+      : "fall"
+  );
+}
+
+function createDemoPointFloat(
+  direction
+){
+  const float =
+    document.createElement("span");
+
+  float.className =
+    "demo-point-float " +
+    (
+      direction === 1
+        ? "positive"
+        : "negative"
+    );
+
+  float.textContent =
+    direction === 1
+      ? "+1"
+      : "−1";
+
+  demoPreview.appendChild(float);
+
+  setTimeout(
+    () => float.remove(),
+    700
+  );
+}
+
+function changeDemoPoints(
+  direction
+){
+  demoPointValue += direction;
+
+  animateDemoCounter(
+    direction
+  );
+
+  demoPoints.textContent =
+    demoPointValue;
+
+  createDemoPointFloat(
+    direction
+  );
+}
+
+demoPlusBtn.addEventListener(
+  "click",
+  () => {
+    changeDemoPoints(1);
+  }
+);
+
+demoMinusBtn.addEventListener(
+  "click",
+  () => {
+    changeDemoPoints(-1);
+  }
+);
+
+featureAdd.addEventListener(
+  "click",
+  () => {
+    changeDemoPoints(1);
+
+    featureAdd.animate(
+      [
+        {
+          transform:"translateY(-6px) scale(1.025)"
+        },
+        {
+          transform:"translateY(-11px) scale(1.05)"
+        },
+        {
+          transform:"translateY(-6px) scale(1.025)"
+        }
+      ],
+      {
+        duration:420,
+        easing:"cubic-bezier(.2,.8,.2,1)"
+      }
+    );
+  }
+);
+
+featureHistory.addEventListener(
+  "click",
+  () => {
+    const icon =
+      featureHistory.querySelector(
+        ".login-feature-icon"
+      );
+
+    icon.animate(
+      [
+        {
+          transform:"rotate(0deg) scale(1)"
+        },
+        {
+          transform:"rotate(360deg) scale(1.15)"
+        },
+        {
+          transform:"rotate(720deg) scale(1)"
+        }
+      ],
+      {
+        duration:650,
+        easing:"cubic-bezier(.2,.8,.2,1)"
+      }
+    );
+
+    const oldText =
+      featureHistory.querySelector(
+        ".login-feature-text"
+      );
+
+    oldText.textContent =
+      "History updated ✓";
+
+    setTimeout(
+      () => {
+        oldText.textContent =
+          "Click me for a history spin.";
+      },
+      1300
+    );
+  }
+);
+
+featureCheck.addEventListener(
+  "click",
+  () => {
+    featureCheckPath.style.animation =
+      "none";
+
+    void featureCheckPath.getBoundingClientRect();
+
+    featureCheckPath.style.animation =
+      "drawCheck .8s ease-in-out forwards";
+
+    const oldText =
+      featureCheck.querySelector(
+        ".login-feature-text"
+      );
+
+    oldText.textContent =
+      "Task completed ✓";
+
+    setTimeout(
+      () => {
+        featureCheckPath.style.animation =
+          "none";
+
+        void featureCheckPath.getBoundingClientRect();
+
+        featureCheckPath.style.animation =
+          "drawCheck 2.8s ease-in-out infinite";
+
+        oldText.textContent =
+          "Click me to complete it.";
+      },
+      1500
+    );
+  }
+);
+
+/* Cursor proximity field */
+
+const proximityItems =
+  [...document.querySelectorAll(
+    ".proximity-item"
+  )];
+
+const environmentParticles =
+  [...document.querySelectorAll(
+    ".environment-particle"
+  )];
+
+let pointerX = null;
+let pointerY = null;
+let proximityFrame = null;
+
+function updateProximity(){
+  if(
+    pointerX === null ||
+    pointerY === null
+  ){
+    proximityFrame = null;
+    return;
+  }
+
+  proximityItems.forEach(
+    item => {
+      const rect =
+        item.getBoundingClientRect();
+
+      const centerX =
+        rect.left +
+        rect.width / 2;
+
+      const centerY =
+        rect.top +
+        rect.height / 2;
+
+      const dx =
+        pointerX - centerX;
+
+      const dy =
+        pointerY - centerY;
+
+      const distance =
+        Math.sqrt(
+          dx * dx +
+          dy * dy
+        );
+
+      const radius =
+        420;
+
+      const influence =
+        Math.max(
+          0,
+          1 - distance / radius
+        );
+
+      const depth =
+        Number(
+          item.dataset.depth || 1
+        );
+
+      const moveX =
+        (dx / radius) *
+        influence *
+        20 *
+        depth;
+
+      const moveY =
+        (dy / radius) *
+        influence *
+        20 *
+        depth;
+
+      const scale =
+        1 +
+        influence *
+        .16 *
+        depth;
+
+      item.style.setProperty(
+        "--proximity-x",
+        `${moveX}px`
+      );
+
+      item.style.setProperty(
+        "--proximity-y",
+        `${moveY}px`
+      );
+
+      item.style.setProperty(
+        "--proximity-scale",
+        scale.toFixed(3)
+      );
+    }
+  );
+
+  environmentParticles.forEach(
+    particle => {
+      const rect =
+        particle.getBoundingClientRect();
+
+      const centerX =
+        rect.left +
+        rect.width / 2;
+
+      const centerY =
+        rect.top +
+        rect.height / 2;
+
+      const dx =
+        centerX - pointerX;
+
+      const dy =
+        centerY - pointerY;
+
+      const distance =
+        Math.sqrt(
+          dx * dx +
+          dy * dy
+        );
+
+      const radius = 190;
+
+      if(distance < radius){
+        const force =
+          1 - distance / radius;
+
+        particle.style.transform =
+          `translate(${(dx / Math.max(distance,1)) * force * 34}px, ${(dy / Math.max(distance,1)) * force * 34}px) scale(${1 + force * 2.2})`;
+
+        particle.style.opacity =
+          String(.45 + force * .55);
+      }
+      else{
+        particle.style.transform =
+          "translate(0,0) scale(1)";
+
+        particle.style.opacity =
+          ".7";
+      }
+    }
+  );
+
+  proximityFrame =
+    requestAnimationFrame(
+      updateProximity
+    );
+}
+
+loginScreenElement.addEventListener(
+  "pointermove",
+  event => {
+    pointerX =
+      event.clientX;
+
+    pointerY =
+      event.clientY;
+
+    loginScreenElement.style.setProperty(
+      "--cursor-x",
+      `${pointerX}px`
+    );
+
+    loginScreenElement.style.setProperty(
+      "--cursor-y",
+      `${pointerY}px`
+    );
+
+    if(!proximityFrame){
+      proximityFrame =
+        requestAnimationFrame(
+          updateProximity
+        );
+    }
+  }
+);
+
+loginScreenElement.addEventListener(
+  "pointerleave",
+  () => {
+    pointerX = null;
+    pointerY = null;
+
+    proximityItems.forEach(
+      item => {
+        item.style.setProperty(
+          "--proximity-x",
+          "0px"
+        );
+
+        item.style.setProperty(
+          "--proximity-y",
+          "0px"
+        );
+
+        item.style.setProperty(
+          "--proximity-scale",
+          "1"
+        );
+      }
+    );
+
+    environmentParticles.forEach(
+      particle => {
+        particle.style.transform =
+          "translate(0,0) scale(1)";
+        particle.style.opacity =
+          ".7";
+      }
+    );
+
+    if(proximityFrame){
+      cancelAnimationFrame(
+        proximityFrame
+      );
+      proximityFrame = null;
+    }
+  }
+);
+
+/* Give the background a little life even when the mouse is still. */
+
+setInterval(
+  () => {
+    if(
+      pointerX !== null ||
+      document.hidden
+    ){
+      return;
+    }
+
+    const particle =
+      environmentParticles[
+        Math.floor(
+          Math.random() *
+          environmentParticles.length
+        )
+      ];
+
+    if(!particle){
+      return;
+    }
+
+    particle.animate(
+      [
+        {
+          transform:"scale(1)",
+          opacity:.35
+        },
+        {
+          transform:"scale(2.4)",
+          opacity:.9
+        },
+        {
+          transform:"scale(1)",
+          opacity:.35
+        }
+      ],
+      {
+        duration:1100,
+        easing:"ease-in-out"
+      }
+    );
+  },
+  2200
+);
+
 
 
 /* =========================================================
@@ -4309,6 +5661,19 @@ async function changePoints(
     formatDecimal(
       newPoints
     );
+
+  pointsDisplay.classList.remove(
+    "point-rise",
+    "point-fall"
+  );
+
+  void pointsDisplay.offsetWidth;
+
+  pointsDisplay.classList.add(
+    isPositiveDecimal(change)
+      ? "point-rise"
+      : "point-fall"
+  );
 
   showPointAnimation(
     card,
