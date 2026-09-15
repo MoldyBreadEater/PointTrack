@@ -590,15 +590,15 @@ body.dark .login-feature{
   stroke-width:4;
   stroke-linecap:round;
   stroke-linejoin:round;
-  stroke-dasharray:40;
-  stroke-dashoffset:40;
+  stroke-dasharray:50;
+  stroke-dashoffset:50;
   animation:drawCheck 2.8s ease-in-out infinite;
 }
 
 @keyframes drawCheck{
-  0%,18%{stroke-dashoffset:40}
+  0%,18%{stroke-dashoffset:50}
   38%,76%{stroke-dashoffset:0}
-  94%,100%{stroke-dashoffset:40}
+  94%,100%{stroke-dashoffset:50}
 }
 
 .login-feature-title{
@@ -872,6 +872,34 @@ header{
   font-size:15px;
 }
 
+.brand{
+  transition:transform .25s ease;
+}
+
+.brand:hover{
+  transform:translateX(3px);
+}
+
+.brand-logo{
+  position:relative;
+  overflow:hidden;
+}
+
+.brand-logo::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);
+  transform:translateX(-90%);
+  animation:brandShine 5s ease-in-out infinite;
+}
+
+@keyframes brandShine{
+  0%,62%{transform:translateX(-90%)}
+  78%,100%{transform:translateX(90%)}
+}
+
+
 .header-actions{
   display:flex;
   align-items:center;
@@ -904,6 +932,243 @@ header{
   outline-offset:2px;
 }
 
+
+/* =========================================================
+   APP ENERGY
+========================================================= */
+
+#app{
+  position:relative;
+  overflow:hidden;
+}
+
+#app::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 8% 8%,rgba(37,99,235,.08),transparent 24%),
+    radial-gradient(circle at 92% 18%,rgba(99,102,241,.07),transparent 23%),
+    radial-gradient(circle at 75% 90%,rgba(14,165,233,.055),transparent 25%);
+}
+
+#app header,
+#app main{
+  position:relative;
+  z-index:1;
+}
+
+#dashboardView{
+  animation:dashboardEnter .7s cubic-bezier(.2,.8,.2,1) both;
+}
+
+#app.app-entering header{
+  animation:appHeaderEnter .7s cubic-bezier(.2,.8,.2,1) both;
+}
+
+#app.app-entering main{
+  animation:appMainEnter .85s .04s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes appHeaderEnter{
+  from{opacity:0;transform:translateY(-18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes appMainEnter{
+  from{opacity:0;transform:translateY(24px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+@keyframes dashboardEnter{
+  from{opacity:0;transform:translateY(18px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.dashboard-welcome{
+  position:relative;
+  padding:27px 28px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(255,255,255,.48));
+  box-shadow:var(--shadow);
+}
+
+body.dark .dashboard-welcome{
+  background:linear-gradient(135deg,rgba(24,28,35,.92),rgba(24,28,35,.62));
+}
+
+.dashboard-welcome::before{
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  right:-85px;
+  top:-130px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(37,99,235,.17),transparent 68%);
+  animation:welcomeGlow 5s ease-in-out infinite alternate;
+}
+
+.dashboard-welcome::after{
+  content:"";
+  position:absolute;
+  width:130%;
+  height:1px;
+  left:-15%;
+  bottom:0;
+  background:linear-gradient(90deg,transparent,rgba(37,99,235,.4),transparent);
+  animation:welcomeSweep 4s linear infinite;
+}
+
+@keyframes welcomeGlow{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(-30px,25px) scale(1.18)}
+}
+
+@keyframes welcomeSweep{
+  from{transform:translateX(-35%);opacity:.2}
+  50%{opacity:.8}
+  to{transform:translateX(35%);opacity:.2}
+}
+
+.dashboard-welcome .welcome,
+.dashboard-welcome .dashboard-create-btn{
+  position:relative;
+  z-index:1;
+}
+
+.welcome h2{
+  animation:welcomeText .65s .08s both cubic-bezier(.2,.8,.2,1);
+}
+
+.welcome p{
+  animation:welcomeText .65s .16s both cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes welcomeText{
+  from{opacity:0;transform:translateY(9px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.dashboard-create-btn{
+  position:relative;
+  overflow:hidden;
+}
+
+.dashboard-create-btn::before{
+  content:"";
+  position:absolute;
+  inset:-80% -20%;
+  background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.34) 48%,transparent 61%);
+  transform:translateX(-65%);
+  animation:buttonShine 4.5s ease-in-out infinite;
+}
+
+@keyframes buttonShine{
+  0%,55%{transform:translateX(-65%)}
+  75%,100%{transform:translateX(65%)}
+}
+
+.stats-grid{
+  perspective:900px;
+}
+
+.stat-card{
+  position:relative;
+  overflow:hidden;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,border-color .22s;
+  animation:statEnter .55s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.stat-card:nth-child(1){animation-delay:.12s}
+.stat-card:nth-child(2){animation-delay:.19s}
+.stat-card:nth-child(3){animation-delay:.26s}
+
+.stat-card::after{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  right:-45px;
+  bottom:-55px;
+  border-radius:50%;
+  background:rgba(37,99,235,.08);
+  transition:transform .35s;
+}
+
+.stat-card:hover{
+  transform:translateY(-6px) rotateX(var(--pointer-y,1.5deg)) rotateY(var(--pointer-x,0deg));
+  border-color:rgba(37,99,235,.35);
+  box-shadow:0 18px 40px rgba(37,99,235,.12);
+}
+
+.stat-card:hover::after{
+  transform:scale(2.1);
+}
+
+.stat-value{
+  transition:transform .25s;
+}
+
+.stat-card:hover .stat-value{
+  transform:translateX(3px);
+}
+
+@keyframes statEnter{
+  from{opacity:0;transform:translateY(15px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.section-header{
+  animation:sectionEnter .6s .27s both;
+}
+
+@keyframes sectionEnter{
+  from{opacity:0;transform:translateX(-12px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+.classes-grid{
+  perspective:1200px;
+}
+
+ .class-card{
+  animation:classCardEnter .55s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.class-card:nth-child(1){animation-delay:.08s}
+.class-card:nth-child(2){animation-delay:.14s}
+.class-card:nth-child(3){animation-delay:.20s}
+.class-card:nth-child(4){animation-delay:.26s}
+.class-card:nth-child(5){animation-delay:.32s}
+.class-card:nth-child(6){animation-delay:.38s}
+
+.class-card::after{
+  content:"";
+  position:absolute;
+  top:-30%;
+  left:-80%;
+  width:55%;
+  height:160%;
+  transform:rotate(18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  transition:left .65s ease;
+  pointer-events:none;
+}
+
+.class-card:hover::after{
+  left:125%;
+}
+
+
+@keyframes classCardEnter{
+  from{opacity:0;transform:translateY(20px) scale(.975)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 
 /* =========================================================
    MAIN
@@ -1013,6 +1278,34 @@ main{
   margin-top:4px;
 }
 
+
+ .dashboard-activity-hint{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:28px 0 0;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.02em;
+  opacity:.72;
+}
+
+.activity-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 0 0 rgba(22,163,74,.35);
+  animation:activityPulse 2s infinite;
+}
+
+@keyframes activityPulse{
+  0%{box-shadow:0 0 0 0 rgba(22,163,74,.35)}
+  70%{box-shadow:0 0 0 7px rgba(22,163,74,0)}
+  100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}
+}
 
 /* =========================================================
    CLASS CARDS
@@ -2322,6 +2615,11 @@ main{
         id="classesContainer"
         class="classes-grid"
       ></div>
+
+      <div class="dashboard-activity-hint" aria-hidden="true">
+        <span class="activity-dot"></span>
+        Your classroom command center is ready
+      </div>
 
     </section>
 
@@ -4230,6 +4528,8 @@ async function showApp(){
   app.classList.remove(
     "hidden"
   );
+
+  playAppEntrance();
 
   teacherEmail.textContent =
     currentUser.email || "";
@@ -6166,6 +6466,45 @@ function escapeHtml(
 /* =========================================================
    START
 ========================================================= */
+
+// Make the background picture rails loop seamlessly without needing a huge image collection.
+document.querySelectorAll(".picture-rail").forEach(rail => {
+  [...rail.children].forEach(card => {
+    rail.appendChild(card.cloneNode(true));
+  });
+});
+
+// Let dashboard cards subtly lean toward the cursor, keeping the same "alive" feeling as the login screen.
+let dashboardPointerFrame = null;
+document.addEventListener("pointermove", event => {
+  if (dashboardPointerFrame) return;
+  dashboardPointerFrame = requestAnimationFrame(() => {
+    dashboardPointerFrame = null;
+    const target = event.target.closest?.(".stat-card, .class-card, .dashboard-welcome");
+    if (!target || target.closest("#loginScreen")) return;
+    const rect = target.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - .5;
+    const y = (event.clientY - rect.top) / rect.height - .5;
+    target.style.setProperty("--pointer-x", `${(x * 7).toFixed(2)}deg`);
+    target.style.setProperty("--pointer-y", `${(y * -5).toFixed(2)}deg`);
+  });
+});
+
+document.addEventListener("pointerout", event => {
+  const target = event.target.closest?.(".stat-card, .class-card, .dashboard-welcome");
+  if (target && !target.contains(event.relatedTarget)) {
+    target.style.removeProperty("--pointer-x");
+    target.style.removeProperty("--pointer-y");
+  }
+});
+
+// Give the post-login app a small cinematic handoff instead of an instant hard cut.
+function playAppEntrance(){
+  app.classList.remove("app-entering");
+  void app.offsetWidth;
+  app.classList.add("app-entering");
+  setTimeout(() => app.classList.remove("app-entering"), 900);
+}
 
 checkUser();
 
