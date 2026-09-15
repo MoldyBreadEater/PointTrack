@@ -185,7 +185,7 @@ body.dark #loginScreen{
   height:220px;
   display:flex;
   gap:24px;
-  animation:railRoll 58s linear infinite;
+  animation:railRoll 82s linear infinite;
   opacity:.68;
   transform:rotate(-3.2deg);
   transform-origin:center;
@@ -197,7 +197,7 @@ body.dark #loginScreen{
   top:auto;
   bottom:6%;
   animation-direction:reverse;
-  animation-duration:72s;
+  animation-duration:96s;
   opacity:.48;
   transform:rotate(2.6deg);
 }
@@ -833,6 +833,11 @@ body.dark .login-feature{
   }
 
   .picture-rail{
+    animation:none;
+  }
+
+  .feature-check-path{
+    stroke-dashoffset:0;
     animation:none;
   }
 
@@ -2410,6 +2415,148 @@ main{
     padding:14px;
   }
 }
+
+
+/* =========================================================
+   DASHBOARD EXPERIENCE + QUALITY OF LIFE
+========================================================= */
+
+.dashboard-side-decor{
+  position:fixed;
+  top:70px;
+  bottom:0;
+  width:max(120px,calc((100vw - 1100px)/2 - 18px));
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+  opacity:.75;
+}
+.dashboard-side-left{left:0;}
+.dashboard-side-right{right:0;}
+.side-orb,.side-symbol,.side-line{position:absolute;}
+.side-orb{width:90px;height:90px;border:1px solid rgba(37,99,235,.10);border-radius:50%;}
+.side-orb::after{content:"";position:absolute;inset:18px;border:1px dashed rgba(37,99,235,.08);border-radius:50%;}
+.side-symbol{font-size:13px;font-weight:850;color:var(--primary);opacity:.13;letter-spacing:-.04em;animation:sideFloat 9s ease-in-out infinite;}
+.side-line{height:1px;width:80px;background:linear-gradient(90deg,transparent,rgba(37,99,235,.14),transparent);transform:rotate(-28deg);}
+.dashboard-side-left .orb-a{left:18%;top:16%;}
+.dashboard-side-left .orb-b{left:42%;top:68%;width:54px;height:54px;}
+.dashboard-side-left .symbol-a{left:52%;top:30%;animation-delay:-2s;}
+.dashboard-side-left .symbol-b{left:22%;top:54%;animation-delay:-5s;}
+.dashboard-side-left .symbol-c{left:58%;top:82%;animation-delay:-7s;}
+.dashboard-side-left .line-a{left:5%;top:40%;}
+.dashboard-side-left .line-b{left:32%;top:76%;transform:rotate(24deg);}
+.dashboard-side-right .orb-a{right:18%;top:23%;}
+.dashboard-side-right .orb-b{right:46%;top:73%;width:58px;height:58px;}
+.dashboard-side-right .symbol-a{right:55%;top:38%;animation-delay:-3s;}
+.dashboard-side-right .symbol-b{right:21%;top:59%;animation-delay:-6s;}
+.dashboard-side-right .symbol-c{right:48%;top:83%;animation-delay:-1s;}
+.dashboard-side-right .line-a{right:5%;top:47%;}
+.dashboard-side-right .line-b{right:31%;top:79%;transform:rotate(-23deg);}
+@keyframes sideFloat{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}50%{transform:translate3d(5px,-10px,0) rotate(5deg)}}
+
+.welcome-kicker{display:inline-flex;align-items:center;margin-bottom:8px;color:var(--primary);font-size:9px;font-weight:900;letter-spacing:.13em;}
+.welcome-kicker::before{content:"";width:6px;height:6px;margin-right:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 5px rgba(37,99,235,.07);}
+.welcome-meta{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--muted);font-size:10px;font-weight:700;}
+.welcome-meta-dot{width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5;}
+.welcome-account{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.daily-thought{display:flex;align-items:center;gap:7px;margin-top:14px;color:var(--muted);font-size:11px;font-weight:650;}
+.thought-mark{color:var(--primary);font-size:12px;}
+
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:0 0 24px;}
+.quick-action{display:flex;align-items:center;gap:11px;min-width:0;padding:13px 14px;border:1px solid var(--border);border-radius:15px;background:var(--surface);color:var(--text);text-align:left;box-shadow:0 8px 22px rgba(15,23,42,.045);transition:transform .2s,box-shadow .2s,border-color .2s,background .2s;}
+.quick-action:hover{transform:translateY(-3px);border-color:rgba(37,99,235,.28);box-shadow:0 13px 28px rgba(37,99,235,.09);background:var(--surface-2);}
+.quick-action-icon{width:31px;height:31px;display:flex;align-items:center;justify-content:center;flex:0 0 31px;border-radius:10px;background:var(--surface-2);color:var(--primary);font-size:17px;font-weight:900;}
+.quick-action strong,.quick-action small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.quick-action strong{font-size:11px;}
+.quick-action small{margin-top:3px;color:var(--muted);font-size:9px;font-weight:650;}
+.primary-quick{border-color:rgba(37,99,235,.2);background:linear-gradient(145deg,rgba(37,99,235,.07),var(--surface));}
+
+.dashboard-content-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,.72fr);gap:22px;align-items:start;}
+.dashboard-main-column{min-width:0;}
+.dashboard-side-column{display:grid;gap:15px;min-width:0;}
+.section-tool-btn{border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:10px;padding:8px 10px;font-size:11px;font-weight:800;transition:.2s;}
+.section-tool-btn:hover{color:var(--text);border-color:rgba(37,99,235,.28);background:var(--surface-2);}
+.class-search-wrap{display:flex;align-items:center;gap:8px;margin:-5px 0 14px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:0 7px 20px rgba(15,23,42,.04);}
+.class-search-wrap>span{color:var(--muted);}
+.class-search-wrap input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:12px;}
+.class-search-wrap button{border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;}
+
+.dashboard-panel{position:relative;overflow:hidden;padding:17px;border:1px solid var(--border);border-radius:17px;background:linear-gradient(145deg,var(--surface),var(--surface-2));box-shadow:0 10px 27px rgba(15,23,42,.05);}
+.dashboard-panel::before{content:"";position:absolute;left:0;top:0;width:46px;height:3px;background:linear-gradient(90deg,var(--primary),transparent);}
+.panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px;}
+.panel-heading h3{margin:0;font-size:14px;letter-spacing:-.2px;}
+.panel-heading p{margin:4px 0 0;color:var(--muted);font-size:9px;font-weight:650;}
+.panel-icon{width:27px;height:27px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:rgba(37,99,235,.07);color:var(--primary);font-weight:900;}
+.activity-list{display:grid;gap:7px;}
+.activity-item{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border-bottom:0;padding-bottom:0;}
+.activity-badge{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--surface-3);font-size:11px;font-weight:900;}
+.activity-badge.positive{color:var(--success);}
+.activity-badge.negative{color:var(--danger);}
+.activity-main{min-width:0;}
+.activity-main strong{display:block;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.activity-main span{display:block;margin-top:2px;color:var(--muted);font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.activity-amount{font-size:11px;font-weight:900;}
+.activity-amount.positive{color:var(--success);}
+.activity-amount.negative{color:var(--danger);}
+.panel-empty{padding:14px 0;color:var(--muted);font-size:10px;text-align:center;}
+.pulse-live{display:flex;align-items:center;gap:5px;color:var(--success);font-size:8px;font-weight:900;letter-spacing:.08em;}
+.pulse-live i{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px rgba(22,163,74,.08);animation:pulseDot 2s ease-in-out infinite;}
+@keyframes pulseDot{50%{transform:scale(1.35);opacity:.55}}
+.pulse-content{display:grid;gap:9px;}
+.pulse-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.45);}
+body.dark .pulse-row{background:rgba(255,255,255,.025);}
+.pulse-row span{color:var(--muted);font-size:9px;font-weight:700;}
+.pulse-row strong{font-size:10px;text-align:right;}
+
+.settings-modal{max-width:500px;}
+.settings-header{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;}
+.settings-kicker{color:var(--primary);font-size:9px;font-weight:900;letter-spacing:.12em;margin-bottom:5px;}
+.settings-header h3{margin:0;font-size:23px;}
+.settings-header p{margin:5px 0 0;color:var(--muted);font-size:11px;}
+.settings-section{margin-top:20px;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px;border-bottom:1px solid var(--border);}
+.settings-row:last-child{border-bottom:0;}
+.settings-row strong,.settings-row span{display:block;}
+.settings-row strong{font-size:11px;}
+.settings-row span{margin-top:3px;color:var(--muted);font-size:9px;}
+.settings-select{border:1px solid var(--border);background:var(--surface-2);color:var(--text);padding:8px 10px;border-radius:9px;font-size:9px;font-weight:800;}
+.account-badge{margin-top:0!important;padding:5px 8px;border-radius:999px;background:rgba(37,99,235,.07);color:var(--primary)!important;font-weight:850;}
+.switch{position:relative;width:40px;height:23px;flex:0 0 40px;}
+.switch input{opacity:0;width:0;height:0;}
+.switch span{position:absolute;inset:0;border-radius:999px;background:var(--surface-3);border:1px solid var(--border);transition:.2s;}
+.switch span::after{content:"";position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:var(--surface);box-shadow:0 1px 4px rgba(15,23,42,.18);transition:.2s;}
+.switch input:checked+span{background:var(--primary);border-color:var(--primary);}
+.switch input:checked+span::after{transform:translateX(17px);}
+
+body.motion-off *,body.motion-off *::before,body.motion-off *::after{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
+
+@media(max-width:980px){
+  .dashboard-side-decor{display:none;}
+  .dashboard-content-grid{grid-template-columns:1fr;}
+  .dashboard-side-column{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:760px){
+  .quick-actions{grid-template-columns:1fr 1fr;}
+  .dashboard-side-column{grid-template-columns:1fr;}
+  .dashboard-content-grid{gap:18px;}
+  .welcome-meta{flex-wrap:wrap;}
+  .welcome-account{max-width:210px;}
+}
+@media(max-width:500px){
+  .quick-actions{grid-template-columns:1fr;}
+  .quick-action{padding:12px;}
+  .section-tool-btn{font-size:10px;}
+  .dashboard-welcome .welcome{max-width:100%;}
+}
+
+
+.toast-host{position:fixed;right:20px;bottom:20px;display:grid;gap:9px;z-index:9999;pointer-events:none;max-width:min(380px,calc(100vw - 40px));}
+.app-toast{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:13px;background:var(--surface);color:var(--text);box-shadow:0 16px 35px rgba(15,23,42,.16);font-size:11px;font-weight:750;line-height:1.4;opacity:0;transform:translateY(10px) scale(.98);transition:.22s;}
+.app-toast.show{opacity:1;transform:translateY(0) scale(1);}
+.toast-mark{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:0 0 20px;border-radius:7px;background:rgba(220,38,38,.1);color:var(--danger);font-weight:900;}
+
 </style>
 </head>
 
@@ -2719,6 +2866,26 @@ main{
   </header>
 
 
+  <div class="dashboard-side-decor dashboard-side-left" aria-hidden="true">
+    <span class="side-orb orb-a"></span>
+    <span class="side-orb orb-b"></span>
+    <span class="side-symbol symbol-a">+1</span>
+    <span class="side-symbol symbol-b">✓</span>
+    <span class="side-symbol symbol-c">↺</span>
+    <span class="side-line line-a"></span>
+    <span class="side-line line-b"></span>
+  </div>
+
+  <div class="dashboard-side-decor dashboard-side-right" aria-hidden="true">
+    <span class="side-orb orb-a"></span>
+    <span class="side-orb orb-b"></span>
+    <span class="side-symbol symbol-a">+5</span>
+    <span class="side-symbol symbol-b">−2</span>
+    <span class="side-symbol symbol-c">✦</span>
+    <span class="side-line line-a"></span>
+    <span class="side-line line-b"></span>
+  </div>
+
   <main>
 
     <!-- ===================================================
@@ -2731,11 +2898,22 @@ main{
 
         <div class="welcome">
 
-          <h2>
-            Welcome back 👋
-          </h2>
+          <div class="welcome-kicker">POINTTRACK · HOME</div>
 
-          <p id="teacherEmail"></p>
+          <h2 id="welcomeGreeting">Good afternoon! 👋</h2>
+
+          <p id="welcomeSubtitle">Ready to keep your classroom on track?</p>
+
+          <div class="welcome-meta">
+            <span id="welcomeDate"></span>
+            <span class="welcome-meta-dot"></span>
+            <span id="teacherEmail" class="welcome-account"></span>
+          </div>
+
+          <div class="daily-thought">
+            <span class="thought-mark">✦</span>
+            <span id="dailyThought">Small progress adds up.</span>
+          </div>
 
         </div>
 
@@ -2744,6 +2922,31 @@ main{
           class="dashboard-create-btn"
         >
           + Create Class
+        </button>
+
+      </div>
+
+
+      <div class="quick-actions" aria-label="Quick actions">
+
+        <button id="quickCreateClass" class="quick-action primary-quick" type="button">
+          <span class="quick-action-icon">+</span>
+          <span><strong>Create Class</strong><small>Start a classroom</small></span>
+        </button>
+
+        <button id="quickActivity" class="quick-action" type="button">
+          <span class="quick-action-icon">↺</span>
+          <span><strong>Recent Activity</strong><small>See what changed</small></span>
+        </button>
+
+        <button id="quickSearch" class="quick-action" type="button">
+          <span class="quick-action-icon">⌕</span>
+          <span><strong>Find a Class</strong><small>Search your classes</small></span>
+        </button>
+
+        <button id="quickSettings" class="quick-action" type="button">
+          <span class="quick-action-icon">⚙</span>
+          <span><strong>Settings</strong><small>Personalize PointTrack</small></span>
         </button>
 
       </div>
@@ -2801,27 +3004,57 @@ main{
       </div>
 
 
-      <div class="section-header">
+      <div class="dashboard-content-grid">
 
-        <div>
+        <div class="dashboard-main-column">
 
-          <h3>
-            Your Classes
-          </h3>
-
-          <div class="section-subtitle">
-            Open a class to manage students and points.
+          <div class="section-header">
+            <div>
+              <h3>Your Classes</h3>
+              <div class="section-subtitle">Open a class to manage students and points.</div>
+            </div>
+            <button id="dashboardSearchBtn" class="section-tool-btn" type="button">⌕ Search</button>
           </div>
+
+          <div id="classSearchWrap" class="class-search-wrap hidden">
+            <span>⌕</span>
+            <input id="classSearchInput" type="search" autocomplete="off" placeholder="Search your classes..." aria-label="Search your classes">
+            <button id="clearClassSearch" type="button" aria-label="Clear class search">×</button>
+          </div>
+
+          <div id="classesContainer" class="classes-grid"></div>
 
         </div>
 
+        <aside class="dashboard-side-column">
+
+          <section id="activityPanel" class="dashboard-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Recent Activity</h3>
+                <p>Latest point changes</p>
+              </div>
+              <span class="panel-icon">↺</span>
+            </div>
+            <div id="recentActivity" class="activity-list">
+              <div class="panel-empty">Loading activity...</div>
+            </div>
+          </section>
+
+          <section class="dashboard-panel pulse-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Classroom Pulse</h3>
+                <p>A quick look at your tracker</p>
+              </div>
+              <span class="pulse-live"><i></i> LIVE</span>
+            </div>
+            <div id="classroomPulse" class="pulse-content"></div>
+          </section>
+
+        </aside>
+
       </div>
-
-
-      <div
-        id="classesContainer"
-        class="classes-grid"
-      ></div>
 
       <div class="dashboard-activity-hint" aria-hidden="true">
         <span class="activity-dot"></span>
@@ -3170,7 +3403,69 @@ main{
 </div>
 
 
+<!-- =======================================================
+     SETTINGS MODAL
+======================================================= -->
+
+<div id="settingsModal" class="modal-overlay hidden">
+  <div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="settings-header">
+      <div>
+        <div class="settings-kicker">POINTTRACK</div>
+        <h3 id="settingsTitle">Settings</h3>
+        <p>Make PointTrack feel right for you.</p>
+      </div>
+      <button id="closeSettingsBtn" class="secondary-btn" type="button">Close</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-row">
+        <div><strong>Appearance</strong><span>Choose how PointTrack looks.</span></div>
+        <button id="settingsThemeBtn" class="settings-select" type="button">System / Light / Dark</button>
+      </div>
+      <div class="settings-row">
+        <div><strong>Animations</strong><span>Keep the small interactions and ambient motion.</span></div>
+        <label class="switch"><input id="settingsMotionToggle" type="checkbox" checked><span></span></label>
+      </div>
+    </div>
+
+    <div class="settings-section account-section">
+      <div class="settings-row">
+        <div><strong>Signed in as</strong><span id="settingsAccount"></span></div>
+        <span class="account-badge">Google</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+
+/* =========================================================
+   FRIENDLY APP FEEDBACK
+========================================================= */
+
+function showToast(message, type="error"){
+  let host = document.getElementById("toastHost");
+  if(!host){
+    host = document.createElement("div");
+    host.id = "toastHost";
+    host.className = "toast-host";
+    document.body.appendChild(host);
+  }
+  const toast = document.createElement("div");
+  toast.className = `app-toast ${type}`;
+  toast.innerHTML = `<span class="toast-mark">${type === "error" ? "!" : "✓"}</span><span>${escapeHtml(String(message)).replaceAll("\\n","<br>")}</span>`;
+  host.appendChild(toast);
+  setTimeout(() => toast.classList.add("show"), 10);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 220);
+  }, 3400);
+}
+
+window.alert = function(message){
+  showToast(message, "error");
+};
 
 /* =========================================================
    SUPABASE
@@ -3255,6 +3550,19 @@ const teacherEmail =
   document.getElementById(
     "teacherEmail"
   );
+
+const welcomeGreeting = document.getElementById("welcomeGreeting");
+const welcomeSubtitle = document.getElementById("welcomeSubtitle");
+const welcomeDate = document.getElementById("welcomeDate");
+const dailyThought = document.getElementById("dailyThought");
+const recentActivity = document.getElementById("recentActivity");
+const classroomPulse = document.getElementById("classroomPulse");
+const classSearchWrap = document.getElementById("classSearchWrap");
+const classSearchInput = document.getElementById("classSearchInput");
+const clearClassSearch = document.getElementById("clearClassSearch");
+const settingsModal = document.getElementById("settingsModal");
+const settingsAccount = document.getElementById("settingsAccount");
+const settingsMotionToggle = document.getElementById("settingsMotionToggle");
 
 const currentClassName =
   document.getElementById(
@@ -4722,6 +5030,196 @@ function showLogin(){
 }
 
 
+function updateDashboardWelcome(){
+  if(!currentUser) return;
+
+  const name =
+    currentUser.user_metadata?.full_name ||
+    currentUser.user_metadata?.name ||
+    currentUser.email?.split("@")[0] ||
+    "there";
+
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Good morning" :
+    hour < 18 ? "Good afternoon" :
+    "Good evening";
+
+  const subtitles = [
+    "Ready to keep your classroom on track?",
+    "Let’s make those points count.",
+    "Your classroom command center is ready.",
+    "Everything you need, right where you need it."
+  ];
+
+  const thoughts = [
+    "Small progress adds up.",
+    "A well-tracked class is a calmer class.",
+    "Keep it simple. Keep it moving.",
+    "Every point tells a little story."
+  ];
+
+  const dayIndex = Math.floor(Date.now() / 86400000);
+  const subtitle = subtitles[dayIndex % subtitles.length];
+  const thought = thoughts[dayIndex % thoughts.length];
+
+  welcomeGreeting.textContent = `${greeting}, ${name}! 👋`;
+  welcomeSubtitle.textContent = subtitle;
+  welcomeDate.textContent = new Intl.DateTimeFormat(undefined, {
+    weekday:"long",
+    month:"long",
+    day:"numeric"
+  }).format(new Date());
+  dailyThought.textContent = thought;
+  teacherEmail.textContent = currentUser.email || "";
+  settingsAccount.textContent = currentUser.email || "";
+}
+
+function applyMotionPreference(){
+  const enabled = localStorage.getItem("pointtrack-motion") !== "off";
+  document.body.classList.toggle("motion-off", !enabled);
+  if(settingsMotionToggle) settingsMotionToggle.checked = enabled;
+}
+
+function cycleTheme(){
+  const current = localStorage.getItem("pointtrack-theme") || "light";
+  const next = current === "light" ? "dark" : current === "dark" ? "light" : "dark";
+  document.body.classList.toggle("dark", next === "dark");
+  localStorage.setItem("pointtrack-theme", next);
+}
+
+function openSettings(){
+  closeHistory();
+  settingsModal.classList.remove("hidden");
+  applyMotionPreference();
+}
+
+function closeSettings(){
+  settingsModal.classList.add("hidden");
+}
+
+function toggleClassSearch(){
+  classSearchWrap.classList.toggle("hidden");
+  if(!classSearchWrap.classList.contains("hidden")){
+    setTimeout(() => classSearchInput.focus(), 0);
+  } else {
+    classSearchInput.value = "";
+    filterClassCards();
+  }
+}
+
+function filterClassCards(){
+  const query = classSearchInput.value.trim().toLowerCase();
+  let visible = 0;
+  classesContainer.querySelectorAll(".class-card").forEach(card => {
+    const matches = !query || card.dataset.searchText.includes(query);
+    card.style.display = matches ? "" : "none";
+    if(matches) visible++;
+  });
+  let noMatch = classesContainer.querySelector(".search-no-match");
+  if(query && !visible && classesContainer.querySelector(".class-card")){
+    if(!noMatch){
+      noMatch = document.createElement("div");
+      noMatch.className = "empty-state search-no-match";
+      noMatch.innerHTML = '<div class="empty-icon">⌕</div><div class="empty-title">No matching classes</div><div class="empty-description">Try a different class name.</div>';
+      classesContainer.appendChild(noMatch);
+    }
+  } else if(noMatch){
+    noMatch.remove();
+  }
+}
+
+async function loadDashboardExtras(classesData){
+  const classes = classesData || [];
+  const classIds = classes.map(c => c.id);
+
+  if(!classIds.length){
+    recentActivity.innerHTML = '<div class="panel-empty">No activity yet. Create a class to get started.</div>';
+    classroomPulse.innerHTML = '<div class="pulse-row"><span>Status</span><strong>Ready for your first class</strong></div>';
+    return;
+  }
+
+  const { data: students, error: studentError } = await db
+    .from("students")
+    .select("id, class_id, name, points")
+    .in("class_id", classIds);
+
+  if(studentError){
+    recentActivity.innerHTML = '<div class="panel-empty">Activity is temporarily unavailable.</div>';
+    return;
+  }
+
+  const studentMap = {};
+  const classMap = {};
+  classes.forEach(c => classMap[c.id] = c.name);
+  (students || []).forEach(st => studentMap[st.id] = st);
+
+  let history = [];
+  const studentIds = (students || []).map(st => st.id);
+  if(studentIds.length){
+    const result = await db
+      .from("point_history")
+      .select("id, student_id, amount, created_at")
+      .in("student_id", studentIds)
+      .order("created_at", {ascending:false})
+      .limit(6);
+    if(!result.error) history = result.data || [];
+  }
+
+  if(!history.length){
+    recentActivity.innerHTML = '<div class="panel-empty">No point changes yet.<br>Add some points to see activity here.</div>';
+  } else {
+    recentActivity.innerHTML = "";
+    history.forEach(entry => {
+      const student = studentMap[entry.student_id];
+      if(!student) return;
+      const amount = decimalFromDatabase(entry.amount);
+      const positive = isPositiveDecimal(amount);
+      const row = document.createElement("div");
+      row.className = "activity-item";
+      const date = new Date(entry.created_at);
+      row.innerHTML = `
+        <div class="activity-badge ${positive ? "positive" : "negative"}">${positive ? "+" : "−"}</div>
+        <div class="activity-main">
+          <strong>${escapeHtml(student.name)}</strong>
+          <span>${escapeHtml(classMap[student.class_id] || "Class")} · ${escapeHtml(date.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}))}</span>
+        </div>
+        <div class="activity-amount ${positive ? "positive" : "negative"}">${positive ? "+" : ""}${escapeHtml(formatDecimal(amount))}</div>
+      `;
+      recentActivity.appendChild(row);
+    });
+  }
+
+  let total = {integer:0n, scale:0};
+  let topClass = null;
+  classes.forEach(c => {
+    const classStudents = (students || []).filter(st => st.class_id === c.id);
+    let classPoints = {integer:0n, scale:0};
+    classStudents.forEach(st => classPoints = addDecimals(classPoints, decimalFromDatabase(st.points)));
+    total = addDecimals(total, classPoints);
+    if(!topClass || compareDecimals(classPoints, topClass.points) > 0){
+      topClass = {name:c.name, points:classPoints, students:classStudents.length};
+    }
+  });
+
+  const activeStudent = (students || []).length
+    ? students.reduce((best, st) => !best || compareDecimals(decimalFromDatabase(st.points), decimalFromDatabase(best.points)) > 0 ? st : best, null)
+    : null;
+
+  classroomPulse.innerHTML = `
+    <div class="pulse-row"><span>Most points</span><strong>${topClass ? escapeHtml(topClass.name) : "—"}</strong></div>
+    <div class="pulse-row"><span>Top student</span><strong>${activeStudent ? escapeHtml(activeStudent.name) : "—"}</strong></div>
+    <div class="pulse-row"><span>Total tracked</span><strong>${escapeHtml(formatDecimal(total))} points</strong></div>
+  `;
+}
+
+function compareDecimals(a,b){
+  const scale = Math.max(a.scale,b.scale);
+  const ai = a.integer * 10n ** BigInt(scale-a.scale);
+  const bi = b.integer * 10n ** BigInt(scale-b.scale);
+  return ai < bi ? -1 : ai > bi ? 1 : 0;
+}
+
 async function showApp(){
 
   if(!currentUser){
@@ -4738,8 +5236,8 @@ async function showApp(){
 
   playAppEntrance();
 
-  teacherEmail.textContent =
-    currentUser.email || "";
+  updateDashboardWelcome();
+  applyMotionPreference();
 
   if(showingApp){
     return;
@@ -4840,6 +5338,43 @@ if(
 
 }
 
+applyMotionPreference();
+
+
+/* =========================================================
+   DASHBOARD QUALITY OF LIFE CONTROLS
+========================================================= */
+
+document.getElementById("quickCreateClass").addEventListener("click", openCreateClassModal);
+document.getElementById("quickActivity").addEventListener("click", () => {
+  document.getElementById("activityPanel").scrollIntoView({behavior:"smooth",block:"center"});
+});
+document.getElementById("quickSearch").addEventListener("click", toggleClassSearch);
+document.getElementById("dashboardSearchBtn").addEventListener("click", toggleClassSearch);
+document.getElementById("quickSettings").addEventListener("click", openSettings);
+document.getElementById("closeSettingsBtn").addEventListener("click", closeSettings);
+settingsModal.addEventListener("click", event => {
+  if(event.target === settingsModal) closeSettings();
+});
+document.getElementById("settingsThemeBtn").addEventListener("click", cycleTheme);
+settingsMotionToggle.addEventListener("change", () => {
+  localStorage.setItem("pointtrack-motion", settingsMotionToggle.checked ? "on" : "off");
+  applyMotionPreference();
+});
+classSearchInput.addEventListener("input", filterClassCards);
+clearClassSearch.addEventListener("click", () => {
+  classSearchInput.value = "";
+  filterClassCards();
+  classSearchInput.focus();
+});
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape") closeSettings();
+  if(event.key === "/" && !["INPUT","TEXTAREA"].includes(document.activeElement?.tagName)){
+    event.preventDefault();
+    toggleClassSearch();
+  }
+});
 
 /* =========================================================
    CREATE CLASS
@@ -5061,6 +5596,7 @@ async function loadClasses(){
         openCreateClassModal
       );
 
+    await loadDashboardExtras([]);
     return;
 
   }
@@ -5198,6 +5734,7 @@ async function loadClasses(){
 
       card.className =
         "class-card";
+      card.dataset.searchText = `${classItem.name || ""} ${classItem.school_year || ""} ${classItem.term || ""}`.toLowerCase();
 
       const info = [
         classItem.school_year,
@@ -5321,6 +5858,9 @@ async function loadClasses(){
     }
   );
 
+
+  await loadDashboardExtras(data);
+  filterClassCards();
 
   /* Restore previously opened class */
 
