@@ -2476,10 +2476,23 @@ main{
 .dashboard-side-column{display:grid;gap:15px;min-width:0;}
 .section-tool-btn{border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:10px;padding:8px 10px;font-size:11px;font-weight:800;transition:.2s;}
 .section-tool-btn:hover{color:var(--text);border-color:rgba(37,99,235,.28);background:var(--surface-2);}
-.class-search-wrap{display:flex;align-items:center;gap:8px;margin:-5px 0 14px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:0 7px 20px rgba(15,23,42,.04);}
+.class-search-wrap{display:flex;align-items:center;gap:8px;margin:-5px 0 14px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:0 7px 20px rgba(15,23,42,.04);position:relative;z-index:5;}
 .class-search-wrap>span{color:var(--muted);}
 .class-search-wrap input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:12px;}
 .class-search-wrap button{border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;}
+.search-results{display:none;margin:-5px 0 15px;border:1px solid var(--border);border-radius:14px;background:var(--surface);box-shadow:0 12px 30px rgba(15,23,42,.09);overflow:hidden;}
+.search-results.visible{display:block;}
+.search-results-section{padding:11px 12px 5px;}
+.search-results-section+ .search-results-section{border-top:1px solid var(--border);padding-top:10px;}
+.search-results-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;color:var(--muted);font-size:9px;font-weight:850;text-transform:uppercase;letter-spacing:.7px;}
+.search-results-count{font-size:8px;opacity:.7;text-transform:none;letter-spacing:0;}
+.search-result{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 2px;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer;border-radius:9px;transition:background .16s,transform .16s;}
+.search-result:hover{background:var(--surface-2);transform:translateX(2px);}
+.search-result-main{min-width:0;}
+.search-result-title{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.search-result-subtitle{margin-top:2px;color:var(--muted);font-size:9px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.search-result-arrow{flex:0 0 auto;color:var(--primary);font-size:13px;font-weight:900;}
+.search-no-results{padding:15px 12px;color:var(--muted);font-size:10px;font-weight:650;}
 
 .dashboard-panel{position:relative;overflow:hidden;padding:17px;border:1px solid var(--border);border-radius:17px;background:linear-gradient(145deg,var(--surface),var(--surface-2));box-shadow:0 10px 27px rgba(15,23,42,.05);}
 .dashboard-panel::before{content:"";position:absolute;left:0;top:0;width:46px;height:3px;background:linear-gradient(90deg,var(--primary),transparent);}
@@ -3018,9 +3031,11 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
           <div id="classSearchWrap" class="class-search-wrap hidden">
             <span>⌕</span>
-            <input id="classSearchInput" type="search" autocomplete="off" placeholder="Search your classes..." aria-label="Search your classes">
-            <button id="clearClassSearch" type="button" aria-label="Clear class search">×</button>
+            <input id="classSearchInput" type="search" autocomplete="off" placeholder="Search for a class or a student..." aria-label="Search for a class or a student">
+            <button id="clearClassSearch" type="button" aria-label="Clear search">×</button>
           </div>
+
+          <div id="searchResults" class="search-results" aria-live="polite"></div>
 
           <div id="classesContainer" class="classes-grid"></div>
 
@@ -3560,6 +3575,9 @@ const classroomPulse = document.getElementById("classroomPulse");
 const classSearchWrap = document.getElementById("classSearchWrap");
 const classSearchInput = document.getElementById("classSearchInput");
 const clearClassSearch = document.getElementById("clearClassSearch");
+const searchResults = document.getElementById("searchResults");
+let dashboardSearchClasses = [];
+let dashboardSearchStudents = [];
 const settingsModal = document.getElementById("settingsModal");
 const settingsAccount = document.getElementById("settingsAccount");
 const settingsMotionToggle = document.getElementById("settingsMotionToggle");
@@ -5108,6 +5126,91 @@ function toggleClassSearch(){
   }
 }
 
+function renderDashboardSearchResults(query){
+  const q = query.trim().toLowerCase();
+  if(!q){
+    searchResults.innerHTML = "";
+    searchResults.classList.remove("visible");
+    return;
+  }
+
+  const classMatches = dashboardSearchClasses.filter(c => {
+    const haystack = `${c.name || ""} ${c.school_year || ""} ${c.term || ""}`.toLowerCase();
+    return haystack.includes(q);
+  });
+
+  const studentMatches = dashboardSearchStudents.filter(st =>
+    (st.name || "").toLowerCase().includes(q)
+  );
+
+  const pieces = [];
+
+  if(classMatches.length){
+    pieces.push(`
+      <section class="search-results-section">
+        <div class="search-results-heading">
+          <span>Class name matches:</span>
+          <span class="search-results-count">${classMatches.length}</span>
+        </div>
+        ${classMatches.slice(0,8).map(c => `
+          <button class="search-result" type="button" data-search-class-id="${escapeHtml(c.id)}">
+            <span class="search-result-main">
+              <span class="search-result-title">${escapeHtml(c.name || "Unnamed class")}</span>
+              <span class="search-result-subtitle">${escapeHtml([c.school_year,c.term].filter(Boolean).join(" • ") || "No additional information")}</span>
+            </span>
+            <span class="search-result-arrow">→</span>
+          </button>
+        `).join("")}
+      </section>
+    `);
+  }
+
+  if(studentMatches.length){
+    pieces.push(`
+      <section class="search-results-section">
+        <div class="search-results-heading">
+          <span>Student name matches:</span>
+          <span class="search-results-count">${studentMatches.length}</span>
+        </div>
+        ${studentMatches.slice(0,10).map(st => {
+          const cls = dashboardSearchClasses.find(c => c.id === st.class_id);
+          return `
+            <button class="search-result" type="button" data-search-student-id="${escapeHtml(st.id)}">
+              <span class="search-result-main">
+                <span class="search-result-title">${escapeHtml(st.name || "Unnamed student")}</span>
+                <span class="search-result-subtitle">Class: ${escapeHtml(cls?.name || "Unknown class")}</span>
+              </span>
+              <span class="search-result-arrow">→</span>
+            </button>
+          `;
+        }).join("")}
+      </section>
+    `);
+  }
+
+  if(!pieces.length){
+    pieces.push('<div class="search-no-results">No classes or students match that search.</div>');
+  }
+
+  searchResults.innerHTML = pieces.join("");
+  searchResults.classList.add("visible");
+
+  searchResults.querySelectorAll("[data-search-class-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cls = dashboardSearchClasses.find(c => c.id === btn.dataset.searchClassId);
+      if(cls) openClass(cls);
+    });
+  });
+
+  searchResults.querySelectorAll("[data-search-student-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const student = dashboardSearchStudents.find(st => st.id === btn.dataset.searchStudentId);
+      const cls = dashboardSearchClasses.find(c => c.id === student?.class_id);
+      if(cls) openClass(cls);
+    });
+  });
+}
+
 function filterClassCards(){
   const query = classSearchInput.value.trim().toLowerCase();
   let visible = 0;
@@ -5121,14 +5224,14 @@ function filterClassCards(){
     if(!noMatch){
       noMatch = document.createElement("div");
       noMatch.className = "empty-state search-no-match";
-      noMatch.innerHTML = '<div class="empty-icon">⌕</div><div class="empty-title">No matching classes</div><div class="empty-description">Try a different class name.</div>';
+      noMatch.innerHTML = '<div class="empty-icon">⌕</div><div class="empty-title">No matching classes</div><div class="empty-description">Try a class or student name.</div>';
       classesContainer.appendChild(noMatch);
     }
   } else if(noMatch){
     noMatch.remove();
   }
+  renderDashboardSearchResults(query);
 }
-
 async function loadDashboardExtras(classesData){
   const classes = classesData || [];
   const classIds = classes.map(c => c.id);
@@ -5546,11 +5649,17 @@ async function loadClasses(){
 
   }
 
+  dashboardSearchClasses = data || [];
+  dashboardSearchStudents = [];
   totalClasses.textContent =
     data.length.toLocaleString();
 
   if(!data.length){
 
+    dashboardSearchClasses = [];
+    dashboardSearchStudents = [];
+    searchResults.innerHTML = "";
+    searchResults.classList.remove("visible");
     clearLastClass();
 
     totalStudents.textContent =
@@ -5614,7 +5723,7 @@ async function loadClasses(){
     await db
       .from("students")
       .select(
-        "id, class_id, points"
+        "id, class_id, name, points"
       )
       .in(
         "class_id",
@@ -5634,6 +5743,8 @@ async function loadClasses(){
       "—";
 
   }
+
+  dashboardSearchStudents = students || [];
 
   const classStats = {};
 
