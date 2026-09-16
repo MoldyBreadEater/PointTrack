@@ -2639,6 +2639,10 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 @media(max-width:500px){.app-side-rail{top:auto;bottom:12px;transform:none;max-height:none;}.app-side-rail:hover,.app-side-rail:focus-within{width:calc(100vw - 16px);}.app-side-panel{max-height:calc(100vh - 110px);}.app-side-rail:hover .app-side-panel,.app-side-rail:focus-within .app-side-panel{width:calc(100vw - 68px);}.app-side-icons{max-height:calc(100vh - 110px);overflow:auto;}.app-side-icon.class-only{display:flex;}.app-side-rail:not(.has-class) .app-side-icon.class-only{display:none;}}
 
 </style>
+
+<style id="rollback-sidebar-css">
+#appSideRail, #appSideScrim { display:none !important; }
+</style>
 </head>
 
 <body>
@@ -2922,6 +2926,11 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
       PointTrack
 
+    </div>
+  
+    <div class="header-actions" style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+      <button id="exploreNavBtn" class="secondary-btn header-explore-btn" type="button" aria-label="Open Explore">✦ Explore</button>
+      <button id="headerThemeBtn" class="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle light and dark mode">◐</button>
     </div>
   </header>
 
@@ -5273,6 +5282,9 @@ function cycleTheme(){
   localStorage.setItem("pointtrack-theme", next);
 }
 
+/* RESTORED_HEADER_THEME */
+document.getElementById("headerThemeBtn").addEventListener("click", cycleTheme);
+
 function openSettings(){
   closeHistory();
   settingsModal.classList.remove("hidden");
@@ -6392,6 +6404,16 @@ async function deleteClass(
 /* =========================================================
    EXPLORE / ENGAGEMENT PAGE
 ========================================================= */
+
+
+/* RESTORED_HEADER_EXPLORE */
+document.getElementById("exploreNavBtn").addEventListener("click", async () => {
+  closeTransientUI();
+  dashboardView.classList.add("hidden");
+  classView.classList.add("hidden");
+  exploreView.classList.remove("hidden");
+  await loadExploreData();
+});
 
 async function loadExploreData(){
   if(!currentUser) return;
