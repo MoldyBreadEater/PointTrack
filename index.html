@@ -951,6 +951,42 @@ header{
 }
 
 
+
+/* =========================================================
+   EXPLORE / ENGAGEMENT PAGE
+========================================================= */
+#exploreView{animation:dashboardEnter .7s cubic-bezier(.2,.8,.2,1) both;}
+.explore-hero{position:relative;overflow:hidden;padding:30px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(255,255,255,.48));box-shadow:var(--shadow);}
+body.dark .explore-hero{background:linear-gradient(135deg,rgba(24,28,35,.94),rgba(24,28,35,.62));}
+.explore-hero::before{content:"";position:absolute;width:330px;height:330px;right:-100px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.18),transparent 68%);pointer-events:none;}
+.explore-kicker{font-size:9px;font-weight:900;letter-spacing:.14em;color:var(--primary);margin-bottom:8px;}
+.explore-hero h2{margin:0;font-size:27px;letter-spacing:-.7px;}
+.explore-hero p{margin:7px 0 0;color:var(--muted);font-size:11px;max-width:650px;line-height:1.6;font-weight:600;}
+.explore-orbit{position:absolute;right:42px;top:50%;width:110px;height:110px;border:1px solid rgba(37,99,235,.16);border-radius:50%;transform:translateY(-50%);pointer-events:none;animation:exploreOrbit 12s linear infinite;}
+.explore-orbit::before,.explore-orbit::after{content:"";position:absolute;border-radius:50%;background:var(--primary);box-shadow:0 0 18px rgba(37,99,235,.25);}
+.explore-orbit::before{width:8px;height:8px;left:-4px;top:50%;margin-top:-4px;}.explore-orbit::after{width:5px;height:5px;right:8px;top:13px;}
+@keyframes exploreOrbit{to{transform:translateY(-50%) rotate(360deg)}}
+.explore-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:16px;margin-top:16px;}
+.explore-panel{border:1px solid var(--border);border-radius:20px;background:var(--surface);box-shadow:var(--shadow);padding:19px;}
+.explore-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.explore-panel-head h3{margin:0;font-size:14px;letter-spacing:-.2px;}.explore-panel-head p{margin:4px 0 0;color:var(--muted);font-size:9px;font-weight:650;}
+.milestone-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.milestone-card{position:relative;overflow:hidden;padding:14px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2);transition:.25s;}
+.milestone-card:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:var(--shadow-hover);border-color:rgba(37,99,235,.28);}
+.milestone-card.unlocked{background:linear-gradient(135deg,rgba(37,99,235,.09),var(--surface-2));}
+.milestone-card.locked{opacity:.58;filter:saturate(.45);}
+.milestone-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--surface);font-size:18px;margin-bottom:10px;box-shadow:0 5px 15px rgba(15,23,42,.06);}
+.milestone-card h4{margin:0;font-size:11px;}.milestone-card p{margin:4px 0 0;color:var(--muted);font-size:9px;line-height:1.45;font-weight:600;}.milestone-status{display:inline-flex;margin-top:9px;font-size:7px;font-weight:900;letter-spacing:.08em;color:var(--muted);}.milestone-card.unlocked .milestone-status{color:var(--success);}
+.explore-stat-stack{display:grid;gap:9px;}.explore-stat{padding:13px 14px;border-radius:14px;background:var(--surface-2);display:flex;justify-content:space-between;align-items:center;gap:10px;}.explore-stat span{font-size:9px;color:var(--muted);font-weight:750;}.explore-stat strong{font-size:17px;letter-spacing:-.4px;}
+.playground{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.point-lab{position:relative;overflow:hidden;text-align:center;padding:25px;border-radius:20px;border:1px solid var(--border);background:linear-gradient(145deg,var(--surface),var(--surface-2));}
+.point-lab::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.09),transparent 68%);pointer-events:none;}
+.point-lab-label{position:relative;z-index:1;font-size:8px;font-weight:900;letter-spacing:.13em;color:var(--muted);}.point-lab-value{position:relative;z-index:1;font-size:54px;font-weight:950;letter-spacing:-2px;margin:5px 0 12px;}.point-lab-controls{position:relative;z-index:1;display:flex;justify-content:center;gap:8px;}.point-lab-controls button{width:48px;height:38px;border:1px solid var(--border);border-radius:11px;background:var(--surface);font-size:18px;font-weight:900;color:var(--text);transition:.2s;}.point-lab-controls button:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);}.point-lab-float{position:absolute;left:50%;top:43%;font-size:15px;font-weight:950;pointer-events:none;animation:labFloat .8s ease-out forwards;z-index:3;}.point-lab-float.up{color:var(--success);}.point-lab-float.down{color:var(--danger);}@keyframes labFloat{from{opacity:0;transform:translate(-50%,0) scale(.8)}20%{opacity:1}to{opacity:0;transform:translate(-50%,-48px) scale(1.08)}}
+.explore-ideas{padding:22px;border-radius:20px;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow);}.idea-list{display:grid;gap:9px;margin-top:13px;}.idea-chip{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:var(--surface-2);font-size:9px;font-weight:750;transition:.2s;}.idea-chip:hover{transform:translateX(4px);background:rgba(37,99,235,.08);}.idea-chip b{font-size:13px;}
+.explore-back{margin-bottom:15px;}
+@media(max-width:900px){.explore-grid,.playground{grid-template-columns:1fr;}.explore-orbit{opacity:.35;right:15px;}.milestone-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.explore-hero{padding:22px 18px;}.explore-hero h2{font-size:22px;max-width:75%;}.explore-orbit{display:none;}.milestone-grid{grid-template-columns:1fr;}.explore-panel{padding:15px;}}
+
 /* =========================================================
    APP ENERGY
 ========================================================= */
@@ -2859,6 +2895,15 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
     <div class="header-actions">
 
       <button
+        id="exploreNavBtn"
+        class="secondary-btn header-explore-btn"
+        type="button"
+        title="Open PointTrack Explore"
+      >
+        ✦ Explore
+      </button>
+
+      <button
         id="themeBtn"
         class="icon-btn"
         title="Toggle dark mode"
@@ -3078,6 +3123,66 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
     </section>
 
+
+    <!-- ===================================================
+         EXPLORE / ENGAGEMENT
+    ==================================================== -->
+
+    <section id="exploreView" class="hidden">
+
+      <button id="exploreBackBtn" class="back-btn explore-back" type="button">← Back to Dashboard</button>
+
+      <div class="explore-hero">
+        <div class="explore-kicker">POINTTRACK · EXPLORE</div>
+        <h2>There’s more to PointTrack than points.</h2>
+        <p>Track your progress, unlock milestones, and play with the little interactions that make PointTrack feel alive.</p>
+        <div class="explore-orbit" aria-hidden="true"></div>
+      </div>
+
+      <div class="explore-grid">
+        <section class="explore-panel">
+          <div class="explore-panel-head">
+            <div><h3>Milestones</h3><p>Earned naturally as you use PointTrack.</p></div>
+            <span class="panel-icon">🏆</span>
+          </div>
+          <div id="milestoneGrid" class="milestone-grid"></div>
+        </section>
+
+        <aside class="explore-panel">
+          <div class="explore-panel-head">
+            <div><h3>Your PointTrack</h3><p>A quick snapshot of your journey.</p></div>
+            <span class="pulse-live"><i></i> LIVE</span>
+          </div>
+          <div id="exploreStats" class="explore-stat-stack"></div>
+        </aside>
+      </div>
+
+      <div class="playground">
+        <section class="point-lab">
+          <div class="point-lab-label">POINT LAB</div>
+          <div id="labPoints" class="point-lab-value">0</div>
+          <div class="point-lab-controls">
+            <button id="labMinus" type="button" aria-label="Subtract one point">−</button>
+            <button id="labReset" type="button" aria-label="Reset point lab">↺</button>
+            <button id="labPlus" type="button" aria-label="Add one point">+</button>
+          </div>
+        </section>
+
+        <section class="explore-ideas">
+          <div class="explore-panel-head">
+            <div><h3>What's next?</h3><p>The playground for future PointTrack ideas.</p></div>
+            <span class="panel-icon">✦</span>
+          </div>
+          <div class="idea-list">
+            <div class="idea-chip"><b>🎨</b> Per-class backgrounds and themes</div>
+            <div class="idea-chip"><b>📈</b> Deeper classroom insights</div>
+            <div class="idea-chip"><b>🥚</b> Hidden interactions and easter eggs</div>
+            <div class="idea-chip"><b>⚡</b> More tiny feedback moments everywhere</div>
+          </div>
+        </section>
+      </div>
+
+    </section>
 
     <!-- ===================================================
          CLASS VIEW
@@ -3550,6 +3655,11 @@ const classView =
   document.getElementById(
     "classView"
   );
+
+const exploreView = document.getElementById("exploreView");
+const exploreStats = document.getElementById("exploreStats");
+const milestoneGrid = document.getElementById("milestoneGrid");
+const labPoints = document.getElementById("labPoints");
 
 const classesContainer =
   document.getElementById(
@@ -5027,6 +5137,8 @@ function showLogin(){
     "hidden"
   );
 
+  exploreView.classList.add("hidden");
+
   classView.classList.add(
     "hidden"
   );
@@ -5352,6 +5464,7 @@ async function showApp(){
   showDashboard(false);
 
   await loadClasses();
+  await loadExploreData();
 
 }
 
@@ -6157,6 +6270,99 @@ async function deleteClass(
 
 
 /* =========================================================
+   EXPLORE / ENGAGEMENT PAGE
+========================================================= */
+
+async function loadExploreData(){
+  if(!currentUser) return;
+
+  const classes = dashboardSearchClasses || [];
+  let students = [];
+
+  try{
+    if(classes.length){
+      const classIds = classes.map(c => c.id);
+      const { data, error } = await db
+        .from("students")
+        .select("id,name,points,class_id")
+        .in("class_id", classIds);
+      if(error) throw error;
+      students = data || [];
+    }
+  }catch(error){
+    students = [];
+  }
+
+  let totalPointsValue = parseDecimal("0");
+  students.forEach(s => totalPointsValue = addDecimals(totalPointsValue, parseDecimal(String(s.points ?? 0))));
+
+  const classCount = classes.length;
+  const studentCount = students.length;
+  const pointText = formatDecimal(totalPointsValue);
+  const unlockedCount = [classCount >= 1, studentCount >= 1, studentCount >= 10, totalPointsValue.integer > 0n, totalPointsValue.integer >= 100n].filter(Boolean).length;
+
+  exploreStats.innerHTML = `
+    <div class="explore-stat"><span>Classes created</span><strong>${classCount}</strong></div>
+    <div class="explore-stat"><span>Students tracked</span><strong>${studentCount}</strong></div>
+    <div class="explore-stat"><span>Total points</span><strong>${escapeHtml(pointText)}</strong></div>
+    <div class="explore-stat"><span>Milestones unlocked</span><strong>${unlockedCount}/5</strong></div>
+  `;
+
+  const milestones = [
+    {icon:"🚪",title:"First Class",desc:"Create your first classroom.",ok:classCount >= 1},
+    {icon:"👥",title:"First Student",desc:"Add a student to a class.",ok:studentCount >= 1},
+    {icon:"📚",title:"Full Roster",desc:"Track at least 10 students.",ok:studentCount >= 10},
+    {icon:"⚡",title:"First Point",desc:"Award or subtract your first point.",ok:totalPointsValue.integer > 0n},
+    {icon:"💯",title:"Century",desc:"Reach 100 total points across your classes.",ok:totalPointsValue.integer >= 100n}
+  ];
+
+  milestoneGrid.innerHTML = milestones.map(m => `
+    <article class="milestone-card ${m.ok ? "unlocked" : "locked"}">
+      <div class="milestone-icon">${m.icon}</div>
+      <h4>${m.title}</h4>
+      <p>${m.desc}</p>
+      <span class="milestone-status">${m.ok ? "UNLOCKED" : "LOCKED"}</span>
+    </article>
+  `).join("");
+}
+
+let pointLabValue = Number(localStorage.getItem("pointtrack-lab-points") || 0);
+if(!Number.isFinite(pointLabValue)) pointLabValue = 0;
+function renderPointLab(){ labPoints.textContent = pointLabValue; }
+function nudgePointLab(amount){
+  pointLabValue += amount;
+  localStorage.setItem("pointtrack-lab-points", String(pointLabValue));
+  renderPointLab();
+  const f = document.createElement("span");
+  f.className = `point-lab-float ${amount > 0 ? "up" : "down"}`;
+  f.textContent = amount > 0 ? "+1" : "−1";
+  f.setAttribute("aria-hidden","true");
+  document.querySelector(".point-lab").appendChild(f);
+  setTimeout(() => f.remove(), 850);
+}
+renderPointLab();
+
+document.getElementById("exploreNavBtn").addEventListener("click", async () => {
+  closeTransientUI();
+  dashboardView.classList.add("hidden");
+  classView.classList.add("hidden");
+  exploreView.classList.remove("hidden");
+  await loadExploreData();
+});
+
+document.getElementById("exploreBackBtn").addEventListener("click", async () => {
+  showDashboard(true);
+  await loadClasses();
+});
+document.getElementById("labPlus").addEventListener("click", () => nudgePointLab(1));
+document.getElementById("labMinus").addEventListener("click", () => nudgePointLab(-1));
+document.getElementById("labReset").addEventListener("click", () => {
+  pointLabValue = 0;
+  localStorage.setItem("pointtrack-lab-points","0");
+  renderPointLab();
+});
+
+/* =========================================================
    OPEN CLASS
 ========================================================= */
 
@@ -6181,6 +6387,8 @@ async function openClass(
   dashboardView.classList.add(
     "hidden"
   );
+
+  exploreView.classList.add("hidden");
 
   classView.classList.remove(
     "hidden"
