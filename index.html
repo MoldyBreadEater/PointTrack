@@ -2493,176 +2493,6 @@ main{
 /* =========================================================
    DASHBOARD SIDE NAV + DISCOVERY RAIL
 ========================================================= */
-.dashboard-nav-rail{
-  position:fixed;
-  left:18px;
-  top:102px;
-  width:146px;
-  padding:13px;
-  border:1px solid var(--border);
-  border-radius:18px;
-  background:linear-gradient(145deg,var(--surface),var(--surface-2));
-  box-shadow:0 14px 34px rgba(15,23,42,.06);
-  z-index:4;
-}
-.dashboard-nav-label{
-  padding:2px 8px 9px;
-  color:var(--muted);
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:.12em;
-}
-.dashboard-nav-item{
-  position:relative;
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:10px 9px;
-  border:1px solid transparent;
-  border-radius:11px;
-  background:transparent;
-  color:var(--muted);
-  text-align:left;
-  font-size:10px;
-  font-weight:800;
-  transition:.2s;
-}
-.dashboard-nav-item:hover{
-  transform:translateX(3px);
-  color:var(--text);
-  background:var(--surface);
-  border-color:var(--border);
-}
-.dashboard-nav-item.active{
-  color:var(--primary);
-  background:rgba(37,99,235,.07);
-  border-color:rgba(37,99,235,.12);
-}
-.dashboard-nav-icon{
-  width:25px;
-  height:25px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex:0 0 25px;
-  border-radius:8px;
-  background:var(--surface-2);
-  font-size:13px;
-  font-weight:900;
-}
-.dashboard-nav-item.active .dashboard-nav-icon,
-.dashboard-nav-explore .dashboard-nav-icon{
-  color:var(--primary);
-}
-.dashboard-nav-explore b{
-  margin-left:auto;
-  padding:3px 5px;
-  border-radius:999px;
-  background:var(--primary);
-  color:#fff;
-  font-size:6px;
-  letter-spacing:.06em;
-}
-.dashboard-nav-divider{
-  height:1px;
-  margin:10px 3px;
-  background:var(--border);
-}
-.dashboard-nav-mini{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:5px 7px 2px;
-  color:var(--muted);
-  font-size:7px;
-  font-weight:750;
-  line-height:1.35;
-}
-.dashboard-nav-mini-dot{
-  width:6px;
-  height:6px;
-  flex:0 0 6px;
-  border-radius:50%;
-  background:var(--success);
-  box-shadow:0 0 0 4px rgba(22,163,74,.08);
-  animation:pulseDot 2s ease-in-out infinite;
-}
-.dashboard-side-promo{
-  position:fixed;
-  right:18px;
-  top:102px;
-  width:166px;
-  padding:16px;
-  border:1px solid rgba(37,99,235,.14);
-  border-radius:19px;
-  background:linear-gradient(145deg,rgba(37,99,235,.08),var(--surface));
-  box-shadow:0 14px 34px rgba(37,99,235,.07);
-  overflow:hidden;
-  z-index:4;
-}
-.dashboard-side-promo::before{
-  content:"";
-  position:absolute;
-  width:110px;
-  height:110px;
-  right:-48px;
-  top:-48px;
-  border-radius:50%;
-  border:1px solid rgba(37,99,235,.13);
-  box-shadow:0 0 0 14px rgba(37,99,235,.025),0 0 0 28px rgba(37,99,235,.018);
-  animation:sidePromoFloat 7s ease-in-out infinite;
-}
-@keyframes sidePromoFloat{50%{transform:translate(-7px,6px) rotate(8deg)}}
-.side-promo-kicker{
-  position:relative;
-  z-index:1;
-  color:var(--primary);
-  font-size:7px;
-  font-weight:900;
-  letter-spacing:.12em;
-}
-.side-promo-icon{
-  position:relative;
-  z-index:1;
-  width:34px;
-  height:34px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:13px 0 9px;
-  border-radius:11px;
-  background:rgba(37,99,235,.09);
-  color:var(--primary);
-  font-size:17px;
-  box-shadow:0 0 0 7px rgba(37,99,235,.035);
-  animation:sidePromoPulse 3s ease-in-out infinite;
-}
-@keyframes sidePromoPulse{50%{transform:translateY(-3px) scale(1.04)}}
-.dashboard-side-promo h3{position:relative;z-index:1;margin:0;font-size:15px;letter-spacing:-.3px;}
-.dashboard-side-promo p{position:relative;z-index:1;margin:5px 0 13px;color:var(--muted);font-size:8px;line-height:1.5;font-weight:650;}
-.dashboard-side-promo button{
-  position:relative;
-  z-index:1;
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 9px;
-  border:1px solid rgba(37,99,235,.15);
-  border-radius:9px;
-  background:var(--surface);
-  color:var(--primary);
-  font-size:8px;
-  font-weight:850;
-  transition:.2s;
-}
-.dashboard-side-promo button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(37,99,235,.1);}
-.dashboard-side-promo button span{font-size:12px;transition:transform .2s;}
-.dashboard-side-promo button:hover span{transform:translateX(3px);}
-@media(max-width:1200px){
-  .dashboard-nav-rail,.dashboard-side-promo{display:none;}
-}
 
 .welcome-kicker{display:inline-flex;align-items:center;margin-bottom:8px;color:var(--primary);font-size:9px;font-weight:900;letter-spacing:.13em;}
 .welcome-kicker::before{content:"";width:6px;height:6px;margin-right:7px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 5px rgba(37,99,235,.07);}
@@ -2779,6 +2609,34 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 .app-toast{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:13px;background:var(--surface);color:var(--text);box-shadow:0 16px 35px rgba(15,23,42,.16);font-size:11px;font-weight:750;line-height:1.4;opacity:0;transform:translateY(10px) scale(.98);transition:.22s;}
 .app-toast.show{opacity:1;transform:translateY(0) scale(1);}
 .toast-mark{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:0 0 20px;border-radius:7px;background:rgba(220,38,38,.1);color:var(--danger);font-weight:900;}
+
+
+/* =========================================================
+   PERSISTENT EDGE CONTROL RAIL
+========================================================= */
+.app-side-scrim{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;background:rgba(8,12,20,.1);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);transition:opacity .24s ease,backdrop-filter .24s ease,-webkit-backdrop-filter .24s ease;}
+.app-side-rail{--rail-collapsed:58px;--rail-expanded:292px;position:fixed;left:12px;top:50%;transform:translateY(-50%);width:var(--rail-collapsed);max-height:calc(100vh - 120px);z-index:90;display:flex;overflow:visible;border:1px solid var(--border);border-radius:17px;background:color-mix(in srgb,var(--surface) 92%,transparent);box-shadow:0 18px 48px rgba(15,23,42,.12);transition:width .28s cubic-bezier(.2,.8,.2,1),border-radius .28s,box-shadow .28s;}
+.app-side-rail:hover,.app-side-rail:focus-within{width:var(--rail-expanded);border-radius:19px;box-shadow:0 22px 58px rgba(15,23,42,.2);}
+.app-side-icons{width:var(--rail-collapsed);flex:0 0 var(--rail-collapsed);padding:9px;display:flex;flex-direction:column;align-items:center;gap:7px;box-sizing:border-box;}
+.app-side-icon{position:relative;width:40px;height:40px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:11px;background:transparent;color:var(--muted);font-size:16px;font-weight:900;transition:transform .18s,background .18s,color .18s,border-color .18s,box-shadow .18s;}
+.app-side-icon:hover{transform:translateY(-2px) scale(1.03);background:var(--surface-2);border-color:var(--border);color:var(--text);box-shadow:0 8px 18px rgba(15,23,42,.08);}
+.app-side-icon.active{background:rgba(37,99,235,.09);border-color:rgba(37,99,235,.18);color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,.035);}
+.app-side-icon.danger{margin-top:auto;color:var(--danger);}.app-side-icon.danger:hover{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.15);}
+.app-side-icon.class-only{display:none;}.app-side-rail.has-class .app-side-icon.class-only{display:flex;}
+.app-side-panel{width:0;min-width:0;overflow:hidden;opacity:0;padding:0;transition:width .28s cubic-bezier(.2,.8,.2,1),opacity .16s ease .04s,padding .28s;}
+.app-side-rail:hover .app-side-panel,.app-side-rail:focus-within .app-side-panel,.app-side-rail.force-open .app-side-panel{width:234px;opacity:1;padding:14px 14px 14px 4px;}
+.side-panel-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 5px 12px 9px;border-bottom:1px solid var(--border);white-space:nowrap;}.side-panel-kicker{font-size:7px;font-weight:950;letter-spacing:.14em;color:var(--primary);margin-bottom:3px;}.side-panel-header strong{font-size:15px;letter-spacing:-.2px;}.side-panel-status{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 0 5px rgba(22,163,74,.08);animation:pulseDot 2s ease-in-out infinite;}
+.side-panel-body{padding:8px 0 2px;max-height:calc(100vh - 170px);overflow:auto;scrollbar-width:thin;}.side-panel-row{width:100%;display:flex;align-items:center;gap:9px;padding:9px 7px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--text);text-align:left;transition:.18s;white-space:nowrap;}.side-panel-row:hover{background:var(--surface-2);border-color:var(--border);transform:translateX(2px);}.side-panel-row-icon{width:29px;height:29px;display:flex;align-items:center;justify-content:center;flex:0 0 29px;border-radius:9px;background:var(--surface-2);color:var(--primary);font-size:13px;font-weight:900;}.side-panel-row span:nth-child(2){min-width:0;display:grid;}.side-panel-row b{font-size:10px;}.side-panel-row small{margin-top:2px;color:var(--muted);font-size:8px;font-weight:650;overflow:hidden;text-overflow:ellipsis;}.side-panel-row i{margin-left:auto;color:var(--muted);font-size:12px;font-style:normal;transition:transform .18s;}.side-panel-row:hover i{transform:translateX(3px);color:var(--primary);}.side-logout-row{color:var(--danger);}
+.side-panel-section{margin:8px 0;padding:10px 7px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}.side-panel-section-label{font-size:7px;font-weight:950;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;}.side-appearance-card,.side-class-card{padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);}.side-control-title{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:9px;font-weight:850;}.side-control-title output,.side-control-title>span:last-child{color:var(--muted);font-size:8px;font-weight:750;}
+.appearance-slider{display:block;width:100%;height:18px;margin:10px 0 2px;appearance:none;-webkit-appearance:none;background:linear-gradient(90deg,#fff 0%,#dedede 20%,#999 50%,#4d4d4d 78%,#050505 100%);border:1px solid rgba(127,127,127,.35);border-radius:999px;outline:none;cursor:pointer;}.appearance-slider::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:var(--text);border:2px solid var(--surface);box-shadow:0 2px 7px rgba(0,0,0,.3);}.appearance-slider::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--text);border:2px solid var(--surface);box-shadow:0 2px 7px rgba(0,0,0,.3);}.appearance-gradient-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:7px;font-weight:750;}.side-appearance-card p{margin:7px 0 0;color:var(--muted);font-size:7px;line-height:1.35;font-weight:650;}
+.side-class-card{display:grid;gap:9px;}.class-bg-options{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}.class-bg-options button{height:28px;border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:2px;transition:.18s;}.class-bg-options button:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.35);}.class-bg-options button.active{border-color:var(--primary);box-shadow:0 0 0 2px rgba(37,99,235,.12);}.class-bg-options span{display:block;width:100%;height:100%;border-radius:5px;}.class-bg-options button[data-class-bg="default"] span{background:linear-gradient(135deg,#eef3ff,#dce7ff);}.class-bg-options button[data-class-bg="space"] span{background:radial-gradient(circle at 70% 30%,#8ab4ff 0 3%,transparent 4%),linear-gradient(135deg,#07142d,#243b6b);}.class-bg-options button[data-class-bg="nature"] span{background:linear-gradient(135deg,#b8d9b0,#3d7452);}.class-bg-options button[data-class-bg="chalk"] span{background:linear-gradient(135deg,#26342f,#53655e);}.class-bg-options button[data-class-bg="aurora"] span{background:linear-gradient(135deg,#12203e,#1b7c76 48%,#65458c);}.side-upload-btn{display:flex;align-items:center;justify-content:center;padding:8px;border:1px dashed var(--border);border-radius:9px;background:var(--surface);color:var(--muted);font-size:8px;font-weight:800;cursor:pointer;transition:.18s;}.side-upload-btn:hover{color:var(--text);border-color:rgba(37,99,235,.35);}.side-upload-btn input{display:none;}.class-bg-opacity-row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;color:var(--muted);font-size:7px;font-weight:750;}.class-bg-opacity-row input{width:100%;accent-color:var(--primary);}
+#app.class-background-active::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:var(--class-bg-image);background-position:center;background-size:cover;background-repeat:no-repeat;opacity:var(--class-bg-opacity,0);transition:opacity .45s ease;}.class-background-active #app header,.class-background-active #app main{position:relative;}
+#app.side-panel-open ~ *{filter:none;}
+#app.side-panel-open .app-side-scrim{opacity:1;}
+#app.side-panel-open header,#app.side-panel-open main{filter:blur(4px);transition:filter .24s ease;}
+.app-side-rail{isolation:isolate;}
+@media(max-width:760px){.app-side-rail{left:8px;--rail-collapsed:52px;--rail-expanded:min(292px,calc(100vw - 16px));}.app-side-icons{width:52px;flex-basis:52px;padding:7px;}.app-side-icon{width:38px;height:38px;flex-basis:38px;}.app-side-rail:hover .app-side-panel,.app-side-rail:focus-within .app-side-panel{width:calc(var(--rail-expanded) - 52px);padding-right:9px;}.side-panel-body{max-height:calc(100vh - 145px);}.side-panel-row{padding:8px 5px;}.app-side-rail{max-height:calc(100vh - 90px);}}
+@media(max-width:500px){.app-side-rail{top:auto;bottom:12px;transform:none;max-height:none;}.app-side-rail:hover,.app-side-rail:focus-within{width:calc(100vw - 16px);}.app-side-panel{max-height:calc(100vh - 110px);}.app-side-rail:hover .app-side-panel,.app-side-rail:focus-within .app-side-panel{width:calc(100vw - 68px);}.app-side-icons{max-height:calc(100vh - 110px);overflow:auto;}.app-side-icon.class-only{display:flex;}.app-side-rail:not(.has-class) .app-side-icon.class-only{display:none;}}
 
 </style>
 </head>
@@ -3065,31 +2923,62 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
       PointTrack
 
     </div>
-
-    <div class="header-actions">
-
-      <button
-        id="themeBtn"
-        class="icon-btn"
-        title="Toggle dark mode"
-        aria-label="Toggle dark mode"
-      >
-        ◐
-      </button>
-
-      <button
-        id="logoutBtn"
-        class="logout-btn"
-      >
-        Log out
-      </button>
-
-    </div>
-
   </header>
 
+  <div id="appSideScrim" class="app-side-scrim" aria-hidden="true"></div>
 
-  <div class="dashboard-side-decor dashboard-side-left" aria-hidden="true">
+  <aside id="appSideRail" class="app-side-rail" aria-label="PointTrack tools">
+    <div class="app-side-icons">
+      <button id="sideHomeBtn" class="app-side-icon active" type="button" aria-label="Home" title="Home"><span>⌂</span></button>
+      <button id="sideExploreBtn" class="app-side-icon" type="button" aria-label="Explore" title="Explore"><span>✦</span></button>
+      <button id="sideAppearanceBtn" class="app-side-icon" type="button" aria-label="Appearance" title="Appearance"><span>◐</span></button>
+      <button id="sideSettingsBtn" class="app-side-icon" type="button" aria-label="Settings" title="Settings"><span>⚙</span></button>
+      <button id="sideClassBgBtn" class="app-side-icon class-only" type="button" aria-label="Class background" title="Class background"><span>▧</span></button>
+      <button id="sideLogoutBtn" class="app-side-icon danger" type="button" aria-label="Log out" title="Log out"><span>↪</span></button>
+    </div>
+
+    <div class="app-side-panel">
+      <div class="side-panel-header">
+        <div><div class="side-panel-kicker">POINTTRACK</div><strong id="sidePanelTitle">Home</strong></div>
+        <span class="side-panel-status"></span>
+      </div>
+      <div class="side-panel-body">
+        <button id="sidePanelHome" class="side-panel-row" type="button"><span class="side-panel-row-icon">⌂</span><span><b>Home</b><small>Your classroom overview</small></span><i>→</i></button>
+        <button id="sidePanelExplore" class="side-panel-row" type="button"><span class="side-panel-row-icon">✦</span><span><b>Explore</b><small>Milestones and experiments</small></span><i>→</i></button>
+
+        <div class="side-panel-section">
+          <div class="side-panel-section-label">APPEARANCE</div>
+          <div class="side-appearance-card">
+            <div class="side-control-title"><span>Background color</span><output id="appearanceValue">50%</output></div>
+            <input id="appearanceSlider" class="appearance-slider" type="range" min="0" max="100" step="0.1" value="50" aria-label="Background color from white to black">
+            <div class="appearance-gradient-labels"><span>White</span><span>Black</span></div>
+            <p>Drag freely. There are no preset points.</p>
+          </div>
+        </div>
+
+        <div id="sideClassBackgroundSection" class="side-panel-section class-only">
+          <div class="side-panel-section-label">THIS CLASS</div>
+          <div class="side-class-card">
+            <div class="side-control-title"><span id="sideClassBackgroundName">Class background</span><span>Personal</span></div>
+            <div class="class-bg-options">
+              <button type="button" data-class-bg="default" title="PointTrack default"><span></span></button>
+              <button type="button" data-class-bg="space" title="Space"><span></span></button>
+              <button type="button" data-class-bg="nature" title="Nature"><span></span></button>
+              <button type="button" data-class-bg="chalk" title="Chalkboard"><span></span></button>
+              <button type="button" data-class-bg="aurora" title="Aurora"><span></span></button>
+            </div>
+            <label class="side-upload-btn">Upload image<input id="classBgUpload" type="file" accept="image/*"></label>
+            <div class="class-bg-opacity-row"><span>Image intensity</span><input id="classBgOpacity" type="range" min="0" max="35" step="1" value="14" aria-label="Class background intensity"></div>
+          </div>
+        </div>
+
+        <button id="sidePanelSettings" class="side-panel-row" type="button"><span class="side-panel-row-icon">⚙</span><span><b>Settings</b><small>Motion and account options</small></span><i>→</i></button>
+        <button id="sidePanelLogout" class="side-panel-row side-logout-row" type="button"><span class="side-panel-row-icon">↪</span><span><b>Log out</b><small>Leave PointTrack</small></span><i>→</i></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="dashboard-side-decor dashboard-side-left aria-hidden="true">
     <span class="side-orb orb-a"></span>
     <span class="side-orb orb-b"></span>
     <span class="side-symbol symbol-a">+1</span>
@@ -3116,36 +3005,6 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
     ==================================================== -->
 
     <section id="dashboardView">
-
-      <nav class="dashboard-nav-rail" aria-label="PointTrack navigation">
-        <div class="dashboard-nav-label">NAVIGATION</div>
-
-        <button class="dashboard-nav-item active" type="button" aria-current="page">
-          <span class="dashboard-nav-icon">⌂</span>
-          <span>Home</span>
-        </button>
-
-        <button id="dashboardExploreBtn" class="dashboard-nav-item dashboard-nav-explore" type="button">
-          <span class="dashboard-nav-icon">✦</span>
-          <span>Explore</span>
-          <b>NEW</b>
-        </button>
-
-        <div class="dashboard-nav-divider"></div>
-
-        <div class="dashboard-nav-mini">
-          <span class="dashboard-nav-mini-dot"></span>
-          <span>PointTrack is ready</span>
-        </div>
-      </nav>
-
-      <aside class="dashboard-side-promo" aria-label="PointTrack Explore">
-        <div class="side-promo-kicker">JUST ADDED</div>
-        <div class="side-promo-icon">✦</div>
-        <h3>Explore</h3>
-        <p>Milestones, experiments, and the little things that make PointTrack more fun.</p>
-        <button id="dashboardExplorePromoBtn" type="button">Open Explore <span>→</span></button>
-      </aside>
 
       <div class="dashboard-welcome">
 
@@ -3736,7 +3595,7 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
     <div class="settings-section">
       <div class="settings-row">
         <div><strong>Appearance</strong><span>Choose how PointTrack looks.</span></div>
-        <button id="settingsThemeBtn" class="settings-select" type="button">System / Light / Dark</button>
+        <span class="settings-side-hint">Use the sidebar appearance slider.</span>
       </div>
       <div class="settings-row">
         <div><strong>Animations</strong><span>Keep the small interactions and ambient motion.</span></div>
@@ -3831,15 +3690,7 @@ const googleLoginBtn =
     "googleLoginBtn"
   );
 
-const logoutBtn =
-  document.getElementById(
-    "logoutBtn"
-  );
 
-const themeBtn =
-  document.getElementById(
-    "themeBtn"
-  );
 
 const dashboardView =
   document.getElementById(
@@ -3886,6 +3737,15 @@ let dashboardSearchStudents = [];
 const settingsModal = document.getElementById("settingsModal");
 const settingsAccount = document.getElementById("settingsAccount");
 const settingsMotionToggle = document.getElementById("settingsMotionToggle");
+const appSideRail = document.getElementById("appSideRail");
+const appSideScrim = document.getElementById("appSideScrim");
+const appearanceSlider = document.getElementById("appearanceSlider");
+const appearanceValue = document.getElementById("appearanceValue");
+const sideClassBgUpload = document.getElementById("classBgUpload");
+const sideClassBgOpacity = document.getElementById("classBgOpacity");
+const sidePanelTitle = document.getElementById("sidePanelTitle");
+const sideClassBackgroundName = document.getElementById("sideClassBackgroundName");
+
 
 const currentClassName =
   document.getElementById(
@@ -5681,6 +5541,11 @@ function showDashboard(
   currentClass =
     null;
 
+  clearClassBackground();
+  appSideRail.classList.remove("has-class");
+  setSideActive("home");
+  updateSideTitle("Home");
+
   if(clearSavedClass){
 
     clearLastClass();
@@ -5694,63 +5559,124 @@ function showDashboard(
    LOGOUT
 ========================================================= */
 
-logoutBtn.addEventListener(
-  "click",
-  async () => {
-
-    closeTransientUI();
-
-    currentClass =
-      null;
-
-    showingApp =
-      false;
-
-    await db.auth.signOut();
-
-  }
-);
+async function performLogout(){
+  closeTransientUI();
+  currentClass = null;
+  clearClassBackground();
+  appSideRail.classList.remove("has-class");
+  showingApp = false;
+  await db.auth.signOut();
+}
 
 
 /* =========================================================
-   DARK MODE
+   CONTINUOUS APPEARANCE
 ========================================================= */
-
-themeBtn.addEventListener(
-  "click",
-  () => {
-
-    document.body.classList.toggle(
-      "dark"
-    );
-
-    localStorage.setItem(
-      "pointtrack-theme",
-      document.body.classList.contains(
-        "dark"
-      )
-        ? "dark"
-        : "light"
-    );
-
-  }
-);
-
-
-if(
-  localStorage.getItem(
-    "pointtrack-theme"
-  ) === "dark"
-){
-
-  document.body.classList.add(
-    "dark"
-  );
-
+function lerp(a,b,t){ return a + (b-a)*t; }
+function rgb(r,g,b){ return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`; }
+function applyAppearance(raw){
+  let value = Number(raw);
+  if(!Number.isFinite(value)) value = 50;
+  value = Math.max(0,Math.min(100,value));
+  const t = value / 100;
+  const bg = rgb(247,249,252).replace('rgb(', 'rgb(');
+  document.documentElement.style.setProperty("--bg", rgb(lerp(247,12,t),lerp(249,16,t),lerp(252,23,t)));
+  document.documentElement.style.setProperty("--surface", rgb(lerp(255,18,t),lerp(255,22,t),lerp(255,29,t)));
+  document.documentElement.style.setProperty("--surface-2", rgb(lerp(240,31,t),lerp(243,37,t),lerp(248,47,t)));
+  document.documentElement.style.setProperty("--surface-3", rgb(lerp(232,43,t),lerp(237,49,t),lerp(245,60,t)));
+  document.documentElement.style.setProperty("--text", rgb(lerp(23,245,t),lerp(32,247,t),lerp(51,250,t)));
+  document.documentElement.style.setProperty("--muted", rgb(lerp(107,161,t),lerp(114,168,t),lerp(128,182,t)));
+  document.documentElement.style.setProperty("--border", rgb(lerp(223,54,t),lerp(228,62,t),lerp(236,73,t)));
+  document.documentElement.style.setProperty("--shadow", `0 10px 30px rgba(0,0,0,${lerp(.08,.28,t).toFixed(3)})`);
+  document.documentElement.style.setProperty("--shadow-hover", `0 14px 35px rgba(0,0,0,${lerp(.12,.34,t).toFixed(3)})`);
+  document.body.classList.remove("dark");
+  if(appearanceSlider) appearanceSlider.value = String(value);
+  if(appearanceValue) appearanceValue.textContent = `${value.toFixed(1).replace(/\.0$/,'')}%`;
+  localStorage.setItem("pointtrack-appearance", String(value));
 }
+const savedAppearance = Number(localStorage.getItem("pointtrack-appearance"));
+applyAppearance(Number.isFinite(savedAppearance) ? savedAppearance : 68);
+if(appearanceSlider){ appearanceSlider.addEventListener("input", e => applyAppearance(e.target.value)); }
 
-applyMotionPreference();
 
+
+
+/* =========================================================
+   GLOBAL SIDEBAR
+========================================================= */
+function setSideActive(which){
+  document.querySelectorAll(".app-side-icon").forEach(btn => btn.classList.remove("active"));
+  const map={home:"sideHomeBtn",explore:"sideExploreBtn",appearance:"sideAppearanceBtn",settings:"sideSettingsBtn",classbg:"sideClassBgBtn"};
+  const el=document.getElementById(map[which]);
+  if(el) el.classList.add("active");
+}
+function updateSideTitle(title){ if(sidePanelTitle) sidePanelTitle.textContent=title; }
+function openSidePanel(){ appSideRail.classList.add("force-open"); }
+function closeSidePanel(){ appSideRail.classList.remove("force-open"); }
+function openSideSettings(){ setSideActive("settings"); updateSideTitle("Settings"); openSettings(); }
+function getClassBgKey(){ return currentUser && currentClass ? `pointtrack-class-bg-${currentUser.id}-${currentClass.id}` : null; }
+const CLASS_BACKGROUNDS={
+  default:"none",
+  space:"radial-gradient(circle at 72% 20%,rgba(91,145,255,.26),transparent 22%),linear-gradient(135deg,#07142d,#162c58 50%,#0a1022)",
+  nature:"linear-gradient(135deg,#0e2417,#285b3c 48%,#0e2a20)",
+  chalk:"linear-gradient(135deg,#1c2925,#34463e 52%,#1b2522)",
+  aurora:"radial-gradient(circle at 70% 20%,rgba(79,226,205,.28),transparent 25%),radial-gradient(circle at 25% 70%,rgba(145,92,226,.24),transparent 30%),linear-gradient(135deg,#0e1830,#17394a 52%,#24153b)"
+};
+function applyClassBackground(type="default",image=null,opacity=null){
+  const value=opacity===null ? Number(sideClassBgOpacity?.value || 14) : Number(opacity);
+  document.documentElement.style.setProperty("--class-bg-opacity", String(Math.max(0,Math.min(35,value))/100));
+  if(image){
+    document.documentElement.style.setProperty("--class-bg-image", `url("${image}")`);
+  }else if(type && CLASS_BACKGROUNDS[type] && type !== "default"){
+    document.documentElement.style.setProperty("--class-bg-image", CLASS_BACKGROUNDS[type]);
+  }else{
+    document.documentElement.style.setProperty("--class-bg-image", "none");
+  }
+  document.getElementById("app").classList.toggle("class-background-active", Boolean(image || (type && type !== "default")));
+  document.querySelectorAll("[data-class-bg]").forEach(btn => btn.classList.toggle("active",btn.dataset.classBg===type && !image));
+  if(sideClassBgOpacity) sideClassBgOpacity.value=String(value);
+}
+function saveClassBackground(state){ const key=getClassBgKey(); if(key) localStorage.setItem(key,JSON.stringify(state)); }
+function loadClassBackground(){
+  const key=getClassBgKey();
+  if(!key){ appSideRail.classList.remove("has-class"); clearClassBackground(); return; }
+  appSideRail.classList.add("has-class");
+  if(sideClassBgUpload) sideClassBgUpload.value="";
+  let state=null;
+  try{ state=JSON.parse(localStorage.getItem(key)||"null"); }catch(e){ state=null; }
+  if(state){ applyClassBackground(state.type||"default",state.image||null,state.opacity ?? 14); }
+  else applyClassBackground("default",null,14);
+  if(sideClassBackgroundName) sideClassBackgroundName.textContent=currentClass?.name || "Class background";
+}
+function clearClassBackground(){
+  appSideRail.classList.remove("has-class");
+  document.getElementById("app").classList.remove("class-background-active");
+  document.documentElement.style.setProperty("--class-bg-image","none");
+  document.documentElement.style.setProperty("--class-bg-opacity","0");
+}
+async function goHome(){ closeTransientUI(); showDashboard(true); setSideActive("home"); updateSideTitle("Home"); clearClassBackground(); await loadClasses(); }
+
+document.getElementById("sideHomeBtn").addEventListener("click",goHome);
+document.getElementById("sidePanelHome").addEventListener("click",goHome);
+document.getElementById("sideExploreBtn").addEventListener("click",openExplore);
+document.getElementById("sidePanelExplore").addEventListener("click",openExplore);
+document.getElementById("sideAppearanceBtn").addEventListener("click",()=>{setSideActive("appearance");updateSideTitle("Appearance");});
+document.getElementById("sideSettingsBtn").addEventListener("click",openSideSettings);
+document.getElementById("sidePanelSettings").addEventListener("click",openSideSettings);
+document.getElementById("sideClassBgBtn").addEventListener("click",()=>{setSideActive("classbg");updateSideTitle(currentClass?.name || "Class background");});
+document.getElementById("sideLogoutBtn").addEventListener("click",performLogout);
+document.getElementById("sidePanelLogout").addEventListener("click",performLogout);
+appSideRail.addEventListener("mouseenter",()=>{app.classList.add("side-panel-open");});
+appSideRail.addEventListener("mouseleave",()=>{app.classList.remove("side-panel-open");});
+appSideRail.addEventListener("focusin",()=>{app.classList.add("side-panel-open");});
+appSideRail.addEventListener("focusout",()=>{setTimeout(()=>{if(!appSideRail.contains(document.activeElement)) app.classList.remove("side-panel-open");},0);});
+if(sideClassBgUpload){ sideClassBgUpload.addEventListener("change",event=>{
+  const file=event.target.files?.[0]; if(!file || !currentClass) return;
+  if(file.size>5*1024*1024){ showToast("Please choose an image under 5 MB."); event.target.value=""; return; }
+  const reader=new FileReader(); reader.onload=()=>{ const image=String(reader.result); applyClassBackground("default",image,sideClassBgOpacity?.value||14); saveClassBackground({type:"custom",image,opacity:Number(sideClassBgOpacity?.value||14)}); }; reader.readAsDataURL(file);
+}); }
+document.querySelectorAll("[data-class-bg]").forEach(btn=>btn.addEventListener("click",()=>{ if(!currentClass)return; const type=btn.dataset.classBg; applyClassBackground(type,null,sideClassBgOpacity?.value||14); saveClassBackground({type,opacity:Number(sideClassBgOpacity?.value||14)}); }));
+if(sideClassBgOpacity){ sideClassBgOpacity.addEventListener("input",()=>{ if(!currentClass)return; const key=getClassBgKey(); let state=null; try{state=JSON.parse(localStorage.getItem(key)||"null");}catch(e){} if(state){state.opacity=Number(sideClassBgOpacity.value);saveClassBackground(state);applyClassBackground(state.type||"default",state.image||null,state.opacity);} }); }
 
 /* =========================================================
    DASHBOARD QUALITY OF LIFE CONTROLS
@@ -5767,7 +5693,6 @@ document.getElementById("closeSettingsBtn").addEventListener("click", closeSetti
 settingsModal.addEventListener("click", event => {
   if(event.target === settingsModal) closeSettings();
 });
-document.getElementById("settingsThemeBtn").addEventListener("click", cycleTheme);
 settingsMotionToggle.addEventListener("change", () => {
   localStorage.setItem("pointtrack-motion", settingsMotionToggle.checked ? "on" : "off");
   applyMotionPreference();
@@ -6542,11 +6467,12 @@ async function openExplore(){
   dashboardView.classList.add("hidden");
   classView.classList.add("hidden");
   exploreView.classList.remove("hidden");
+  setSideActive("explore");
+  updateSideTitle("Explore");
+  clearClassBackground();
   await loadExploreData();
 }
 
-document.getElementById("dashboardExploreBtn").addEventListener("click", openExplore);
-document.getElementById("dashboardExplorePromoBtn").addEventListener("click", openExplore);
 
 document.getElementById("exploreBackBtn").addEventListener("click", async () => {
   showDashboard(true);
@@ -6591,6 +6517,11 @@ async function openClass(
   classView.classList.remove(
     "hidden"
   );
+
+  appSideRail.classList.add("has-class");
+  setSideActive("classbg");
+  updateSideTitle(classItem.name || "Class");
+  loadClassBackground();
 
   currentClassName.textContent =
     classItem.name;
