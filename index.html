@@ -1382,6 +1382,69 @@ body.dark .class-card{
 }
 
 
+
+/* =========================================================
+   LEFT AD BANNERS
+========================================================= */
+.left-ad-rail{
+  position:fixed;
+  top:94px;
+  left:18px;
+  width:150px;
+  display:grid;
+  gap:16px;
+  z-index:2;
+  pointer-events:none;
+}
+
+.ad-banner{
+  position:relative;
+  width:150px;
+  min-height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px dashed var(--border);
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(240,243,248,.5));
+  color:var(--muted);
+  box-shadow:0 8px 22px rgba(15,23,42,.035);
+  overflow:hidden;
+}
+
+.ad-banner::before{
+  content:"ADVERTISEMENT";
+  position:absolute;
+  top:9px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-size:7px;
+  font-weight:850;
+  letter-spacing:.11em;
+  opacity:.55;
+}
+
+.ad-banner span{
+  font-size:10px;
+  font-weight:700;
+  opacity:.42;
+  text-align:center;
+  padding:20px;
+}
+
+body.dark .ad-banner{
+  background:linear-gradient(145deg,rgba(24,28,35,.68),rgba(34,39,49,.5));
+}
+
+@media(max-width:1370px){
+  .left-ad-rail{display:none;}
+}
+
+@media(max-width:980px){
+  .left-ad-rail{display:none;}
+}
+
 /* =========================================================
    MAIN
 ========================================================= */
@@ -2878,6 +2941,12 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
   </header>
 
+
+
+  <div class="left-ad-rail" aria-label="Advertisement space">
+    <div class="ad-banner"><span>Ad space reserved</span></div>
+    <div class="ad-banner"><span>Ad space reserved</span></div>
+  </div>
 
   <div class="dashboard-side-decor dashboard-side-left" aria-hidden="true">
     <span class="side-orb orb-a"></span>
