@@ -745,6 +745,59 @@ body.dark .login-feature{
   transition:.18s;
 }
 
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap input{
+  padding-right:72px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:850;
+  padding:6px 7px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.password-toggle:hover{
+  color:var(--text);
+  background:var(--surface-2);
+}
+
+.password-toggle:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:1px;
+}
+
+.auth-resend{
+  display:none;
+  margin-top:6px;
+  border:0;
+  background:transparent;
+  color:var(--primary);
+  font-size:10px;
+  font-weight:850;
+  cursor:pointer;
+}
+
+.auth-resend.show{
+  display:inline-block;
+}
+
+.auth-resend:disabled{
+  opacity:.55;
+  cursor:wait;
+}
+
 .auth-field input:focus{
   border-color:var(--primary);
   box-shadow:0 0 0 3px var(--focus);
@@ -2684,6 +2737,67 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 .app-toast.show{opacity:1;transform:translateY(0) scale(1);}
 .toast-mark{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex:0 0 20px;border-radius:7px;background:rgba(220,38,38,.1);color:var(--danger);font-weight:900;}
 
+
+
+.site-footer{
+  width:min(1180px,calc(100% - 32px));
+  margin:28px auto 0;
+  padding:22px 24px 120px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(248,250,252,.68));
+  box-shadow:0 10px 30px rgba(15,23,42,.05);
+  color:var(--muted);
+}
+
+body.dark .site-footer{
+  background:linear-gradient(135deg,rgba(15,23,42,.78),rgba(15,23,42,.58));
+}
+
+.site-footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.site-footer-title{
+  font-size:11px;
+  font-weight:850;
+  color:var(--text);
+}
+
+.site-footer-note{
+  font-size:10px;
+  margin-top:3px;
+}
+
+.feedback-btn{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  padding:9px 13px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:850;
+  cursor:pointer;
+  transition:.18s;
+}
+
+.feedback-btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--primary);
+  box-shadow:0 8px 20px rgba(37,99,235,.1);
+}
+
+@media(max-width:600px){
+  .site-footer-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .feedback-btn{width:100%;}
+}
 </style>
 </head>
 
@@ -2959,7 +3073,10 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
       <div class="auth-field">
         <label for="authPassword">Password</label>
-        <input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+        <div class="password-wrap">
+          <input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+          <button id="passwordToggle" class="password-toggle" type="button" aria-label="Show password">Show</button>
+        </div>
       </div>
 
       <button id="nativeAuthSubmit" class="auth-submit" type="submit">Sign in</button>
@@ -2970,6 +3087,7 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
       </div>
 
       <div id="authStatus" class="auth-status" aria-live="polite"></div>
+      <button id="authResend" class="auth-resend" type="button">Resend confirmation email</button>
     </form>
 
     <div class="login-note">
@@ -3310,6 +3428,16 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
   </main>
 
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div>
+        <div class="site-footer-title">PointTrack</div>
+        <div class="site-footer-note">Built to make classroom point tracking simpler.</div>
+      </div>
+      <button id="feedbackBtn" class="feedback-btn" type="button">💬 Feedback</button>
+    </div>
+  </footer>
+
 </div>
 
 
@@ -3604,6 +3732,17 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 <script>
 
 /* =========================================================
+   FEEDBACK
+========================================================= */
+
+const feedbackBtn = document.getElementById("feedbackBtn");
+if(feedbackBtn){
+  feedbackBtn.addEventListener("click", () => {
+    showToast("Feedback form coming soon — the button is ready for the final feedback destination.", "success");
+  });
+}
+
+/* =========================================================
    FRIENDLY APP FEEDBACK
 ========================================================= */
 
@@ -3699,6 +3838,16 @@ const authPassword =
     "authPassword"
   );
 
+const passwordToggle =
+  document.getElementById(
+    "passwordToggle"
+  );
+
+const authResend =
+  document.getElementById(
+    "authResend"
+  );
+
 const nativeAuthSubmit =
   document.getElementById(
     "nativeAuthSubmit"
@@ -3720,6 +3869,36 @@ const authStatus =
   );
 
 let nativeAuthMode = "signin";
+let lastSignupEmail = "";
+
+passwordToggle.addEventListener("click", () => {
+  const showing = authPassword.type === "text";
+  authPassword.type = showing ? "password" : "text";
+  passwordToggle.textContent = showing ? "Show" : "Hide";
+  passwordToggle.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+});
+
+authResend.addEventListener("click", async () => {
+  const email = lastSignupEmail || authEmail.value.trim();
+  if(!email) return;
+  authResend.disabled = true;
+  authResend.textContent = "Sending...";
+  const { error } = await db.auth.resend({
+    type: "signup",
+    email,
+    options:{
+      emailRedirectTo:"https://moldybreadeater.github.io/PointTrack/"
+    }
+  });
+  authResend.disabled = false;
+  authResend.textContent = "Resend confirmation email";
+  if(error){
+    console.error(error);
+    setAuthStatus(error.message, "error");
+    return;
+  }
+  setAuthStatus(`Confirmation email sent to ${email}. Check your inbox and spam folder.`, "success");
+});
 
 const logoutBtn =
   document.getElementById(
@@ -5162,6 +5341,7 @@ authModeBtn.addEventListener(
     authPassword.autocomplete =
       signup ? "new-password" : "current-password";
 
+    authResend.classList.remove("show");
     setAuthStatus("");
   }
 );
@@ -5180,26 +5360,33 @@ nativeAuthForm.addEventListener(
     nativeAuthSubmit.textContent =
       nativeAuthMode === "signup" ? "Creating account..." : "Signing in...";
 
-    let result;
+    let data = null;
+    let error = null;
 
-    if(nativeAuthMode === "signup"){
-      result = await db.auth.signUp({
-        email,
-        password,
-        options:{
-          emailRedirectTo:
-            "https://moldybreadeater.github.io/PointTrack/"
-        }
-      });
+    try{
+      if(nativeAuthMode === "signup"){
+        const result = await db.auth.signUp({
+          email,
+          password,
+          options:{
+            emailRedirectTo:
+              "https://moldybreadeater.github.io/PointTrack/"
+          }
+        });
+        data = result.data;
+        error = result.error;
+      }
+      else{
+        const result = await db.auth.signInWithPassword({
+          email,
+          password
+        });
+        data = result.data;
+        error = result.error;
+      }
+    }catch(err){
+      error = err;
     }
-    else{
-      result = await db.auth.signInWithPassword({
-        email,
-        password
-      });
-    }
-
-    const { data, error } = result;
 
     nativeAuthSubmit.disabled = false;
     nativeAuthSubmit.textContent =
@@ -5212,11 +5399,14 @@ nativeAuthForm.addEventListener(
     }
 
     if(nativeAuthMode === "signup"){
-      if(data.session){
+      if(data && data.session){
         setAuthStatus("Account created. Signing you in...", "success");
+        authResend.classList.remove("show");
       }
       else{
-        setAuthStatus("Account created. Check your email to confirm it, then sign in.", "success");
+        lastSignupEmail = email;
+        setAuthStatus(`Account created. We sent a confirmation email to ${email}. Check your inbox and spam folder.`, "success");
+        authResend.classList.add("show");
         authPassword.value = "";
       }
     }
