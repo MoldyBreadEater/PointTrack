@@ -2808,6 +2808,96 @@ body.dark .site-footer{
   margin-top:3px;
 }
 
+.feedback-modal{
+  max-width:500px;
+}
+
+.feedback-modal h3{
+  margin-bottom:7px;
+}
+
+.feedback-intro{
+  margin:0 0 17px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+
+.feedback-account{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+  padding:9px 11px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface-2);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.feedback-account strong{
+  color:var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.feedback-textarea{
+  width:100%;
+  min-height:145px;
+  resize:vertical;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 13px;
+  background:var(--surface);
+  color:var(--text);
+  outline:none;
+  font-size:12px;
+  line-height:1.5;
+  transition:.18s;
+}
+
+.feedback-textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--focus);
+}
+
+.feedback-count{
+  margin-top:6px;
+  text-align:right;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.feedback-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:15px;
+}
+
+.feedback-submit{
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:850;
+  transition:.18s;
+}
+
+.feedback-submit:hover{
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+}
+
+.feedback-submit:disabled{
+  transform:none;
+}
+
+
 .feedback-btn{
   flex:0 0 auto;
   border:1px solid var(--border);
@@ -3734,6 +3824,46 @@ body.dark .site-footer{
      SETTINGS MODAL
 ======================================================= -->
 
+<!-- =======================================================
+     FEEDBACK MODAL
+======================================================= -->
+
+<div id="feedbackModal" class="modal-overlay hidden">
+  <div
+    class="modal feedback-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="feedbackTitle"
+  >
+    <h3 id="feedbackTitle">Send feedback</h3>
+
+    <p class="feedback-intro">
+      Found a bug, have an idea, or just want to tell us what you think?
+      Your feedback will be sent directly to the PointTrack feedback sheet.
+    </p>
+
+    <div class="feedback-account">
+      <span>Signed in as</span>
+      <strong id="feedbackAccount"></strong>
+    </div>
+
+    <textarea
+      id="feedbackText"
+      class="feedback-textarea"
+      maxlength="2000"
+      placeholder="Tell us what you found or what you'd like to see..."
+    ></textarea>
+
+    <div id="feedbackCount" class="feedback-count">0 / 2000</div>
+
+    <div class="feedback-actions">
+      <button id="closeFeedbackBtn" class="secondary-btn" type="button">Cancel</button>
+      <button id="submitFeedbackBtn" class="feedback-submit" type="button">Send feedback</button>
+    </div>
+  </div>
+</div>
+
+
 <div id="settingsModal" class="modal-overlay hidden">
   <div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-header">
@@ -3771,12 +3901,92 @@ body.dark .site-footer{
    FEEDBACK
 ========================================================= */
 
+const FEEDBACK_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbz5uJKNQIf64-eWuEluanyVdq8Ye7RywWHGyNf-tcGsB8DM2hLDDBLEBJ_bhrmh6W5c/exec";
+
 const feedbackBtn = document.getElementById("feedbackBtn");
-if(feedbackBtn){
-  feedbackBtn.addEventListener("click", () => {
-    showToast("Feedback form coming soon — the button is ready for the final feedback destination.", "success");
-  });
+const feedbackModal = document.getElementById("feedbackModal");
+const closeFeedbackBtn = document.getElementById("closeFeedbackBtn");
+const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
+const feedbackText = document.getElementById("feedbackText");
+const feedbackCount = document.getElementById("feedbackCount");
+const feedbackAccount = document.getElementById("feedbackAccount");
+
+function openFeedbackModal(){
+  if(!feedbackModal) return;
+
+  const email = currentUser?.email || "Signed-in PointTrack account";
+  if(feedbackAccount) feedbackAccount.textContent = email;
+  if(feedbackText){
+    feedbackText.value = "";
+    feedbackCount.textContent = "0 / 2000";
+  }
+
+  feedbackModal.classList.remove("hidden");
+  setTimeout(() => feedbackText?.focus(), 40);
 }
+
+function closeFeedbackModal(){
+  feedbackModal?.classList.add("hidden");
+}
+
+feedbackBtn?.addEventListener("click", openFeedbackModal);
+closeFeedbackBtn?.addEventListener("click", closeFeedbackModal);
+
+feedbackModal?.addEventListener("click", (event) => {
+  if(event.target === feedbackModal) closeFeedbackModal();
+});
+
+feedbackText?.addEventListener("input", () => {
+  feedbackCount.textContent = `${feedbackText.value.length} / 2000`;
+});
+
+submitFeedbackBtn?.addEventListener("click", async () => {
+  const feedback = feedbackText.value.trim();
+  const email = currentUser?.email || "Unknown account";
+
+  if(!feedback){
+    showToast("Please enter some feedback first.", "error");
+    feedbackText.focus();
+    return;
+  }
+
+  submitFeedbackBtn.disabled = true;
+  submitFeedbackBtn.textContent = "Sending…";
+
+  try{
+    const body = new URLSearchParams({
+      email,
+      page: "PointTrack",
+      feedback
+    });
+
+    await fetch(FEEDBACK_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+      },
+      body
+    });
+
+    closeFeedbackModal();
+    showToast("Thanks! Your feedback was sent.", "success");
+  }catch(error){
+    console.error("PointTrack feedback error:", error);
+    showToast("We couldn't send your feedback. Please try again.", "error");
+  }finally{
+    submitFeedbackBtn.disabled = false;
+    submitFeedbackBtn.textContent = "Send feedback";
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if(event.key === "Escape" && feedbackModal && !feedbackModal.classList.contains("hidden")){
+    closeFeedbackModal();
+  }
+});
+
 
 /* =========================================================
    FRIENDLY APP FEEDBACK
