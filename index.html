@@ -89,8 +89,8 @@ button:disabled{
 ========================================================= */
 
 #loginScreen{
-  --cursor-x:50vw;
-  --cursor-y:50vh;
+  --cursor-x:50%;
+  --cursor-y:50%;
   position:relative;
   min-height:100vh;
   display:flex;
@@ -123,13 +123,13 @@ button:disabled{
 #loginScreen::after{
   content:"";
   position:absolute;
-  inset:-25%;
+  inset:0;
   z-index:-6;
   background:
     radial-gradient(circle at var(--cursor-x) var(--cursor-y),rgba(59,130,246,.12),transparent 18%),
     radial-gradient(circle at 50% 50%,transparent 0%,rgba(15,23,42,.04) 72%,rgba(15,23,42,.14) 100%);
   pointer-events:none;
-  transition:background .12s linear;
+  transition:none;
 }
 
 body.dark #loginScreen{
@@ -217,15 +217,17 @@ body.dark #loginScreen{
   box-shadow:0 22px 55px rgba(15,23,42,.13);
   opacity:.68;
   will-change:transform;
-  transform:scale(var(--proximity-scale,1)) translate3d(
+  transform:scale(calc(var(--proximity-scale,1) * var(--hover-scale,1))) translate3d(
     var(--proximity-x,0px),
     var(--proximity-y,0px),
     0
   );
+  --hover-scale:1;
   transition:transform .2s ease-out,filter .2s,opacity .2s;
 }
 
 .ambient-float:hover .ambient-image{
+  --hover-scale:1.08;
   opacity:.9;
   filter:saturate(1.12) contrast(1.04);
 }
@@ -268,9 +270,19 @@ body.dark #loginScreen{
   transform:translateY(0);
 }
 
-@keyframes railDrift{
-  from{transform:translateX(-3%)}
-  to{transform:translateX(-28%)}
+@keyframes railRoll{
+  from{transform:translate3d(0,0,0) rotate(-3.2deg)}
+  to{transform:translate3d(-50%,0,0) rotate(-3.2deg)}
+}
+
+@keyframes orbitDrift{
+  from{transform:translate(-50%,-50%) rotate(-8deg)}
+  to{transform:translate(-50%,-50%) rotate(352deg)}
+}
+
+@keyframes orbitDriftReverse{
+  from{transform:translate(-50%,-50%) rotate(22deg)}
+  to{transform:translate(-50%,-50%) rotate(-338deg)}
 }
 
 .login-orbit{
@@ -288,12 +300,16 @@ body.dark #loginScreen{
   border:1px solid rgba(37,99,235,.09);
   border-radius:50%;
   transform:translate(-50%,-50%) rotate(-8deg);
+  animation:orbitDrift 42s linear infinite;
+  will-change:transform;
 }
 
 .orbit-ring:nth-child(2){
   width:min(60vw,700px);
   border-color:rgba(99,102,241,.08);
   transform:translate(-50%,-50%) rotate(22deg);
+  animation:orbitDriftReverse 58s linear infinite;
+  will-change:transform;
 }
 
 .login-card{
@@ -990,26 +1006,32 @@ body.dark .login-feature{
 }
 
 @media(prefers-reduced-motion:reduce){
-  #loginScreen *,
-  #loginScreen::before,
-  #loginScreen::after{
-    animation-duration:.001ms!important;
-    animation-iteration-count:1!important;
+  /* Keep the login UI usable, but remove decorative motion. */
+  #loginScreen .picture-rail,
+  #loginScreen .orbit-ring,
+  #loginScreen .logo,
+  #loginScreen .feature-add .feature-icon-glyph,
+  #loginScreen .feature-spin .feature-icon-glyph,
+  #loginScreen .feature-check-path{
+    animation:none!important;
+  }
+
+  #loginScreen .feature-check-path{
+    stroke-dashoffset:0!important;
+  }
+
+  #loginScreen .ambient-image,
+  #loginScreen .environment-particle,
+  #loginScreen .login-feature,
+  #loginScreen .login-preview,
+  #loginScreen .google-btn,
+  #loginScreen .auth-submit{
     transition-duration:.001ms!important;
-    scroll-behavior:auto!important;
   }
 
-  .picture-rail{
-    animation:none;
-  }
-
-  .feature-check-path{
-    stroke-dashoffset:0;
-    animation:none;
-  }
-
-  .environment-glow{
-    display:none;
+  #loginScreen .environment-glow{
+    opacity:.35;
+    filter:none;
   }
 }
 
@@ -2709,7 +2731,21 @@ body.dark .pulse-row{background:rgba(255,255,255,.025);}
 .switch input:checked+span{background:var(--primary);border-color:var(--primary);}
 .switch input:checked+span::after{transform:translateX(17px);}
 
-body.motion-off *,body.motion-off *::before,body.motion-off *::after{animation:none!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+body.motion-off .picture-rail,
+body.motion-off .orbit-ring,
+body.motion-off .logo,
+body.motion-off .feature-add .feature-icon-glyph,
+body.motion-off .feature-spin .feature-icon-glyph,
+body.motion-off .feature-check-path,
+body.motion-off .brand-logo::after,
+body.motion-off .dashboard-welcome::before,
+body.motion-off .dashboard-welcome::after,
+body.motion-off .dashboard-create-btn::before,
+body.motion-off .activity-dot,
+body.motion-off .pulse-live i,
+body.motion-off .side-symbol{
+  animation:none!important;
+}
 body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
 @media(max-width:980px){
@@ -2789,107 +2825,6 @@ body.dark .site-footer{
   transform:translateY(-2px);
   border-color:var(--primary);
   box-shadow:0 8px 20px rgba(37,99,235,.1);
-}
-
-.feedback-modal{
-  max-width:500px;
-}
-
-.feedback-modal h3{
-  margin-bottom:7px;
-}
-
-.feedback-intro{
-  margin:0 0 17px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.5;
-}
-
-.feedback-account{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:12px;
-  padding:9px 11px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:var(--surface-2);
-  font-size:10px;
-  color:var(--muted);
-}
-
-.feedback-account strong{
-  color:var(--text);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.feedback-textarea{
-  width:100%;
-  min-height:145px;
-  resize:vertical;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px 13px;
-  background:var(--surface);
-  color:var(--text);
-  outline:none;
-  font-size:12px;
-  line-height:1.5;
-  transition:.18s;
-}
-
-.feedback-textarea:focus{
-  border-color:var(--primary);
-  box-shadow:0 0 0 3px var(--focus);
-}
-
-.feedback-count{
-  margin-top:6px;
-  text-align:right;
-  color:var(--muted);
-  font-size:9px;
-}
-
-.feedback-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:9px;
-  margin-top:15px;
-}
-
-.feedback-submit{
-  border:0;
-  background:var(--primary);
-  color:#fff;
-  padding:10px 15px;
-  border-radius:10px;
-  font-size:11px;
-  font-weight:850;
-  transition:.18s;
-}
-
-.feedback-submit:hover{
-  background:var(--primary-hover);
-  transform:translateY(-1px);
-}
-
-.feedback-submit:disabled{
-  transform:none;
-}
-
-@media(max-width:600px){
-  .feedback-modal{
-    padding:20px;
-  }
-  .feedback-actions{
-    flex-direction:column-reverse;
-  }
-  .feedback-actions button{
-    width:100%;
-  }
 }
 
 @media(max-width:600px){
@@ -3799,46 +3734,6 @@ body.dark .site-footer{
      SETTINGS MODAL
 ======================================================= -->
 
-<!-- =======================================================
-     FEEDBACK MODAL
-======================================================= -->
-
-<div id="feedbackModal" class="modal-overlay hidden">
-  <div
-    class="modal feedback-modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="feedbackTitle"
-  >
-    <h3 id="feedbackTitle">Send feedback</h3>
-
-    <p class="feedback-intro">
-      Found a bug, have an idea, or just want to tell us what you think?
-      Your feedback will be sent directly to the PointTrack feedback sheet.
-    </p>
-
-    <div class="feedback-account">
-      <span>Signed in as</span>
-      <strong id="feedbackAccount"></strong>
-    </div>
-
-    <textarea
-      id="feedbackText"
-      class="feedback-textarea"
-      maxlength="2000"
-      placeholder="Tell us what you found or what you'd like to see..."
-    ></textarea>
-
-    <div id="feedbackCount" class="feedback-count">0 / 2000</div>
-
-    <div class="feedback-actions">
-      <button id="closeFeedbackBtn" class="secondary-btn" type="button">Cancel</button>
-      <button id="submitFeedbackBtn" class="feedback-submit" type="button">Send feedback</button>
-    </div>
-  </div>
-</div>
-
-
 <div id="settingsModal" class="modal-overlay hidden">
   <div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-header">
@@ -3876,91 +3771,12 @@ body.dark .site-footer{
    FEEDBACK
 ========================================================= */
 
-const FEEDBACK_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbz5uJKNQIf64-eWuEluanyVdq8Ye7RywWHGyNf-tcGsB8DM2hLDDBLEBJ_bhrmh6W5c/exec";
-
 const feedbackBtn = document.getElementById("feedbackBtn");
-const feedbackModal = document.getElementById("feedbackModal");
-const closeFeedbackBtn = document.getElementById("closeFeedbackBtn");
-const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
-const feedbackText = document.getElementById("feedbackText");
-const feedbackCount = document.getElementById("feedbackCount");
-const feedbackAccount = document.getElementById("feedbackAccount");
-
-function openFeedbackModal(){
-  if(!feedbackModal) return;
-
-  const email = currentUser?.email || "Signed-in PointTrack account";
-  if(feedbackAccount) feedbackAccount.textContent = email;
-  if(feedbackText){
-    feedbackText.value = "";
-    feedbackCount.textContent = "0 / 2000";
-  }
-
-  feedbackModal.classList.remove("hidden");
-  setTimeout(() => feedbackText?.focus(), 40);
+if(feedbackBtn){
+  feedbackBtn.addEventListener("click", () => {
+    showToast("Feedback form coming soon — the button is ready for the final feedback destination.", "success");
+  });
 }
-
-function closeFeedbackModal(){
-  feedbackModal?.classList.add("hidden");
-}
-
-feedbackBtn?.addEventListener("click", openFeedbackModal);
-closeFeedbackBtn?.addEventListener("click", closeFeedbackModal);
-
-feedbackModal?.addEventListener("click", (event) => {
-  if(event.target === feedbackModal) closeFeedbackModal();
-});
-
-feedbackText?.addEventListener("input", () => {
-  feedbackCount.textContent = `${feedbackText.value.length} / 2000`;
-});
-
-submitFeedbackBtn?.addEventListener("click", async () => {
-  const feedback = feedbackText.value.trim();
-  const email = currentUser?.email || "Unknown account";
-
-  if(!feedback){
-    showToast("Please enter some feedback first.", "error");
-    feedbackText.focus();
-    return;
-  }
-
-  submitFeedbackBtn.disabled = true;
-  submitFeedbackBtn.textContent = "Sending…";
-
-  try{
-    const body = new URLSearchParams({
-      email,
-      page: "PointTrack",
-      feedback
-    });
-
-    await fetch(FEEDBACK_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-      },
-      body
-    });
-
-    closeFeedbackModal();
-    showToast("Thanks! Your feedback was sent.", "success");
-  }catch(error){
-    console.error("PointTrack feedback error:", error);
-    showToast("We couldn't send your feedback. Please try again.", "error");
-  }finally{
-    submitFeedbackBtn.disabled = false;
-    submitFeedbackBtn.textContent = "Send feedback";
-  }
-});
-
-document.addEventListener("keydown", (event) => {
-  if(event.key === "Escape" && feedbackModal && !feedbackModal.classList.contains("hidden")){
-    closeFeedbackModal();
-  }
-});
 
 /* =========================================================
    FRIENDLY APP FEEDBACK
@@ -4522,7 +4338,7 @@ featureCheck.addEventListener(
 
 /* Cursor proximity field */
 
-const proximityItems =
+let proximityItems =
   [...document.querySelectorAll(
     ".proximity-item"
   )];
@@ -4534,263 +4350,125 @@ const environmentParticles =
 
 let pointerX = null;
 let pointerY = null;
+let cursorLocalX = null;
+let cursorLocalY = null;
 let proximityFrame = null;
 
+function motionIsReduced(){
+  return document.body.classList.contains("motion-off") ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function resetLoginProximity(){
+  proximityItems.forEach(item => {
+    item.style.setProperty("--proximity-x", "0px");
+    item.style.setProperty("--proximity-y", "0px");
+    item.style.setProperty("--proximity-scale", "1");
+  });
+
+  environmentParticles.forEach(particle => {
+    particle.style.transform = "translate(0,0) scale(1)";
+    particle.style.opacity = ".7";
+  });
+}
+
 function updateProximity(){
-  if(
-    pointerX === null ||
-    pointerY === null
-  ){
-    proximityFrame = null;
+  proximityFrame = null;
+
+  if(pointerX === null || pointerY === null){
     return;
   }
 
-  proximityItems.forEach(
-    item => {
-      const rect =
-        item.getBoundingClientRect();
-
-      const centerX =
-        rect.left +
-        rect.width / 2;
-
-      const centerY =
-        rect.top +
-        rect.height / 2;
-
-      const dx =
-        pointerX - centerX;
-
-      const dy =
-        pointerY - centerY;
-
-      const distance =
-        Math.sqrt(
-          dx * dx +
-          dy * dy
-        );
-
-      const radius =
-        420;
-
-      const influence =
-        Math.max(
-          0,
-          1 - distance / radius
-        );
-
-      const depth =
-        Number(
-          item.dataset.depth || 1
-        );
-
-      const moveX =
-        (dx / radius) *
-        influence *
-        20 *
-        depth;
-
-      const moveY =
-        (dy / radius) *
-        influence *
-        20 *
-        depth;
-
-      const scale =
-        1 +
-        influence *
-        .16 *
-        depth;
-
-      item.style.setProperty(
-        "--proximity-x",
-        `${moveX}px`
-      );
-
-      item.style.setProperty(
-        "--proximity-y",
-        `${moveY}px`
-      );
-
-      item.style.setProperty(
-        "--proximity-scale",
-        scale.toFixed(3)
-      );
-    }
-  );
-
-  environmentParticles.forEach(
-    particle => {
-      const rect =
-        particle.getBoundingClientRect();
-
-      const centerX =
-        rect.left +
-        rect.width / 2;
-
-      const centerY =
-        rect.top +
-        rect.height / 2;
-
-      const dx =
-        centerX - pointerX;
-
-      const dy =
-        centerY - pointerY;
-
-      const distance =
-        Math.sqrt(
-          dx * dx +
-          dy * dy
-        );
-
-      const radius = 190;
-
-      if(distance < radius){
-        const force =
-          1 - distance / radius;
-
-        particle.style.transform =
-          `translate(${(dx / Math.max(distance,1)) * force * 34}px, ${(dy / Math.max(distance,1)) * force * 34}px) scale(${1 + force * 2.2})`;
-
-        particle.style.opacity =
-          String(.45 + force * .55);
-      }
-      else{
-        particle.style.transform =
-          "translate(0,0) scale(1)";
-
-        particle.style.opacity =
-          ".7";
-      }
-    }
-  );
-
-  proximityFrame =
-    requestAnimationFrame(
-      updateProximity
-    );
-}
-
-loginScreenElement.addEventListener(
-  "pointermove",
-  event => {
-    pointerX =
-      event.clientX;
-
-    pointerY =
-      event.clientY;
-
+  if(cursorLocalX !== null && cursorLocalY !== null){
     loginScreenElement.style.setProperty(
       "--cursor-x",
-      `${pointerX}px`
+      `${cursorLocalX}px`
     );
 
     loginScreenElement.style.setProperty(
       "--cursor-y",
-      `${pointerY}px`
+      `${cursorLocalY}px`
     );
-
-    if(!proximityFrame){
-      proximityFrame =
-        requestAnimationFrame(
-          updateProximity
-        );
-    }
   }
-);
 
-loginScreenElement.addEventListener(
-  "pointerleave",
-  () => {
-    pointerX = null;
-    pointerY = null;
-
-    proximityItems.forEach(
-      item => {
-        item.style.setProperty(
-          "--proximity-x",
-          "0px"
-        );
-
-        item.style.setProperty(
-          "--proximity-y",
-          "0px"
-        );
-
-        item.style.setProperty(
-          "--proximity-scale",
-          "1"
-        );
-      }
-    );
-
-    environmentParticles.forEach(
-      particle => {
-        particle.style.transform =
-          "translate(0,0) scale(1)";
-        particle.style.opacity =
-          ".7";
-      }
-    );
-
-    if(proximityFrame){
-      cancelAnimationFrame(
-        proximityFrame
-      );
-      proximityFrame = null;
-    }
+  if(motionIsReduced()){
+    resetLoginProximity();
+    return;
   }
-);
 
-/* Give the background a little life even when the mouse is still. */
+  proximityItems.forEach(item => {
+    const rect = item.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = pointerX - centerX;
+    const dy = pointerY - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const radius = 420;
+    const influence = Math.max(0, 1 - distance / radius);
+    const depth = Number(item.dataset.depth || 1);
 
-setInterval(
-  () => {
-    if(
-      pointerX !== null ||
-      document.hidden
-    ){
-      return;
+    const moveX = (dx / radius) * influence * 20 * depth;
+    const moveY = (dy / radius) * influence * 20 * depth;
+    const scale = 1 + influence * .16 * depth;
+
+    item.style.setProperty("--proximity-x", `${moveX}px`);
+    item.style.setProperty("--proximity-y", `${moveY}px`);
+    item.style.setProperty("--proximity-scale", scale.toFixed(3));
+  });
+
+  environmentParticles.forEach(particle => {
+    const rect = particle.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = centerX - pointerX;
+    const dy = centerY - pointerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const radius = 190;
+
+    if(distance < radius){
+      const force = 1 - distance / radius;
+      particle.style.transform =
+        `translate(${(dx / Math.max(distance,1)) * force * 34}px, ${(dy / Math.max(distance,1)) * force * 34}px) scale(${1 + force * 2.2})`;
+      particle.style.opacity = String(.45 + force * .55);
+    }else{
+      particle.style.transform = "translate(0,0) scale(1)";
+      particle.style.opacity = ".7";
     }
+  });
+}
 
-    const particle =
-      environmentParticles[
-        Math.floor(
-          Math.random() *
-          environmentParticles.length
-        )
-      ];
+function queueProximityFrame(){
+  if(proximityFrame === null){
+    proximityFrame = requestAnimationFrame(updateProximity);
+  }
+}
 
-    if(!particle){
-      return;
-    }
+loginScreenElement.addEventListener("pointermove", event => {
+  pointerX = event.clientX;
+  pointerY = event.clientY;
 
-    particle.animate(
-      [
-        {
-          transform:"scale(1)",
-          opacity:.35
-        },
-        {
-          transform:"scale(2.4)",
-          opacity:.9
-        },
-        {
-          transform:"scale(1)",
-          opacity:.35
-        }
-      ],
-      {
-        duration:1100,
-        easing:"ease-in-out"
-      }
-    );
-  },
-  2200
-);
+  const rect = loginScreenElement.getBoundingClientRect();
+  cursorLocalX = event.clientX - rect.left;
+  cursorLocalY = event.clientY - rect.top;
 
+  queueProximityFrame();
+});
 
+loginScreenElement.addEventListener("pointerleave", () => {
+  pointerX = null;
+  pointerY = null;
+  cursorLocalX = null;
+  cursorLocalY = null;
+
+  loginScreenElement.style.setProperty("--cursor-x", "50%");
+  loginScreenElement.style.setProperty("--cursor-y", "50%");
+  resetLoginProximity();
+
+  if(proximityFrame !== null){
+    cancelAnimationFrame(proximityFrame);
+    proximityFrame = null;
+  }
+});
 
 /* =========================================================
    DECIMAL NUMBER ENGINE
@@ -5784,6 +5462,16 @@ function applyMotionPreference(){
   const enabled = localStorage.getItem("pointtrack-motion") !== "off";
   document.body.classList.toggle("motion-off", !enabled);
   if(settingsMotionToggle) settingsMotionToggle.checked = enabled;
+
+  if(!enabled){
+    resetLoginProximity();
+    if(proximityFrame !== null){
+      cancelAnimationFrame(proximityFrame);
+      proximityFrame = null;
+    }
+  }else if(pointerX !== null){
+    queueProximityFrame();
+  }
 }
 
 function cycleTheme(){
@@ -8013,11 +7701,81 @@ function escapeHtml(
 ========================================================= */
 
 // Make the background picture rails loop seamlessly without needing a huge image collection.
-document.querySelectorAll(".picture-rail").forEach(rail => {
-  [...rail.children].forEach(card => {
-    rail.appendChild(card.cloneNode(true));
+const pictureRails = [...document.querySelectorAll(".picture-rail")];
+
+pictureRails.forEach(rail => {
+  const originalCards = [...rail.children];
+  originalCards.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    rail.appendChild(clone);
   });
 });
+
+// The clones are real interactive pictures too, so refresh the proximity field after cloning.
+proximityItems = [...document.querySelectorAll(".proximity-item")];
+
+// CSS handles the normal rail motion. This tiny watchdog provides a JS fallback if a
+// browser, extension, or future edit causes the named keyframe to stop animating.
+let railFallbackFrame = null;
+const railFallbacks = new Map();
+
+function startRailJsFallback(rail){
+  if(railFallbacks.has(rail) || motionIsReduced()) return;
+
+  railFallbacks.set(rail, {
+    start: performance.now(),
+    duration: rail.classList.contains("second") ? 96000 : 82000,
+    reverse: rail.classList.contains("second")
+  });
+
+  if(railFallbackFrame === null){
+    const tick = now => {
+      railFallbackFrame = null;
+
+      if(motionIsReduced() || railFallbacks.size === 0){
+        return;
+      }
+
+      railFallbacks.forEach((state, target) => {
+        const progress = ((now - state.start) % state.duration) / state.duration;
+        const offset = state.reverse ? -50 + progress * 50 : -progress * 50;
+        const rotation = target.classList.contains("second") ? 2.6 : -3.2;
+        target.style.transform = `translate3d(${offset}%,0,0) rotate(${rotation}deg)`;
+      });
+
+      railFallbackFrame = requestAnimationFrame(tick);
+    };
+
+    railFallbackFrame = requestAnimationFrame(tick);
+  }
+}
+
+function verifyRailAnimation(rail){
+  if(motionIsReduced()) return;
+
+  const computed = getComputedStyle(rail);
+  const names = computed.animationName
+    .split(",")
+    .map(name => name.trim());
+
+  if(!names.includes("railRoll")){
+    startRailJsFallback(rail);
+    return;
+  }
+
+  const initialTransform = getComputedStyle(rail).transform;
+
+  setTimeout(() => {
+    if(motionIsReduced() || !document.body.contains(rail)) return;
+    const currentTransform = getComputedStyle(rail).transform;
+    if(currentTransform === initialTransform){
+      startRailJsFallback(rail);
+    }
+  }, 350);
+}
+
+pictureRails.forEach(verifyRailAnimation);
 
 // Let dashboard cards subtly lean toward the cursor, keeping the same "alive" feeling as the login screen.
 let dashboardPointerFrame = null;
