@@ -693,6 +693,120 @@ body.dark .login-feature{
   font-weight:900;
 }
 
+.facebook-btn{
+  margin-top:9px;
+}
+
+.auth-divider{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:15px 0 12px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  content:"";
+  height:1px;
+  flex:1;
+  background:var(--border);
+}
+
+.native-auth{
+  display:grid;
+  gap:9px;
+  text-align:left;
+}
+
+.auth-field{
+  display:grid;
+  gap:5px;
+}
+
+.auth-field label{
+  font-size:10px;
+  font-weight:800;
+  color:var(--muted);
+}
+
+.auth-field input{
+  width:100%;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  border-radius:10px;
+  padding:11px 12px;
+  outline:none;
+  transition:.18s;
+}
+
+.auth-field input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--focus);
+}
+
+.auth-submit{
+  width:100%;
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  padding:12px 15px;
+  border-radius:10px;
+  font-weight:850;
+  transition:.18s;
+}
+
+.auth-submit:hover{
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+}
+
+.auth-submit:focus-visible,
+.auth-link:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
+}
+
+.auth-switch{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  margin-top:1px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.auth-link{
+  border:0;
+  padding:0;
+  background:transparent;
+  color:var(--primary);
+  font-weight:850;
+}
+
+.auth-status{
+  min-height:0;
+  margin-top:2px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+  text-align:center;
+}
+
+.auth-status.error{
+  color:var(--danger);
+}
+
+.auth-status.success{
+  color:var(--success);
+}
+
 .login-note{
   margin-top:13px;
   color:var(--muted);
@@ -1381,69 +1495,6 @@ body.dark .class-card{
   }
 }
 
-
-
-/* =========================================================
-   LEFT AD BANNERS
-========================================================= */
-.left-ad-rail{
-  position:fixed;
-  top:94px;
-  left:18px;
-  width:150px;
-  display:grid;
-  gap:16px;
-  z-index:2;
-  pointer-events:none;
-}
-
-.ad-banner{
-  position:relative;
-  width:150px;
-  min-height:250px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px dashed var(--border);
-  border-radius:14px;
-  background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(240,243,248,.5));
-  color:var(--muted);
-  box-shadow:0 8px 22px rgba(15,23,42,.035);
-  overflow:hidden;
-}
-
-.ad-banner::before{
-  content:"ADVERTISEMENT";
-  position:absolute;
-  top:9px;
-  left:0;
-  right:0;
-  text-align:center;
-  font-size:7px;
-  font-weight:850;
-  letter-spacing:.11em;
-  opacity:.55;
-}
-
-.ad-banner span{
-  font-size:10px;
-  font-weight:700;
-  opacity:.42;
-  text-align:center;
-  padding:20px;
-}
-
-body.dark .ad-banner{
-  background:linear-gradient(145deg,rgba(24,28,35,.68),rgba(34,39,49,.5));
-}
-
-@media(max-width:1370px){
-  .left-ad-rail{display:none;}
-}
-
-@media(max-width:980px){
-  .left-ad-rail{display:none;}
-}
 
 /* =========================================================
    MAIN
@@ -2887,8 +2938,42 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
       Continue with Google
     </button>
 
+    <button
+      id="facebookLoginBtn"
+      class="google-btn facebook-btn"
+      type="button"
+    >
+      <span class="google-icon">f</span>
+      Continue with Facebook
+    </button>
+
+    <div class="auth-divider">
+      <span>or use email</span>
+    </div>
+
+    <form id="nativeAuthForm" class="native-auth">
+      <div class="auth-field">
+        <label for="authEmail">Email</label>
+        <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="auth-field">
+        <label for="authPassword">Password</label>
+        <input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+      </div>
+
+      <button id="nativeAuthSubmit" class="auth-submit" type="submit">Sign in</button>
+
+      <div class="auth-switch">
+        <span id="authSwitchText">New to PointTrack?</span>
+        <button id="authModeBtn" class="auth-link" type="button">Create an account</button>
+      </div>
+
+      <div id="authStatus" class="auth-status" aria-live="polite"></div>
+    </form>
+
     <div class="login-note">
-      Built for simple, everyday classroom point tracking.
+      Use Google, Facebook, or a PointTrack email and password.
     </div>
 
     <div class="login-credit">
@@ -2941,12 +3026,6 @@ body.motion-off .feature-check-path{stroke-dashoffset:0!important;}
 
   </header>
 
-
-
-  <div class="left-ad-rail" aria-label="Advertisement space">
-    <div class="ad-banner"><span>Ad space reserved</span></div>
-    <div class="ad-banner"><span>Ad space reserved</span></div>
-  </div>
 
   <div class="dashboard-side-decor dashboard-side-left" aria-hidden="true">
     <span class="side-orb orb-a"></span>
@@ -3599,6 +3678,48 @@ const googleLoginBtn =
   document.getElementById(
     "googleLoginBtn"
   );
+
+const facebookLoginBtn =
+  document.getElementById(
+    "facebookLoginBtn"
+  );
+
+const nativeAuthForm =
+  document.getElementById(
+    "nativeAuthForm"
+  );
+
+const authEmail =
+  document.getElementById(
+    "authEmail"
+  );
+
+const authPassword =
+  document.getElementById(
+    "authPassword"
+  );
+
+const nativeAuthSubmit =
+  document.getElementById(
+    "nativeAuthSubmit"
+  );
+
+const authModeBtn =
+  document.getElementById(
+    "authModeBtn"
+  );
+
+const authSwitchText =
+  document.getElementById(
+    "authSwitchText"
+  );
+
+const authStatus =
+  document.getElementById(
+    "authStatus"
+  );
+
+let nativeAuthMode = "signin";
 
 const logoutBtn =
   document.getElementById(
@@ -4967,51 +5088,138 @@ document.addEventListener(
    LOGIN
 ========================================================= */
 
+function setAuthStatus(message = "", type = ""){
+  authStatus.textContent = message;
+  authStatus.className = "auth-status" + (type ? " " + type : "");
+}
+
+function setOAuthButtonState(button, busy, label){
+  button.disabled = busy;
+  button.innerHTML = busy ? "Connecting..." : label;
+}
+
+async function startOAuthLogin(provider, button, label){
+
+  setAuthStatus("");
+  setOAuthButtonState(button, true, label);
+
+  const { error } =
+    await db.auth.signInWithOAuth({
+      provider,
+      options:{
+        redirectTo:
+          "https://moldybreadeater.github.io/PointTrack/",
+        ...(provider === "google"
+          ? { queryParams:{ prompt:"select_account" } }
+          : {})
+      }
+    });
+
+  if(error){
+    console.error(error);
+    setOAuthButtonState(button, false, label);
+    setAuthStatus(error.message, "error");
+  }
+}
+
 googleLoginBtn.addEventListener(
   "click",
-  async () => {
+  () =>
+    startOAuthLogin(
+      "google",
+      googleLoginBtn,
+      '<span class="google-icon">G</span> Continue with Google'
+    )
+);
 
-    googleLoginBtn.disabled =
-      true;
+facebookLoginBtn.addEventListener(
+  "click",
+  () =>
+    startOAuthLogin(
+      "facebook",
+      facebookLoginBtn,
+      '<span class="google-icon">f</span> Continue with Facebook'
+    )
+);
 
-    googleLoginBtn.innerHTML =
-      "Connecting...";
+authModeBtn.addEventListener(
+  "click",
+  () => {
+    nativeAuthMode =
+      nativeAuthMode === "signin" ? "signup" : "signin";
 
-    const { error } =
-      await db.auth.signInWithOAuth({
+    const signup = nativeAuthMode === "signup";
 
-        provider:"google",
+    nativeAuthSubmit.textContent =
+      signup ? "Create account" : "Sign in";
 
+    authSwitchText.textContent =
+      signup ? "Already have an account?" : "New to PointTrack?";
+
+    authModeBtn.textContent =
+      signup ? "Sign in" : "Create an account";
+
+    authPassword.autocomplete =
+      signup ? "new-password" : "current-password";
+
+    setAuthStatus("");
+  }
+);
+
+nativeAuthForm.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+
+    setAuthStatus("");
+    nativeAuthSubmit.disabled = true;
+    nativeAuthSubmit.textContent =
+      nativeAuthMode === "signup" ? "Creating account..." : "Signing in...";
+
+    let result;
+
+    if(nativeAuthMode === "signup"){
+      result = await db.auth.signUp({
+        email,
+        password,
         options:{
-
-          redirectTo:
-            "https://moldybreadeater.github.io/PointTrack/",
-
-          queryParams:{
-            prompt:"select_account"
-          }
-
+          emailRedirectTo:
+            "https://moldybreadeater.github.io/PointTrack/"
         }
-
       });
-
-    if(error){
-
-      console.error(error);
-
-      alert(
-        "Login failed:\n" +
-        error.message
-      );
-
-      googleLoginBtn.disabled =
-        false;
-
-      googleLoginBtn.innerHTML =
-        '<span class="google-icon">G</span> Continue with Google';
-
+    }
+    else{
+      result = await db.auth.signInWithPassword({
+        email,
+        password
+      });
     }
 
+    const { data, error } = result;
+
+    nativeAuthSubmit.disabled = false;
+    nativeAuthSubmit.textContent =
+      nativeAuthMode === "signup" ? "Create account" : "Sign in";
+
+    if(error){
+      console.error(error);
+      setAuthStatus(error.message, "error");
+      return;
+    }
+
+    if(nativeAuthMode === "signup"){
+      if(data.session){
+        setAuthStatus("Account created. Signing you in...", "success");
+      }
+      else{
+        setAuthStatus("Account created. Check your email to confirm it, then sign in.", "success");
+        authPassword.value = "";
+      }
+    }
   }
 );
 
