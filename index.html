@@ -10,6 +10,21 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+  /* Disables all glassmorphism blur and transparent boxes */
+* {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.card, .class-card, .student-row, .panel, .modal, .dialog, div, section {
+  background-color: var(--bg-surface, #ffffff) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.dark .card, body.dark .class-card, body.dark .student-row, body.dark .panel, body.dark .modal {
+  background-color: #1e293b !important;
+}
+
 :root{
   --bg:#f5f7fb;
   --surface:#fff;
